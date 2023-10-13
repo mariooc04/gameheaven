@@ -13,10 +13,10 @@ def getVideojuegos():
 def getConsolas():
     return Consola.objects.all()
 
-def getVideojuegoById(id):
+def getVideojuego(id):
     return Videojuego.objects.get(id=id)
 
-def getConsolaById(id):
+def getConsola(id):
     return Consola.objects.get(id=id)
 
     
@@ -45,14 +45,14 @@ def updateImagenConsola(consola, imagen):
     consola.save()
     
 def updateVideojuego(idvideojuego, newVideojuego):
-    videojuego = getVideojuegoById(idvideojuego)
+    videojuego = getVideojuego(idvideojuego)
     videojuego.nombre = newVideojuego.nombre
     videojuego.descripcion = newVideojuego.descripcion
     videojuego.img = newVideojuego.img
     videojuego.save()
     
 def updateConsola(idConsola, newConsola):
-    consola = getConsolaById(idConsola)
+    consola = getConsola(idConsola)
     consola.nombre = newConsola.nombre
     consola.descripcion = newConsola.descripcion
     consola.img = newConsola.img

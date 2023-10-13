@@ -32,19 +32,19 @@ class TestDAOs(TestCase):
         # Create
         consola = Consola(nombre="PS5", descripcion="La mejor consola del mercado", img="img/ps5.jpg", valoracion=4.5)
         daoProductos.newConsola(consola)
-        producto = daoProductos.getConsolaById(consola.id)
+        producto = daoProductos.getConsola(consola.id)
         # Read
-        producto2 = daoProductos.getConsolaById(producto.id)
+        producto2 = daoProductos.getConsola(producto.id)
         assert producto2.nombre == producto.nombre
         # Update
         producto2.nombre = "PS4"
         daoProductos.updateConsola(producto.id, producto2)
-        producto3 = daoProductos.getConsolaById(producto.id)
+        producto3 = daoProductos.getConsola(producto.id)
         assert producto3.nombre == producto2.nombre
         # Delete
         daoProductos.deleteConsola(producto)
         try:
-            producto4 = daoProductos.getConsolaById(producto.id)
+            producto4 = daoProductos.getConsola(producto.id)
             assert False
         except:
             assert True
@@ -54,19 +54,19 @@ class TestDAOs(TestCase):
             # Create
             videojuego = Videojuego(nombre="FIFA 21", descripcion="El mejor juego de fútbol", img="img/fifa21.jpg", valoracion=4.5, plataformas="PS5")
             daoProductos.newVideojuego(videojuego)
-            producto = daoProductos.getVideojuegoById(videojuego.id)
+            producto = daoProductos.getVideojuego(videojuego.id)
             # Read
-            producto2 = daoProductos.getVideojuegoById(producto.id)
+            producto2 = daoProductos.getVideojuego(producto.id)
             assert producto2.nombre == producto.nombre
             # Update
             producto2.nombre = "FIFA 20"
             daoProductos.updateVideojuego(producto.id, producto2)
-            producto3 = daoProductos.getVideojuegoById(producto.id)
+            producto3 = daoProductos.getVideojuego(producto.id)
             assert producto3.nombre == producto2.nombre
             # Delete
             daoProductos.deleteVideojuego(producto)
             try:
-                producto4 = daoProductos.getVideojuegoById(producto.id)
+                producto4 = daoProductos.getVideojuego(producto.id)
                 assert False
             except:
                 assert True
