@@ -9,8 +9,8 @@ ESTADOS = {
 class Tienda(models.Model):
     ciudad = models.CharField(max_length=50)
     codigoPostal = models.IntegerField()
-
-
+    videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego')
+    consolas = models.ManyToManyField('Consola', through='StockConsolas')
     
 
 class Videojuego(models.Model):
