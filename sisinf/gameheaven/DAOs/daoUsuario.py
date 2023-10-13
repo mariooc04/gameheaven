@@ -4,6 +4,9 @@ from models import Cliente as Cliente
 
 ###Trabajadores
 
+def checkPasswordTrabajador(idTrabajador, password):
+    return getTrabajador(idTrabajador).password == password
+
 def newTrajador(trabajador):
     Trabajador.save(trabajador)
 
@@ -12,9 +15,6 @@ def getTrabajador(idTrabajador):
 
 def getEmailTrabajador(idTrabajador):
     return getTrabajador(idTrabajador).email
-
-def getPasswordTrabajador(idTrabajador):
-    return getTrabajador(idTrabajador).password
 
 def getUsuarioTrabajador(idTrabajador):
     return getTrabajador(idTrabajador).usuario
@@ -70,6 +70,9 @@ def deleteTrabajador(idTrabajador):
 
 ###Administradores
 
+def checkPasswordAdministrador(idAdministrador, password):
+    return getAdministrador(idAdministrador).password == password
+
 def newAdministrador(administrador):
     Administrador.save(administrador)
 
@@ -78,9 +81,6 @@ def getAdministrador(idAdministrador):
 
 def getEmailAdministrador(idAdministrador):
     return getAdministrador(idAdministrador).email
-
-def getPasswordAdministrador(idAdministrador):
-    return getAdministrador(idAdministrador).password
 
 def getUsuarioAdministrador(idAdministrador):
     return getAdministrador(idAdministrador).usuario
@@ -115,6 +115,9 @@ def deleteAdministrador(idAdministrador):
 
 ###Clientes
 
+def checkPasswordCliente(idCliente, password):
+    return getCliente(idCliente).password == password
+
 def newCliente(cliente):
     Cliente.save(cliente)
 
@@ -123,9 +126,6 @@ def getCliente(idCliente):
 
 def getEmailCliente(idCliente):
     return getCliente(idCliente).email
-
-def getPasswordCliente(idCliente):
-    return getCliente(idCliente).password
 
 def getUsuarioCliente(idCliente):
     return getCliente(idCliente).usuario
