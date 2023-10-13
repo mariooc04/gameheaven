@@ -1,6 +1,6 @@
-from models import Trabajador as Trabajador
-from models import Administrador as Administrador
-from models import Cliente as Cliente
+from gameheaven.models import Trabajador as Trabajador
+from gameheaven.models import Administrador as Administrador
+from gameheaven.models import Cliente as Cliente
 
 ###Trabajadores
 
@@ -65,8 +65,8 @@ def updateIdAdminTrabajador(idTrabajador, idAdmin):
     trabajador.idAdmin = idAdmin
     trabajador.save()
 
-def deleteTrabajador(idTrabajador):
-    Trabajador.objects.get(pk=idTrabajador).delete()
+def deleteTrabajador(trabajador):
+    Trabajador.objects.get(pk=trabajador.id).delete()
 
 ###Administradores
 
@@ -110,8 +110,8 @@ def updateUsuarioAdministrador(idAdministrador, usuario):
     administrador.usuario = usuario
     administrador.save()
 
-def deleteAdministrador(idAdministrador):
-    Administrador.objects.get(pk=idAdministrador).delete()
+def deleteAdministrador(administrador):
+    Administrador.objects.get(pk=administrador.id).delete()
 
 ###Clientes
 
@@ -164,5 +164,5 @@ def updateIdTiendaCliente(idCliente, idTienda):
     cliente.idTienda = idTienda
     cliente.save()
 
-def deleteCliente(idCliente):
-    Cliente.objects.get(pk=idCliente).delete()
+def deleteCliente(cliente):
+    Cliente.objects.get(pk=cliente.id).delete()

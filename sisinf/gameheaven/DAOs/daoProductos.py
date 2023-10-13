@@ -1,6 +1,12 @@
-from models import Videojuego as Videojuego
-from models import Consola as Consola
+from gameheaven.models import Videojuego as Videojuego
+from gameheaven.models import Consola as Consola
 
+def newVideojuego(videojuego):
+    videojuego.save()
+    
+def newConsola(consola):
+    consola.save()
+    
 def getVideojuegos():
     return Videojuego.objects.all()
 
@@ -13,19 +19,6 @@ def getVideojuegoById(id):
 def getConsolaById(id):
     return Consola.objects.get(id=id)
 
-def addVideojuego(videojuego):
-    videojuego.save()
-    
-def addConsola(consola):
-    consola.save()
-    
-def updatePrecioVideojuego(videojuego, precio):
-    videojuego.precio = precio
-    videojuego.save()
-    
-def updatePrecioConsola(consola, precio):
-    consola.precio = precio
-    consola.save()
     
 def updateNombreVideojuego(videojuego, nombre):
     videojuego.nombre = nombre
@@ -44,25 +37,25 @@ def updateDescripcionConsola(consola, descripcion):
     consola.save()
     
 def updateImagenVideojuego(videojuego, imagen):
-    videojuego.imagen = imagen
+    videojuego.img = imagen
     videojuego.save()
     
 def updateImagenConsola(consola, imagen):
-    consola.imagen = imagen
+    consola.img = imagen
     consola.save()
     
-def updateVideojuego(videojuego, nombre, descripcion, precio, imagen):
-    videojuego.nombre = nombre
-    videojuego.descripcion = descripcion
-    videojuego.precio = precio
-    videojuego.imagen = imagen
+def updateVideojuego(idvideojuego, newVideojuego):
+    videojuego = getVideojuegoById(idvideojuego)
+    videojuego.nombre = newVideojuego.nombre
+    videojuego.descripcion = newVideojuego.descripcion
+    videojuego.img = newVideojuego.img
     videojuego.save()
     
-def updateConsola(consola, nombre, descripcion, precio, imagen):
-    consola.nombre = nombre
-    consola.descripcion = descripcion
-    consola.precio = precio
-    consola.imagen = imagen
+def updateConsola(idConsola, newConsola):
+    consola = getConsolaById(idConsola)
+    consola.nombre = newConsola.nombre
+    consola.descripcion = newConsola.descripcion
+    consola.img = newConsola.img
     consola.save()
     
 

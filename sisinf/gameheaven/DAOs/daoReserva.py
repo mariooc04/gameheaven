@@ -1,5 +1,5 @@
-from models import ReservaConsola as ReservaConsola
-from models import ReservaVideojuego as ReservaVideojuego
+from gameheaven.models import ReservaConsola as ReservaConsola
+from gameheaven.models import ReservaVideojuego as ReservaVideojuego
 
 ###Reservas Consolas
 

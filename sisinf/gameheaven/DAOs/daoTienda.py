@@ -1,6 +1,6 @@
-from models import Tienda as Tienda
-from models import StockConsolas as StockConsolas
-from models import StockVideojuego as StockVideojuego
+from gameheaven.models import Tienda as Tienda
+from gameheaven.models import StockConsolas as StockConsolas
+from gameheaven.models import StockVideojuego as StockVideojuego
 
 ###Tiendas
 
@@ -36,31 +36,47 @@ def updateCiudadTienda(idTienda, ciudad):
 def deleteTienda(idTienda):
     Tienda.objects.get(pk=idTienda).delete()
 
+def addConsolaTienda(tienda, consola, precio, stock):
+    stockConsolas = StockConsolas(tienda=tienda, consola=consola, precio=precio, stock=stock)
+    stockConsolas.save()
+
+def addVideojuegoTienda(tienda, videojuego, precio, stock):
+    stockVideojuego = StockVideojuego(tienda=tienda, videojuego=videojuego, precio=precio, stock=stock)
+    stockVideojuego.save()
+
+def removeConsolaTienda(idTienda, idConsola):
+    tienda = getTienda(idTienda)
+    tienda.consolas.remove(idConsola)
+    tienda.save()
+
+def removeVideojuegoTienda(idTienda, idVideojuego):
+    tienda = getTienda(idTienda)
+    tienda.videojuegos.remove(idVideojuego)
+    tienda.save()
+
 ###StockConsolas
 
 def newStockConsolas(stockConsolas):
     stockConsolas.save()
 
-def getStockConsolas(idStockConsolas):
-    return StockConsolas.objects.get(pk=idStockConsolas)
-
+def getStockConsola(idTienda, idConsola):
+    return StockConsolas.objects.get(tienda_id=idTienda, consola_id=idConsola)
+    
 def getIdTiendaStockConsolas(idStockConsolas):
-    return getStockConsolas(idStockConsolas).idTienda
+    return getStockConsola(idStockConsolas).idTienda
 
 def getIdConsolaStockConsolas(idStockConsolas):
-    return getStockConsolas(idStockConsolas).idConsola
+    return getStockConsola(idStockConsolas).idConsola
 
 def getPrecioStockConsolas(idStockConsolas):
-    return getStockConsolas(idStockConsolas).precio
+    return getStockConsola(idStockConsolas).precio
 
-def getStockStockConsolas(idStockConsolas):
-    return getStockConsolas(idStockConsolas).stock
+def getAllStockConsolas(idStockConsolas):
+    return getStockConsola(idStockConsolas).stock
 
-def getStockConsolasTienda(idTienda):
-    return Tienda.objects.filter(idTienda=idTienda).consolas
 
 def updateStockConsolas(idStockConsolas, newStockConsolas):
-    stockConsolas = getStockConsolas(idStockConsolas)
+    stockConsolas = getStockConsola(idStockConsolas)
     stockConsolas.idTienda = newStockConsolas.idTienda
     stockConsolas.idConsola = newStockConsolas.idConsola
     stockConsolas.precio = newStockConsolas.precio
@@ -68,35 +84,33 @@ def updateStockConsolas(idStockConsolas, newStockConsolas):
     stockConsolas.save()
 
 def updateIdTiendaStockConsolas(idStockConsolas, idTienda):
-    stockConsolas = getStockConsolas(idStockConsolas)
+    stockConsolas = getStockConsola(idStockConsolas)
     stockConsolas.idTienda = idTienda
     stockConsolas.save()
 
 def updateIdConsolaStockConsolas(idStockConsolas, idConsola):
-    stockConsolas = getStockConsolas(idStockConsolas)
+    stockConsolas = getStockConsola(idStockConsolas)
     stockConsolas.idConsola = idConsola
     stockConsolas.save()
 
 def updatePrecioStockConsolas(idStockConsolas, precio):
-    stockConsolas = getStockConsolas(idStockConsolas)
+    stockConsolas = getStockConsola(idStockConsolas)
     stockConsolas.precio = precio
     stockConsolas.save()
 
 def updateStockStockConsolas(idStockConsolas, stock):
-    stockConsolas = getStockConsolas(idStockConsolas)
+    stockConsolas = getStockConsola(idStockConsolas)
     stockConsolas.stock = stock
     stockConsolas.save()
 
-def deleteStockConsolas(idStockConsolas):
-    StockConsolas.objects.get(pk=idStockConsolas).delete()
 
 ###StockVideojuego
 
 def newStockVideojuego(stockVideojuego):
     StockVideojuego.save(stockVideojuego)
 
-def getStockVideojuego(idStockVideojuego):
-    return StockVideojuego.objects.get(pk=idStockVideojuego)
+def getStockVideojuego(idTienda, idVideojuego):
+    return StockVideojuego.objects.get(tienda_id=idTienda, videojuego_id=idVideojuego)
 
 def getIdTiendaStockVideojuego(idStockVideojuego):
     return getStockVideojuego(idStockVideojuego).idTienda
@@ -107,7 +121,7 @@ def getIdVideojuegoStockVideojuego(idStockVideojuego):
 def getPrecioStockVideojuego(idStockVideojuego):
     return getStockVideojuego(idStockVideojuego).precio
 
-def getStockStockVideojuego(idStockVideojuego):
+def getAllStockVideojuego(idStockVideojuego):
     return getStockVideojuego(idStockVideojuego).stock
 
 def getStockVideojuegoTienda(idTienda):
@@ -140,6 +154,3 @@ def updateStockStockVideojuego(idStockVideojuego, stock):
     stockVideojuego = getStockVideojuego(idStockVideojuego)
     stockVideojuego.stock = stock
     stockVideojuego.save()
-
-def deleteStockVideojuego(idStockVideojuego):
-    StockVideojuego.objects.get(pk=idStockVideojuego).delete()
