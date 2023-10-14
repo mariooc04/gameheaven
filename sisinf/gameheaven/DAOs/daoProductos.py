@@ -6,20 +6,29 @@ from gameheaven.models import Consola as Consola
 def newVideojuego(videojuego):
     videojuego.save()
 
+
 def getVideojuegos():
     return Videojuego.objects.all()
 
-def getVideojuego(id):
-    return Videojuego.objects.get(pk=id)
+def getVideojuego(idVideojuego):
+    return Videojuego.objects.get(pk=idVideojuego)
 
-def getNombreVideojuego(id):
-    return getVideojuego(id).nombre
+def getNombreVideojuego(idVideojuego):
+    return getVideojuego(idVideojuego).nombre
+
 
 def getDescripcionVideojuego(id):
     return getVideojuego(id).descripcion
 
+def getValoracionVideojuego(idVideojuego):
+    return getVideojuego(idVideojuego).valoracion
+
+def getPlataformasVideojuego(idVideojuego):
+    return getVideojuego(idVideojuego).plataformas
+
 def getImagenVideojuego(id):
     return getVideojuego(id).img
+
 
 def updateVideojuego(idVideojuego, newVideojuego):
     videojuego = getVideojuego(idVideojuego)
@@ -28,15 +37,28 @@ def updateVideojuego(idVideojuego, newVideojuego):
     videojuego.img = newVideojuego.img
     videojuego.save()
 
-def updateNombreVideojuego(videojuego, nombre):
+def updateNombreVideojuego(idVideojuego, nombre):
+    videojuego = getVideojuego(idVideojuego)
     videojuego.nombre = nombre
     videojuego.save()
 
-def updateDescripcionVideojuego(videojuego, descripcion):
+def updateDescripcionVideojuego(idVideojuego, descripcion):
+    videojuego = getVideojuego(idVideojuego)
     videojuego.descripcion = descripcion
     videojuego.save()
 
-def updateImagenVideojuego(videojuego, imagen):
+def updateValoracionVideojuego(idVideojuego, valoracion):
+    videojuego = getVideojuego(idVideojuego)
+    videojuego.valoracion = valoracion
+    videojuego.save()
+
+def updatePlataformasVideojuego(idVideojuego, plataformas):
+    videojuego = getVideojuego(idVideojuego)
+    videojuego.plataformas = plataformas
+    videojuego.save()
+
+def updateImagenVideojuego(idVideojuego, imagen):
+    videojuego = getVideojuego(idVideojuego)
     videojuego.img = imagen
     videojuego.save()
 
@@ -49,17 +71,21 @@ def deleteVideojuego(videojuego):
 def newConsola(consola):
     consola.save()
     
+
 def getConsolas():
     return Consola.objects.all()
 
-def getConsola(id):
-    return Consola.objects.get(id=id)
+def getConsola(idConsola):
+    return Consola.objects.get(pk=idConsola)
 
-def getNombreConsola(id):
-    return getConsola(id).nombre
+def getNombreConsola(idConsola):
+    return getConsola(idConsola).nombre
 
-def getDescripcionConsola(id):
-    return getConsola(id).descripcion
+def getDescripcionConsola(idConsola):
+    return getConsola(idConsola).descripcion
+
+def getValoracionConsola(idConsola):
+    return getConsola(idConsola).valoracion
 
 def getImagenConsola(id):
     return getConsola(id).img
@@ -71,15 +97,23 @@ def updateConsola(idConsola, newConsola):
     consola.img = newConsola.img
     consola.save()
     
-def updateNombreConsola(consola, nombre):
+def updateNombreConsola(idConsola, nombre):
+    consola = getConsola(idConsola)
     consola.nombre = nombre
     consola.save()
     
-def updateDescripcionConsola(consola, descripcion):
+def updateDescripcionConsola(idConsola, descripcion):
+    consola = getConsola(idConsola)
     consola.descripcion = descripcion
     consola.save()
+
+def updateValoracionConsola(idConsola, valoracion):
+    consola = getConsola(idConsola)
+    consola.valoracion = valoracion
+    consola.save()
      
-def updateImagenConsola(consola, imagen):
+def updateImagenConsola(idConsola, imagen):
+    consola = getConsola(idConsola)
     consola.img = imagen
     consola.save()
         

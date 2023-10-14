@@ -19,8 +19,9 @@ class Videojuego(models.Model):
 class Consola(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField(max_length=500, null=True)
-    img = models.ImageField(upload_to='img/', null=True)
     valoracion = models.FloatField(null=True)
+    img = models.ImageField(upload_to='img/', null=True)
+    
 
 class StockVideojuego(models.Model):
     tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
