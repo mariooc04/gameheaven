@@ -6,6 +6,9 @@ class Tienda(models.Model):
     codigoPostal = models.IntegerField()
     videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego')
     consolas = models.ManyToManyField('Consola', through='StockConsolas')
+
+    def __str__(self):
+        return f'Tienda en {self.ciudad}, {self.codigoPostal}'
     
 
 class Videojuego(models.Model):
@@ -14,6 +17,9 @@ class Videojuego(models.Model):
     valoracion = models.FloatField(null=True)
     plataformas = models.CharField(max_length=50, null=True)
     img = models.ImageField(upload_to='img/', null=True)
+
+    def __str__(self):
+        return f'Videojuego {self.nombre}'
     
     
 class Consola(models.Model):
@@ -21,30 +27,45 @@ class Consola(models.Model):
     descripcion = models.TextField(max_length=500, null=True)
     valoracion = models.FloatField(null=True)
     img = models.ImageField(upload_to='img/', null=True)
+
+    def __str__(self):
+        return f'Consola {self.nombre}'
     
 
 class StockVideojuego(models.Model):
-    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    videojuego_id = models.ForeignKey(Videojuego, on_delete=models.CASCADE)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    videojuego = models.ForeignKey(Videojuego, on_delete=models.CASCADE)
     precio = models.FloatField()
     stock = models.IntegerField()
 
+    def __str__(self):
+        return f'Videojuego {self.videojuego} en tienda {self.tienda}, precio {self.precio} €, stock {self.stock}'
+
 class StockConsola(models.Model):
-    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    consola_id = models.ForeignKey(Consola, on_delete=models.CASCADE)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    consola = models.ForeignKey(Consola, on_delete=models.CASCADE)
     precio = models.FloatField()
     stock = models.IntegerField()
+
+    def __str__(self):
+        return f'Consola {self.consola} en tienda {self.tienda}, precio {self.precio} €, stock {self.stock}'
 
 class Administrador(models.Model):
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f'Administrador {self.usuario}'
+
 class Cliente(models.Model):
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
-    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Cliente {self.usuario}'
     
 
 
@@ -52,21 +73,26 @@ class Trabajador(models.Model):
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
-    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    administrador_id = models.ForeignKey(Administrador, on_delete=models.CASCADE)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    administrador = models.ForeignKey(Administrador, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Trabajador {self.usuario}'
 
 class ReservaVideojuego(models.Model):
     estadoNoCompletada = 'No completada'
     estadoCompletada = 'Completada'
     ESTADOS = {
     (estadoCompletada, 'No completada'),
-    (estadoNoCompletada, 'Completada')
-}
+    (estadoNoCompletada, 'Completada')}
 
-    cliente_id = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    stockVideojuego_id = models.ForeignKey(StockVideojuego, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    stockVideojuego = models.ForeignKey(StockVideojuego, on_delete=models.CASCADE)
     fecha = models.DateField()
     estado = models.CharField(max_length=50, choices=ESTADOS)
+
+    def __str__(self):
+        return f'Reserva de {self.stockVideojuego} por {self.cliente}'
 
 class ReservaConsola(models.Model):
     estadoNoCompletada = 'No completada'
@@ -75,7 +101,10 @@ class ReservaConsola(models.Model):
     (estadoCompletada, 'No completada'),
     (estadoNoCompletada, 'Completada')}
     
-    cliente_id = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    stockConsola_id = models.ForeignKey(StockConsola, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    stockConsola = models.ForeignKey(StockConsola, on_delete=models.CASCADE)
     fecha = models.DateField()
     estado = models.CharField(max_length=50, choices=ESTADOS)
+
+    def __str__(self):
+        return f'Reserva de {self.stockConsola} por {self.cliente}'

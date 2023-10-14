@@ -155,8 +155,8 @@ class TestDAOs(TestCase):
         daoProductos.newConsola(consola)
         daoTienda.addConsolaTienda(tienda, consola, 3, 3)        
         stock = daoTienda.getStockConsola(tienda.id, consola.id)
-        assert stock.tienda_id == tienda.id
-        assert stock.consola_id == consola.id
+        assert stock.tienda == tienda.id
+        assert stock.consola == consola.id
         assert stock.stock == 3
         assert stock.precio == 3
         daoTienda.removeConsolaTienda(tienda.id, consola.id)
@@ -173,8 +173,8 @@ class TestDAOs(TestCase):
         daoProductos.newVideojuego(videojuego)
         daoTienda.addVideojuegoTienda(tienda, videojuego, 3, 3)        
         stock = daoTienda.getStockVideojuego(tienda.id, videojuego.id)
-        assert stock.tienda_id == tienda.id
-        assert stock.videojuego_id == videojuego.id
+        assert stock.tienda == tienda.id
+        assert stock.videojuego == videojuego.id
         assert stock.stock == 3
         assert stock.precio == 3
         daoTienda.removeVideojuegoTienda(tienda.id, videojuego.id)
@@ -197,13 +197,13 @@ class TestDAOs(TestCase):
         reserva = ReservaConsola(cliente=cliente, consolaTienda=daoTienda.getStockConsola(tienda.id, consola.id), fecha="2020-12-12", estado="estadoNoCompletada")
         daoReserva.newReservaConsola(reserva)
         reserva2 = daoReserva.getReservaConsola(reserva.id)
-        assert reserva2.cliente_id == cliente.id
+        assert reserva2.cliente == cliente.id
         assert reserva2.consolaTienda_id == daoTienda.getStockConsola(tienda.id, consola.id).id
         assert 1 == daoReserva.filterReservasConsolaByTienda(tienda.id).count()
-        daoReserva.updateReservasConsolaCliente(reserva.id, cliente2.id)
+        daoReserva.updateClienteReservaConsola(reserva.id, cliente2.id)
         reserva55 = daoReserva.filterReservasConsolaByCliente(cliente2.id)
         
-        assert reserva55[0].cliente_id.email == cliente2.email
+        assert reserva55[0].cliente.email == cliente2.email
 
 
         daoReserva.deleteReservaConsola(reserva.id)
@@ -226,13 +226,13 @@ class TestDAOs(TestCase):
         reserva = ReservaVideojuego(cliente=cliente, videojuegoTienda=daoTienda.getStockVideojuego(tienda.id, videojuego.id), fecha="2020-12-12", estado="estadoNoCompletada")
         daoReserva.newReservaVideojuego(reserva)
         reserva2 = daoReserva.getReservaVideojuego(reserva.id)
-        assert reserva2.cliente_id == cliente.id
+        assert reserva2.cliente == cliente.id
         assert reserva2.videojuegoTienda_id == daoTienda.getStockVideojuego(tienda.id, videojuego.id).id
-        assert 1 == daoReserva.getReservasVideojuegoTienda(tienda.id).count()
+        assert 1 == daoReserva.filterReservasVideojuegoByTienda(tienda.id).count()
         daoReserva.updateReservasVideojuegoCliente(reserva.id, cliente2.id)
-        reserva55 = daoReserva.getReservasVideojuegoCliente(cliente2.id)
+        reserva55 = daoReserva.filterReservasVideojuegoByCliente(cliente2.id)
         
-        assert reserva55[0].cliente_id.email == cliente2.email
+        assert reserva55[0].cliente.email == cliente2.email
 
 
         daoReserva.deleteReservasVideojuego(reserva.id)

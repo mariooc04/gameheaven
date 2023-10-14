@@ -7,6 +7,7 @@ def newVideojuego(videojuego):
     videojuego.save()
 
 
+
 def getVideojuegos():
     return Videojuego.objects.all()
 
@@ -15,7 +16,6 @@ def getVideojuego(idVideojuego):
 
 def getNombreVideojuego(idVideojuego):
     return getVideojuego(idVideojuego).nombre
-
 
 def getDescripcionVideojuego(id):
     return getVideojuego(id).descripcion
@@ -28,6 +28,7 @@ def getPlataformasVideojuego(idVideojuego):
 
 def getImagenVideojuego(id):
     return getVideojuego(id).img
+
 
 
 def updateVideojuego(idVideojuego, newVideojuego):
@@ -72,6 +73,7 @@ def newConsola(consola):
     consola.save()
     
 
+
 def getConsolas():
     return Consola.objects.all()
 
@@ -89,6 +91,8 @@ def getValoracionConsola(idConsola):
 
 def getImagenConsola(id):
     return getConsola(id).img
+
+
 
 def updateConsola(idConsola, newConsola):
     consola = getConsola(idConsola)
