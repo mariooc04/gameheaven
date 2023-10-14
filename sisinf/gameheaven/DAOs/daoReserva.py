@@ -1,25 +1,19 @@
 from gameheaven.models import ReservaConsola as ReservaConsola
 from gameheaven.models import ReservaVideojuego as ReservaVideojuego
 
-###Reservas Consolas
+### Daos reservas Consolas
 
 def newReservaConsola(reservaConsola):
-    ReservaConsola.save(reservaConsola)
+    reservaConsola.save()
 
-def newReservaVideojuego(reservaVideojuego):
-    ReservaVideojuego.save(reservaVideojuego)
-    
 def getReservasConsola():
     return ReservaConsola.objects.all()
 
-def  getReservasVideojuego():
-    return ReservaVideojuego.objects.all()
-    
-def getReservasConsolaUsuario(idUsuario):
-    return ReservaConsola.objects.filter(idUsuario=idUsuario)
-
 def getReservaConsola(idReservaConsola):
     return ReservaConsola.objects.get(pk=idReservaConsola)
+
+def getReservasConsolaCliente(idCliente):
+    return ReservaConsola.objects.filter(cliente_id=idCliente)
 
 def getFechaReservaConsola(idReservaConsola):
     return ReservaConsola.objects.get(pk=idReservaConsola).fechaReserva
@@ -100,20 +94,24 @@ def deleteReservasConsola(idReserva):
     reserva = getReservaConsola(idReserva)
     reserva.delete()
 
-    
-### ReservasVidejuegos
+
+
+
+
+### Daos reservas Videojuegos
 
 def newReservaVideojuego(reservaVideojuego):
-    ReservaVideojuego.save(reservaVideojuego)
+    reservaVideojuego.save()
 
-def getReservasVideojuego():
+def  getReservasVideojuego():
     return ReservaVideojuego.objects.all()
-
-def getReservasVideojuegoUsuario(idUsuario):
-    return ReservaVideojuego.objects.filter(idUsuario=idUsuario)
 
 def getReservaVideojuego(idReservaVideojuego):
     return ReservaVideojuego.objects.get(pk=idReservaVideojuego)
+
+def getReservasVideojuegoCliente(idCliente):
+    return ReservaVideojuego.objects.filter(cliente_id=idCliente)
+    
 
 def getReservasVideojuegoTienda(idTienda):
     return ReservaVideojuego.objects.filter(idTienda=idTienda)
