@@ -1,5 +1,5 @@
 from django.test import TestCase
-from gameheaven.models import Tienda, Consola, Videojuego, Trabajador, Administrador, Cliente, StockConsolas, StockVideojuego, ReservaVideojuego, ReservaConsola
+from gameheaven.models import Tienda, Consola, Videojuego, Trabajador, Administrador, Cliente, StockConsola, StockVideojuego, ReservaVideojuego, ReservaConsola
 from gameheaven.DAOs import daoTienda, daoProductos, daoUsuario, daoReserva
 
 # Create your tests here.
@@ -203,7 +203,7 @@ class TestDAOs(TestCase):
         daoReserva.updateReservasConsolaCliente(reserva.id, cliente2.id)
         reserva55 = daoReserva.filterReservasConsolaByCliente(cliente2.id)
         
-        assert reserva55[0].cliente.email == cliente2.email
+        assert reserva55[0].cliente_id.email == cliente2.email
 
 
         daoReserva.deleteReservaConsola(reserva.id)
@@ -232,7 +232,7 @@ class TestDAOs(TestCase):
         daoReserva.updateReservasVideojuegoCliente(reserva.id, cliente2.id)
         reserva55 = daoReserva.getReservasVideojuegoCliente(cliente2.id)
         
-        assert reserva55[0].cliente.email == cliente2.email
+        assert reserva55[0].cliente_id.email == cliente2.email
 
 
         daoReserva.deleteReservasVideojuego(reserva.id)

@@ -1,10 +1,5 @@
 from django.db import models
 
-ESTADOS = {
-    ('estadoNoCompletada', 'No completada'),
-    ('estadoCompletada', 'Completada')
-}
-
 # Create your models here.
 class Tienda(models.Model):
     ciudad = models.CharField(max_length=50)
@@ -28,14 +23,14 @@ class Consola(models.Model):
     valoracion = models.FloatField(null=True)
 
 class StockVideojuego(models.Model):
-    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    videojuego = models.ForeignKey(Videojuego, on_delete=models.CASCADE)
+    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    videojuego_id = models.ForeignKey(Videojuego, on_delete=models.CASCADE)
     precio = models.FloatField()
     stock = models.IntegerField()
 
-class StockConsolas(models.Model):
-    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    consola = models.ForeignKey(Consola, on_delete=models.CASCADE)
+class StockConsola(models.Model):
+    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    consola_id = models.ForeignKey(Consola, on_delete=models.CASCADE)
     precio = models.FloatField()
     stock = models.IntegerField()
 
@@ -48,7 +43,7 @@ class Cliente(models.Model):
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
-    idTienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
     
 
 
@@ -56,17 +51,30 @@ class Trabajador(models.Model):
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
-    idTienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    idAdmin = models.ForeignKey(Administrador, on_delete=models.CASCADE)
+    tienda_id = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    administrador_id = models.ForeignKey(Administrador, on_delete=models.CASCADE)
 
 class ReservaVideojuego(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    videojuegoTienda = models.ForeignKey(StockVideojuego, on_delete=models.CASCADE)
+    estadoNoCompletada = 'No completada'
+    estadoCompletada = 'Completada'
+    ESTADOS = {
+    (estadoCompletada, 'No completada'),
+    (estadoNoCompletada, 'Completada')
+}
+
+    cliente_id = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    stockVideojuego_id = models.ForeignKey(StockVideojuego, on_delete=models.CASCADE)
     fecha = models.DateField()
     estado = models.CharField(max_length=50, choices=ESTADOS)
 
 class ReservaConsola(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    consolaTienda = models.ForeignKey(StockConsolas, on_delete=models.CASCADE)
+    estadoNoCompletada = 'No completada'
+    estadoCompletada = 'Completada'
+    ESTADOS = {
+    (estadoCompletada, 'No completada'),
+    (estadoNoCompletada, 'Completada')}
+    
+    cliente_id = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    stockConsola_id = models.ForeignKey(StockConsola, on_delete=models.CASCADE)
     fecha = models.DateField()
     estado = models.CharField(max_length=50, choices=ESTADOS)

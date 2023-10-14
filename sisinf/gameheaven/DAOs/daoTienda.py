@@ -1,5 +1,5 @@
 from gameheaven.models import Tienda as Tienda
-from gameheaven.models import StockConsolas as StockConsolas
+from gameheaven.models import StockConsola as StockConsola
 from gameheaven.models import StockVideojuego as StockVideojuego
 
 ###Tiendas
@@ -37,7 +37,7 @@ def deleteTienda(idTienda):
     Tienda.objects.get(pk=idTienda).delete()
 
 def addConsolaTienda(tienda, consola, precio, stock):
-    stockConsolas = StockConsolas(tienda=tienda, consola=consola, precio=precio, stock=stock)
+    stockConsolas = StockConsola(tienda=tienda, consola=consola, precio=precio, stock=stock)
     stockConsolas.save()
 
 def addVideojuegoTienda(tienda, videojuego, precio, stock):
@@ -60,7 +60,7 @@ def newStockConsolas(stockConsolas):
     stockConsolas.save()
 
 def getStockConsola(idTienda, idConsola):
-    return StockConsolas.objects.get(tienda_id=idTienda, consola_id=idConsola)
+    return StockConsola.objects.get(tienda_id=idTienda, consola_id=idConsola)
     
 def getIdTiendaStockConsolas(idStockConsolas):
     return getStockConsola(idStockConsolas).idTienda

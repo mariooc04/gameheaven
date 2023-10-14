@@ -41,7 +41,7 @@ def filerReservasConsolaByFecha(fecha):
 
 def updateReservasConsola(idReserva, NewReserva):
     reserva = getReservaConsola(idReserva)
-    reserva.cliente = NewReserva.cliente
+    reserva.cliente_id = NewReserva.cliente
     reserva.consolaTienda = NewReserva.consolaTienda
     reserva.fecha = NewReserva.fecha
     reserva.estado = NewReserva.estado
@@ -115,7 +115,7 @@ def getReservasVideojuegoFecha(fecha):
 
 def updateReservasVideojuego(idReserva, NewReserva):
     reserva = getReservaVideojuego(idReserva)
-    reserva.cliente = NewReserva.cliente
+    reserva.cliente_id = NewReserva.cliente
     reserva.videojuegoTienda = NewReserva.videojuegoTienda
     reserva.fecha = NewReserva.fecha
     reserva.estado = NewReserva.estado
