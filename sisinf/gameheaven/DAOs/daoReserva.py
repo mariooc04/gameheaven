@@ -1,5 +1,6 @@
 from gameheaven.models import ReservaConsola as ReservaConsola
 from gameheaven.models import ReservaVideojuego as ReservaVideojuego
+from gameheaven.DAOs import daoUsuario as daoUsuario
 
 ### Daos reservas Consolas
 
@@ -12,85 +13,67 @@ def getReservasConsola():
 def getReservaConsola(idReservaConsola):
     return ReservaConsola.objects.get(pk=idReservaConsola)
 
-def getReservasConsolaCliente(idCliente):
-    return ReservaConsola.objects.filter(cliente_id=idCliente)
+
 
 def getFechaReservaConsola(idReservaConsola):
-    return ReservaConsola.objects.get(pk=idReservaConsola).fechaReserva
+    return getReservaConsola(idReservaConsola).fechaReserva
 
 def getEstadoReservaConsola(idReservaConsola):
-    return ReservaConsola.objects.get(pk=idReservaConsola).estado
+    return getReservaConsola(idReservaConsola).estado
 
 def getConsolaReservaConsola(idReservaConsola):
-    return ReservaConsola.objects.get(pk=idReservaConsola).idConsola
+    return getReservaConsola(idReservaConsola).consolaTienda__consola_id   
 
 def getClienteReservaConsola(idReservaConsola):
-    return ReservaConsola.objects.get(pk=idReservaConsola).idUsuario
+    return getReservaConsola(idReservaConsola).cliente_id
 
-def getReservasConsolaTienda(idTienda):
-    return ReservaConsola.objects.filter(idTienda=idTienda)
+def filterReservasConsolaByCliente(idCliente):
+    return ReservaConsola.objects.filter(cliente_id=idCliente)
 
-def getReservasConsolaEstado(estado):
+def filterReservasConsolaByTienda(idTienda):
+    return ReservaConsola.objects.filter(consolaTienda__tienda_id=idTienda)
+
+def filterReservasConsolaByEstado(estado):
     return ReservaConsola.objects.filter(estado=estado)
 
-def getReservasConsolaFecha(fecha):
+def filerReservasConsolaByFecha(fecha):
     return ReservaConsola.objects.filter(fecha=fecha)
-
-def getReservasConsolaFechaEstado(fecha, estado):
-    return ReservaConsola.objects.filter(fecha=fecha, estado=estado)
-
-def getReservasConsolaTiendaEstado(idTienda, estado):
-    return ReservaConsola.objects.filter(idTienda=idTienda, estado=estado)
-    
-def getReservasConsolaTiendaFecha(idTienda, fecha):
-    return ReservaConsola.objects.filter(idTienda=idTienda, fecha=fecha)
-
-def getReservasConsolaTiendaFechaEstado(idTienda, fecha, estado):
-    return ReservaConsola.objects.filter(idTienda=idTienda, fecha=fecha, estado=estado)
-
-def getReservasConsolaUsuarioEstado(idUsuario, estado):
-    return ReservaConsola.objects.filter(idUsuario=idUsuario, estado=estado)
-
-def getReservasConsolaUsuarioFecha(idUsuario, fecha):
-    return ReservaConsola.objects.filter(idUsuario=idUsuario, fecha=fecha)
 
 def updateReservasConsola(idReserva, NewReserva):
     reserva = getReservaConsola(idReserva)
-    reserva.idUsuario = NewReserva.idUsuario
-    reserva.idTienda = NewReserva.idTienda
-    reserva.idConsola = NewReserva.idConsola
+    reserva.cliente = NewReserva.cliente
+    reserva.consolaTienda = NewReserva.consolaTienda
     reserva.fecha = NewReserva.fecha
     reserva.estado = NewReserva.estado
     reserva.save()
 
 
-
-def updateUsuarioReservasConsola(idReserva,idUsuario):
+def updateReservasConsolaCliente(idReserva, idCliente):
     reserva = getReservaConsola(idReserva)
-    reserva.idUsuario = idUsuario
+    reserva.cliente_id = idCliente
     reserva.save()
 
-def updateTiendaReservasConsola(idReserva,idTienda):
+def updateReservasConsolaTienda(idReserva,idTienda):
     reserva = getReservaConsola(idReserva)
-    reserva.idTienda = idTienda
+    reserva.consolaTienda__tienda_id = idTienda
     reserva.save()
 
-def updateConsolaReservasConsola(idReserva,idConsola):
+def updateReservasConsolaConsola(idReserva,idConsola):
     reserva = getReservaConsola(idReserva)
-    reserva.idConsola = idConsola
+    reserva.consolaTienda__consola_id = idConsola
     reserva.save()
 
-def updateFechaReservasConsola(idReserva,fecha):
+def updateReservasConsolaFecha(idReserva,fecha):
     reserva = getReservaConsola(idReserva)
     reserva.fecha = fecha
     reserva.save()
 
-def updateEstadoReservasConsola(idReserva,estado):
+def updateReservasConsolaEstado(idReserva,estado):
     reserva = getReservaConsola(idReserva)
     reserva.estado = estado
     reserva.save()
 
-def deleteReservasConsola(idReserva):
+def deleteReservaConsola(idReserva):
     reserva = getReservaConsola(idReserva)
     reserva.delete()
 
@@ -112,9 +95,8 @@ def getReservaVideojuego(idReservaVideojuego):
 def getReservasVideojuegoCliente(idCliente):
     return ReservaVideojuego.objects.filter(cliente_id=idCliente)
     
-
 def getReservasVideojuegoTienda(idTienda):
-    return ReservaVideojuego.objects.filter(idTienda=idTienda)
+    return ReservaVideojuego.objects.filter(videojuegoTienda__tienda_id=idTienda)
 
 def getFechaReservaVideojuego(idReservaVideojuego):
     return getReservaVideojuego(idReservaVideojuego).fechaReserva
@@ -131,46 +113,27 @@ def getReservasVideojuegoEstado(estado):
 def getReservasVideojuegoFecha(fecha):
     return ReservaVideojuego.objects.filter(fecha=fecha)
 
-def getReservasVideojuegoFechaEstado(fecha, estado):
-    return ReservaVideojuego.objects.filter(fecha=fecha, estado=estado)
-
-def getReservasVideojuegoTiendaEstado(idTienda, estado):
-    return ReservaVideojuego.objects.filter(idTienda=idTienda, estado=estado)
-
-def getReservasVideojuegoTiendaFecha(idTienda, fecha):
-    return ReservaVideojuego.objects.filter(idTienda=idTienda, fecha=fecha)
-
-def getReservasVideojuegoTiendaFechaEstado(idTienda, fecha, estado):
-    return ReservaVideojuego.objects.filter(idTienda=idTienda, fecha=fecha, estado=estado)
-
-def getReservasVideojuegoUsuarioEstado(idUsuario, estado):
-    return ReservaVideojuego.objects.filter(idUsuario=idUsuario, estado=estado)
-
-def getReservasVideojuegoUsuarioFecha(idUsuario, fecha):
-    return ReservaVideojuego.objects.filter(idUsuario=idUsuario, fecha=fecha)
-
 def updateReservasVideojuego(idReserva, NewReserva):
     reserva = getReservaVideojuego(idReserva)
-    reserva.idUsuario = NewReserva.idUsuario
-    reserva.idTienda = NewReserva.idTienda
-    reserva.idVideojuego = NewReserva.idVideojuego
+    reserva.cliente = NewReserva.cliente
+    reserva.videojuegoTienda = NewReserva.videojuegoTienda
     reserva.fecha = NewReserva.fecha
     reserva.estado = NewReserva.estado
     reserva.save()
     
-def updateidUsuarioReservaVideojuego(idReserva, idUsuario):
+def updateReservasVideojuegoTienda(idReserva, idTienda):
     reserva = getReservaVideojuego(idReserva)
-    reserva.idUsuario = idUsuario
-    reserva.save()
-    
-def updateidTiendaReservaVideojuego(idReserva, idTienda):
-    reserva = getReservaVideojuego(idReserva)
-    reserva.idTienda = idTienda
+    reserva.videojuegoTienda__tienda_id = idTienda
     reserva.save()
 
 def updateidVideojuegoReservaVideojuego(idReserva, idVideojuego):
     reserva = getReservaVideojuego(idReserva)
-    reserva.idVideojuego = idVideojuego
+    reserva.videojuegoTienda__videojuego_id = idVideojuego
+    reserva.save()
+
+def updateReservasVideojuegoCliente(idReserva, idCliente):
+    reserva = getReservaVideojuego(idReserva)
+    reserva.cliente_id = idCliente
     reserva.save()
 
 def updateFechaReservaVideojuego(idReserva, fecha):

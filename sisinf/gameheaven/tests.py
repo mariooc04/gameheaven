@@ -183,3 +183,62 @@ class TestDAOs(TestCase):
             assert False
         except:
              assert True
+
+    def test_reserva_consolas(TestCase):
+        tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
+        daoTienda.newTienda(tienda)
+        consola = Consola(nombre="PS5", descripcion="La mejor consola del mercado", img="img/ps5.jpg", valoracion=4.5)
+        daoProductos.newConsola(consola)
+        daoTienda.addConsolaTienda(tienda, consola, 3, 3)
+        cliente = Cliente(email="alv@alv.com", password="alv", usuario="alv", idTienda=tienda)
+        cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", idTienda=tienda)
+        daoUsuario.newCliente(cliente)
+        daoUsuario.newCliente(cliente2)
+        reserva = ReservaConsola(cliente=cliente, consolaTienda=daoTienda.getStockConsola(tienda.id, consola.id), fecha="2020-12-12", estado="estadoNoCompletada")
+        daoReserva.newReservaConsola(reserva)
+        reserva2 = daoReserva.getReservaConsola(reserva.id)
+        assert reserva2.cliente_id == cliente.id
+        assert reserva2.consolaTienda_id == daoTienda.getStockConsola(tienda.id, consola.id).id
+        assert 1 == daoReserva.filterReservasConsolaByTienda(tienda.id).count()
+        daoReserva.updateReservasConsolaCliente(reserva.id, cliente2.id)
+        reserva55 = daoReserva.filterReservasConsolaByCliente(cliente2.id)
+        
+        assert reserva55[0].cliente.email == cliente2.email
+
+
+        daoReserva.deleteReservaConsola(reserva.id)
+        try:
+            reserva3 = daoReserva.getReservaConsola(reserva.id)
+            assert False
+        except:
+            assert True
+
+    def test_reserva_videojuegos(TestCase):
+        tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
+        daoTienda.newTienda(tienda)
+        videojuego = Videojuego(nombre="starfield", descripcion="El mejor videojuego del mercado", img="img/stf.jpg", valoracion=4.5)
+        daoProductos.newVideojuego(videojuego)
+        daoTienda.addVideojuegoTienda(tienda, videojuego, 3, 3)
+        cliente = Cliente(email="alv@alv.com", password="alv", usuario="alv", idTienda=tienda)
+        cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", idTienda=tienda)
+        daoUsuario.newCliente(cliente)
+        daoUsuario.newCliente(cliente2)
+        reserva = ReservaVideojuego(cliente=cliente, videojuegoTienda=daoTienda.getStockVideojuego(tienda.id, videojuego.id), fecha="2020-12-12", estado="estadoNoCompletada")
+        daoReserva.newReservaVideojuego(reserva)
+        reserva2 = daoReserva.getReservaVideojuego(reserva.id)
+        assert reserva2.cliente_id == cliente.id
+        assert reserva2.videojuegoTienda_id == daoTienda.getStockVideojuego(tienda.id, videojuego.id).id
+        assert 1 == daoReserva.getReservasVideojuegoTienda(tienda.id).count()
+        daoReserva.updateReservasVideojuegoCliente(reserva.id, cliente2.id)
+        reserva55 = daoReserva.getReservasVideojuegoCliente(cliente2.id)
+        
+        assert reserva55[0].cliente.email == cliente2.email
+
+
+        daoReserva.deleteReservasVideojuego(reserva.id)
+        try:
+            reserva3 = daoReserva.getReservaVideojuego(reserva.id)
+            assert False
+        except:
+            assert True
+             
