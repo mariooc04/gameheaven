@@ -78,22 +78,22 @@ class TestDAOs(TestCase):
             admin = Administrador(email="admin@admin.com", password="admin", usuario="admin")
             daoUsuario.newAdministrador(admin)
             admin = daoUsuario.getAdministrador(admin.id)
-            trabajador = Trabajador(email="test@test.com", password="test", usuario="test", idTienda=tienda, idAdmin=admin)
+            trabajador = Trabajador(email="test@test.com", password="test", usuario="test", tienda=tienda, administrador=admin)
             daoUsuario.newTrajador(trabajador)
             # Read
             trabajador2 = daoUsuario.getTrabajador(trabajador.id)
             assert trabajador2.email == trabajador.email
             assert trabajador2.password == trabajador.password
             assert trabajador2.usuario == trabajador.usuario
-            assert trabajador2.idTienda == trabajador.idTienda
-            assert trabajador2.idAdmin == trabajador.idAdmin
+            assert trabajador2.tienda == trabajador.tienda
+            assert trabajador2.administrador == trabajador.administrador
             # Update
             trabajador2.email = "asdf@asdf.com"
             daoUsuario.updateTrabajador(trabajador.id, trabajador2)
             trabajador3 = daoUsuario.getTrabajador(trabajador.id)
             assert trabajador3.email == trabajador2.email
             # Delete
-            daoUsuario.deleteTrabajador(trabajador)
+            daoUsuario.deleteTrabajador(trabajador.id)
             try:
                 trabajador4 = daoUsuario.getTrabajador(trabajador.id)
                 assert False
@@ -105,14 +105,14 @@ class TestDAOs(TestCase):
          # Create
             tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
             daoTienda.newTienda(tienda)
-            cliente = Cliente(email="test@test.com", password="test", usuario="test", idTienda=tienda)
+            cliente = Cliente(email="test@test.com", password="test", usuario="test", tienda=tienda)
             daoUsuario.newCliente(cliente)
             # Read
             cliente2 = daoUsuario.getCliente(cliente.id)
             assert cliente2.email == cliente.email
             assert cliente2.password == cliente.password
             assert cliente2.usuario == cliente.usuario
-            assert cliente2.idTienda == cliente.idTienda
+            assert cliente2.tienda == cliente.tienda
             # Update
             cliente2.email = "asdf@asdf.com"
             daoUsuario.updateCliente(cliente.id, cliente2)
@@ -190,23 +190,27 @@ class TestDAOs(TestCase):
         consola = Consola(nombre="PS5", descripcion="La mejor consola del mercado", img="img/ps5.jpg", valoracion=4.5)
         daoProductos.newConsola(consola)
         daoTienda.addConsolaTienda(tienda, consola, 3, 3)
-        cliente = Cliente(email="alv@alv.com", password="alv", usuario="alv", idTienda=tienda)
-        cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", idTienda=tienda)
+        cliente = Cliente(email="alv@alv.com", password="alv", usuario="alv", tienda=tienda)
+        cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", tienda=tienda)
         daoUsuario.newCliente(cliente)
         daoUsuario.newCliente(cliente2)
-        reserva = ReservaConsola(cliente=cliente, consolaTienda=daoTienda.getStockConsola(tienda.id, consola.id), fecha="2020-12-12", estado="estadoNoCompletada")
+        reserva = ReservaConsola(cliente=cliente, stockConsola=daoTienda.getStockConsola(tienda.id, consola.id), fecha="2020-12-12", estado=ReservaConsola.estadoNoCompletada)
         daoReserva.newReservaConsola(reserva)
         reserva2 = daoReserva.getReservaConsola(reserva.id)
-        assert reserva2.cliente == cliente.id
-        assert reserva2.consolaTienda_id == daoTienda.getStockConsola(tienda.id, consola.id).id
+        assert reserva2.cliente == cliente
+        assert reserva2.stockConsola == daoTienda.getStockConsola(tienda.id, consola.id)
         assert 1 == daoReserva.filterReservasConsolaByTienda(tienda.id).count()
-        daoReserva.updateClienteReservaConsola(reserva.id, cliente2.id)
+        daoReserva.updateClienteReservaConsola(reserva.id, cliente2)
         reserva55 = daoReserva.filterReservasConsolaByCliente(cliente2.id)
         
         assert reserva55[0].cliente.email == cliente2.email
 
 
         daoReserva.deleteReservaConsola(reserva.id)
+        daoUsuario.deleteCliente(cliente)
+        daoUsuario.deleteCliente(cliente2)
+        daoTienda.deleteTienda(tienda.id)
+        daoProductos.deleteConsola(consola)
         try:
             reserva3 = daoReserva.getReservaConsola(reserva.id)
             assert False
@@ -223,11 +227,11 @@ class TestDAOs(TestCase):
         cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", idTienda=tienda)
         daoUsuario.newCliente(cliente)
         daoUsuario.newCliente(cliente2)
-        reserva = ReservaVideojuego(cliente=cliente, videojuegoTienda=daoTienda.getStockVideojuego(tienda.id, videojuego.id), fecha="2020-12-12", estado="estadoNoCompletada")
+        reserva = ReservaVideojuego(cliente=cliente, stockVideojuego=daoTienda.getStockVideojuego(tienda.id, videojuego.id), fecha="2020-12-12", estado="estadoNoCompletada")
         daoReserva.newReservaVideojuego(reserva)
         reserva2 = daoReserva.getReservaVideojuego(reserva.id)
-        assert reserva2.cliente == cliente.id
-        assert reserva2.videojuegoTienda_id == daoTienda.getStockVideojuego(tienda.id, videojuego.id).id
+        assert reserva2.cliente == cliente
+        assert reserva2.stockVideojuego == daoTienda.getStockVideojuego(tienda.id, videojuego.id)
         assert 1 == daoReserva.filterReservasVideojuegoByTienda(tienda.id).count()
         daoReserva.updateReservasVideojuegoCliente(reserva.id, cliente2.id)
         reserva55 = daoReserva.filterReservasVideojuegoByCliente(cliente2.id)
@@ -236,6 +240,10 @@ class TestDAOs(TestCase):
 
 
         daoReserva.deleteReservasVideojuego(reserva.id)
+        daoUsuario.deleteCliente(cliente)
+        daoUsuario.deleteCliente(cliente2)
+        daoTienda.deleteTienda(tienda.id)
+        daoProductos.deleteVideojuego(videojuego.id)
         try:
             reserva3 = daoReserva.getReservaVideojuego(reserva.id)
             assert False

@@ -64,6 +64,8 @@ def updateImagenVideojuego(idVideojuego, imagen):
     videojuego.save()
 
 def deleteVideojuego(videojuego):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.delete()
 
 
@@ -122,4 +124,6 @@ def updateImagenConsola(idConsola, imagen):
     consola.save()
         
 def deleteConsola(consola):
+    if isinstance(consola, int):
+        consola = getConsola(consola)
     consola.delete()

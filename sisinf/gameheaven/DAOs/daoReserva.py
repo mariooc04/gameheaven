@@ -82,8 +82,9 @@ def updateReservasConsolaEstado(idReserva,estado):
 
 
 
-def deleteReservaConsola(idReserva):
-    reserva = getReservaConsola(idReserva)
+def deleteReservaConsola(reserva):
+    if isinstance(reserva, int):
+        reserva = getReservaConsola(reserva)
     reserva.delete()
 
 
@@ -161,6 +162,7 @@ def updateEstadoReservaVideojuego(idReserva, estado):
 
 
     
-def deleteReservasVideojuego(idReserva):
-    reserva = getReservaVideojuego(idReserva)
+def deleteReservasVideojuego(reserva):
+    if isinstance(reserva, int):
+        reserva = getReservaVideojuego(reserva)
     reserva.delete()

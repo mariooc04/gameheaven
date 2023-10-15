@@ -67,8 +67,9 @@ def removeVideojuegoTienda(idTienda, idVideojuego):
 
 
 
-def deleteTienda(idTienda):
-    tienda = getTienda(idTienda)
+def deleteTienda(tienda):
+    if isinstance(tienda, int):
+        tienda = getTienda(tienda)
     tienda.delete()
 
 
@@ -133,8 +134,9 @@ def updateStockStockConsola(idStockConsola, stock):
 
 
 
-def deleteStockConsola(idStockConsola):
-    stockConsola = getStockConsola(idStockConsola)
+def deleteStockConsola(stockConsola):
+    if isinstance(stockConsola, int):
+        stockConsola = getStockConsola(stockConsola)
     stockConsola.delete()
 
 
@@ -200,6 +202,7 @@ def updateStockStockVideojuego(idStockVideojuego, stock):
 
 
 
-def deleteStockVideojuego(idStockVideojuego):
-    stockVideojuego = getStockVideojuego(idStockVideojuego)
+def deleteStockVideojuego(stockVideojuego):
+    if isinstance(stockVideojuego, int):
+        stockVideojuego = getStockVideojuego(stockVideojuego)
     stockVideojuego.delete()

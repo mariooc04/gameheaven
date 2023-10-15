@@ -79,8 +79,10 @@ def updateAdministradorTrabajador(idTrabajador, idAdmin):
 
 
 
-def deleteTrabajador(idTrabajador):
-    getTrabajador(idTrabajador).delete()
+def deleteTrabajador(trabajador):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
+    trabajador.delete()
 
 
 
@@ -133,7 +135,10 @@ def updateUsuarioAdministrador(idAdministrador, usuario):
 
 
 def deleteAdministrador(administrador):
-    Administrador.objects.get(pk=administrador.id).delete()
+    if isinstance(administrador, int):
+        administrador = getAdministrador(administrador)
+    administrador.delete()
+
 
 ### Daos Cliente
 
@@ -194,4 +199,6 @@ def updateTiendaCliente(idCliente, idTienda):
 
 
 def deleteCliente(cliente):
-    Cliente.objects.get(pk=cliente.id).delete()
+    if isinstance(cliente, int):
+        cliente = getCliente(cliente)
+    cliente.delete()

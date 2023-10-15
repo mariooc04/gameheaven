@@ -5,14 +5,14 @@ class Tienda(models.Model):
     ciudad = models.CharField(max_length=50)
     codigoPostal = models.IntegerField()
     videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego')
-    consolas = models.ManyToManyField('Consola', through='StockConsolas')
+    consolas = models.ManyToManyField('Consola', through='StockConsola')
 
     def __str__(self):
         return f'Tienda en {self.ciudad}, {self.codigoPostal}'
     
 
 class Videojuego(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.TextField(max_length=500, null=True)
     valoracion = models.FloatField(null=True)
     plataformas = models.CharField(max_length=50, null=True)
@@ -23,7 +23,7 @@ class Videojuego(models.Model):
     
     
 class Consola(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.TextField(max_length=500, null=True)
     valoracion = models.FloatField(null=True)
     img = models.ImageField(upload_to='img/', null=True)
@@ -38,6 +38,10 @@ class StockVideojuego(models.Model):
     precio = models.FloatField()
     stock = models.IntegerField()
 
+    class Meta:
+        unique_together = ('tienda', 'videojuego')
+
+
     def __str__(self):
         return f'Videojuego {self.videojuego} en tienda {self.tienda}, precio {self.precio} €, stock {self.stock}'
 
@@ -47,11 +51,15 @@ class StockConsola(models.Model):
     precio = models.FloatField()
     stock = models.IntegerField()
 
+    class Meta:
+        unique_together = ('tienda', 'consola')
+
+
     def __str__(self):
         return f'Consola {self.consola} en tienda {self.tienda}, precio {self.precio} €, stock {self.stock}'
 
 class Administrador(models.Model):
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
 
@@ -59,7 +67,7 @@ class Administrador(models.Model):
         return f'Administrador {self.usuario}'
 
 class Cliente(models.Model):
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
@@ -70,7 +78,7 @@ class Cliente(models.Model):
 
 
 class Trabajador(models.Model):
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     usuario = models.CharField(max_length=50)
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
