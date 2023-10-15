@@ -155,8 +155,8 @@ class TestDAOs(TestCase):
         daoProductos.newConsola(consola)
         daoTienda.addConsolaTienda(tienda, consola, 3, 3)        
         stock = daoTienda.getStockConsola(tienda.id, consola.id)
-        assert stock.tienda == tienda.id
-        assert stock.consola == consola.id
+        assert stock.tienda == tienda
+        assert stock.consola == consola
         assert stock.stock == 3
         assert stock.precio == 3
         daoTienda.removeConsolaTienda(tienda.id, consola.id)
@@ -173,8 +173,8 @@ class TestDAOs(TestCase):
         daoProductos.newVideojuego(videojuego)
         daoTienda.addVideojuegoTienda(tienda, videojuego, 3, 3)        
         stock = daoTienda.getStockVideojuego(tienda.id, videojuego.id)
-        assert stock.tienda == tienda.id
-        assert stock.videojuego == videojuego.id
+        assert stock.tienda == tienda
+        assert stock.videojuego == videojuego
         assert stock.stock == 3
         assert stock.precio == 3
         daoTienda.removeVideojuegoTienda(tienda.id, videojuego.id)
@@ -223,8 +223,8 @@ class TestDAOs(TestCase):
         videojuego = Videojuego(nombre="starfield", descripcion="El mejor videojuego del mercado", img="img/stf.jpg", valoracion=4.5)
         daoProductos.newVideojuego(videojuego)
         daoTienda.addVideojuegoTienda(tienda, videojuego, 3, 3)
-        cliente = Cliente(email="alv@alv.com", password="alv", usuario="alv", idTienda=tienda)
-        cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", idTienda=tienda)
+        cliente = Cliente(email="alv@alv.com", password="alv", usuario="alv", tienda=tienda)
+        cliente2 = Cliente(email="jal@jal.com", password="jal", usuario="jal", tienda=tienda)
         daoUsuario.newCliente(cliente)
         daoUsuario.newCliente(cliente2)
         reserva = ReservaVideojuego(cliente=cliente, stockVideojuego=daoTienda.getStockVideojuego(tienda.id, videojuego.id), fecha="2020-12-12", estado="estadoNoCompletada")
@@ -233,7 +233,7 @@ class TestDAOs(TestCase):
         assert reserva2.cliente == cliente
         assert reserva2.stockVideojuego == daoTienda.getStockVideojuego(tienda.id, videojuego.id)
         assert 1 == daoReserva.filterReservasVideojuegoByTienda(tienda.id).count()
-        daoReserva.updateReservasVideojuegoCliente(reserva.id, cliente2.id)
+        daoReserva.updateClienteReservaVideojuego(reserva.id, cliente2)
         reserva55 = daoReserva.filterReservasVideojuegoByCliente(cliente2.id)
         
         assert reserva55[0].cliente.email == cliente2.email
