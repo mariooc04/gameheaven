@@ -7,27 +7,27 @@ from gameheaven.DAOs import daoUsuario as daoUsuario
 def newReservaConsola(reservaConsola):
     reservaConsola.save()
 
-
+#GETTERS (with ID)
 
 def getAllReservasConsola():
     return ReservaConsola.objects.all()
 
-def getReservaConsola(idReservaConsola):
-    return ReservaConsola.objects.get(pk=idReservaConsola)
+def getReservaConsola(idReserva):
+    return ReservaConsola.objects.get(pk=idReserva)
 
-def getFechaReservaConsola(idReservaConsola):
-    return getReservaConsola(idReservaConsola).fechaReserva
+def getFechaReservaConsola(idReserva):
+    return getReservaConsola(idReserva).fecha
 
-def getEstadoReservaConsola(idReservaConsola):
-    return getReservaConsola(idReservaConsola).estado
+def getEstadoReservaConsola(idReserva):
+    return getReservaConsola(idReserva).estado
 
-def getStockConsolaReservaConsola(idReservaConsola):
-    return getReservaConsola(idReservaConsola).stockConsola
+def getStockConsolaReservaConsola(idReserva):
+    return getReservaConsola(idReserva).stockConsola
 
-def getClienteReservaConsola(idReservaConsola):
-    return getReservaConsola(idReservaConsola).cliente
+def getClienteReservaConsola(idReserva):
+    return getReservaConsola(idReserva).cliente
 
-
+#FILTERS (with ID)
 
 def filterReservasConsolaByCliente(idCliente):
     return ReservaConsola.objects.filter(cliente__id=idCliente)
@@ -44,10 +44,11 @@ def filterReservasConsolaByEstado(estado):
 def filerReservasConsolaByFecha(fecha):
     return ReservaConsola.objects.filter(fecha=fecha)
 
+#UPDATES
 
-
-def updateReservaConsola(idReserva, newReserva):
-    reserva = getReservaConsola(idReserva)
+def updateReservaConsola(reserva, newReserva):
+    if isinstance(reserva, int):
+        reserva = getReservaConsola(reserva)
     reserva.cliente = newReserva.cliente
     reserva.stockConsola = newReserva.stockConsola
     reserva.fecha = newReserva.fecha
@@ -55,68 +56,69 @@ def updateReservaConsola(idReserva, newReserva):
     reserva.save()
 
 
-def updateClienteReservaConsola(idReserva, cliente):
-    reserva = getReservaConsola(idReserva)
+def updateClienteReservaConsola(reserva, cliente):
+    if isinstance(reserva, int):
+        reserva = getReservaConsola(reserva)
     reserva.cliente = cliente
     reserva.save()
 
-def updateStockConsolaReservaConsola(idReserva, stockConsola):
-    reserva = getReservaConsola(idReserva)
+def updateStockConsolaReservaConsola(reserva, stockConsola):
+    if isinstance(reserva, int):
+        reserva = getReservaConsola(reserva)
     reserva.stockConsola = stockConsola
     reserva.save()
 
-def updateReservasConsolaConsola(idReserva,idConsola):
-    reserva = getReservaConsola(idReserva)
+def updateReservasConsolaConsola(reserva,idConsola):
+    if isinstance(reserva, int):
+        reserva = getReservaConsola(reserva)
     reserva.consolaTienda__consola_id = idConsola
     reserva.save()
 
-def updateReservasConsolaFecha(idReserva,fecha):
-    reserva = getReservaConsola(idReserva)
+def updateReservasConsolaFecha(reserva,fecha):
+    if isinstance(reserva, int):
+        reserva = getReservaConsola(reserva)
     reserva.fecha = fecha
     reserva.save()
 
-def updateReservasConsolaEstado(idReserva,estado):
-    reserva = getReservaConsola(idReserva)
+def updateReservasConsolaEstado(reserva,estado):
+    if isinstance(reserva, ReservaConsola):
+        reserva = reserva.id
     reserva.estado = estado
     reserva.save()
 
-
+#DELETES
 
 def deleteReservaConsola(reserva):
     if isinstance(reserva, int):
         reserva = getReservaConsola(reserva)
     reserva.delete()
 
-
-
-
-
 ### Daos reservas Videojuegos
 
 def newReservaVideojuego(reservaVideojuego):
     reservaVideojuego.save()
 
-
+#GETTERS (with ID)
 
 def getAllReservasVideojuego():
     return ReservaVideojuego.objects.all()
 
-def getReservaVideojuego(idReservaVideojuego):
-    return ReservaVideojuego.objects.get(pk=idReservaVideojuego)
+def getReservaVideojuego(idReserva):
+    return ReservaVideojuego.objects.get(pk=idReserva)
 
-def getClienteRservaVideojuego(idReservaVideojuego):
-    return getReservaVideojuego(idReservaVideojuego).cliente
+def getClienteRservaVideojuego(idReserva):
+    return getReservaVideojuego(idReserva).cliente
 
-def getStockVideojuegoReservaVideojuego(idReservaVideojuego):
-    return getReservaVideojuego(idReservaVideojuego).stockVideojuego
+def getStockVideojuegoReservaVideojuego(idReserva):
+    return getReservaVideojuego(idReserva).stockVideojuego
 
-def getFechaReservaVideojuego(idReservaVideojuego):
-    return getReservaVideojuego(idReservaVideojuego).fechaReserva
+def getFechaReservaVideojuego(idReserva):
+    return getReservaVideojuego(idReserva).fecha
 
-def getEstadoReservaVideojuego(idReservaVideojuego):
-    return getReservaVideojuego(idReservaVideojuego).estado
+def getEstadoReservaVideojuego(idReserva):
+    return getReservaVideojuego(idReserva).estado
 
-
+#FILTERS (with ID)
 
 def filterReservasVideojuegoByCliente(idCliente):
     return ReservaVideojuego.objects.filter(cliente_id=idCliente)
@@ -130,37 +132,42 @@ def filterReservasVideojuegoByEstado(estado):
 def filterReservasVideojuegoByFecha(fecha):
     return ReservaVideojuego.objects.filter(fecha=fecha)
 
+#UPDATES
 
-
-def updateReservaVideojuego(idReserva, NewReserva):
-    reserva = getReservaVideojuego(idReserva)
+def updateReservaVideojuego(reserva, NewReserva):
+    if isinstance(reserva, int):
+        reserva = getReservaVideojuego(reserva)
     reserva.cliente = NewReserva.cliente
     reserva.stockVideojuego = NewReserva.stockVideojuego
     reserva.fecha = NewReserva.fecha
     reserva.estado = NewReserva.estado
     reserva.save()
     
-def updateClienteReservaVideojuego(idReserva, cliente):
-    reserva = getReservaVideojuego(idReserva)
+def updateClienteReservaVideojuego(reserva, cliente):
+    if isinstance(reserva, int):
+        reserva = getReservaVideojuego(reserva)
     reserva.cliente = cliente
     reserva.save()
 
-def updateStockVideojuegoReservaVideojuego(idReserva, stockVideojuego):
-    reserva = getReservaVideojuego(idReserva)
+def updateStockVideojuegoReservaVideojuego(reserva, stockVideojuego):
+    if isinstance(reserva, int):
+        reserva = getReservaVideojuego(reserva)
     reserva.stockVideojuego = stockVideojuego
     reserva.save()
 
-def updateFechaReservaVideojuego(idReserva, fecha):
-    reserva = getReservaVideojuego(idReserva)
+def updateFechaReservaVideojuego(reserva, fecha):
+    if isinstance(reserva, int):
+        reserva = getReservaVideojuego(reserva)
     reserva.fecha = fecha
     reserva.save()
 
-def updateEstadoReservaVideojuego(idReserva, estado):
-    reserva = getReservaVideojuego(idReserva)
+def updateEstadoReservaVideojuego(reserva, estado):
+    if isinstance(reserva, int):
+        reserva = getReservaVideojuego(reserva)
     reserva.estado = estado
     reserva.save()
 
-
+#DELETES
     
 def deleteReservasVideojuego(reserva):
     if isinstance(reserva, int):

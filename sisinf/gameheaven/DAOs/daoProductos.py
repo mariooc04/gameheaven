@@ -6,7 +6,7 @@ from gameheaven.models import Consola as Consola
 def newVideojuego(videojuego):
     videojuego.save()
 
-
+#GETTERS (with ID)
 
 def getAllVideojuegos():
     return Videojuego.objects.all()
@@ -17,8 +17,8 @@ def getVideojuego(idVideojuego):
 def getNombreVideojuego(idVideojuego):
     return getVideojuego(idVideojuego).nombre
 
-def getDescripcionVideojuego(id):
-    return getVideojuego(id).descripcion
+def getDescripcionVideojuego(idVideojuego):
+    return getVideojuego(idVideojuego).descripcion
 
 def getValoracionVideojuego(idVideojuego):
     return getVideojuego(idVideojuego).valoracion
@@ -26,42 +26,50 @@ def getValoracionVideojuego(idVideojuego):
 def getPlataformasVideojuego(idVideojuego):
     return getVideojuego(idVideojuego).plataformas
 
-def getImagenVideojuego(id):
-    return getVideojuego(id).img
+def getImagenVideojuego(idVideojuego):
+    return getVideojuego(idVideojuego).img
 
+#UPDATES
 
-
-def updateVideojuego(idVideojuego, newVideojuego):
-    videojuego = getVideojuego(idVideojuego)
+def updateVideojuego(videojuego, newVideojuego):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.nombre = newVideojuego.nombre
     videojuego.descripcion = newVideojuego.descripcion
     videojuego.img = newVideojuego.img
     videojuego.save()
 
-def updateNombreVideojuego(idVideojuego, nombre):
-    videojuego = getVideojuego(idVideojuego)
+def updateNombreVideojuego(videojuego, nombre):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.nombre = nombre
     videojuego.save()
 
-def updateDescripcionVideojuego(idVideojuego, descripcion):
-    videojuego = getVideojuego(idVideojuego)
+def updateDescripcionVideojuego(videojuego, descripcion):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.descripcion = descripcion
     videojuego.save()
 
-def updateValoracionVideojuego(idVideojuego, valoracion):
-    videojuego = getVideojuego(idVideojuego)
+def updateValoracionVideojuego(videojuego, valoracion):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.valoracion = valoracion
     videojuego.save()
 
-def updatePlataformasVideojuego(idVideojuego, plataformas):
-    videojuego = getVideojuego(idVideojuego)
+def updatePlataformasVideojuego(videojuego, plataformas):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.plataformas = plataformas
     videojuego.save()
 
-def updateImagenVideojuego(idVideojuego, imagen):
-    videojuego = getVideojuego(idVideojuego)
+def updateImagenVideojuego(videojuego, imagen):
+    if isinstance(videojuego, int):
+        videojuego = getVideojuego(videojuego)
     videojuego.img = imagen
     videojuego.save()
+
+#DELETES
 
 def deleteVideojuego(videojuego):
     if isinstance(videojuego, int):
@@ -74,7 +82,7 @@ def deleteVideojuego(videojuego):
 def newConsola(consola):
     consola.save()
     
-
+#GETTERS (with ID)
 
 def getAllConsolas():
     return Consola.objects.all()
@@ -91,38 +99,45 @@ def getDescripcionConsola(idConsola):
 def getValoracionConsola(idConsola):
     return getConsola(idConsola).valoracion
 
-def getImagenConsola(id):
-    return getConsola(id).img
+def getImagenConsola(idConsola):
+    return getConsola(idConsola).img
 
+#UPDATES
 
-
-def updateConsola(idConsola, newConsola):
-    consola = getConsola(idConsola)
+def updateConsola(consola, newConsola):
+    if isinstance(consola, int):
+        consola = getConsola(consola)
     consola.nombre = newConsola.nombre
     consola.descripcion = newConsola.descripcion
     consola.img = newConsola.img
     consola.save()
     
-def updateNombreConsola(idConsola, nombre):
-    consola = getConsola(idConsola)
+def updateNombreConsola(consola, nombre):
+    if isinstance(consola, int):
+        consola = getConsola(consola)    
     consola.nombre = nombre
     consola.save()
     
-def updateDescripcionConsola(idConsola, descripcion):
-    consola = getConsola(idConsola)
+def updateDescripcionConsola(consola, descripcion):
+    if isinstance(consola, int):
+        consola = getConsola(consola)
     consola.descripcion = descripcion
     consola.save()
 
-def updateValoracionConsola(idConsola, valoracion):
-    consola = getConsola(idConsola)
+def updateValoracionConsola(consola, valoracion):
+    if isinstance(consola, int):
+        consola = getConsola(consola)
     consola.valoracion = valoracion
     consola.save()
      
-def updateImagenConsola(idConsola, imagen):
-    consola = getConsola(idConsola)
+def updateImagenConsola(consola, imagen):
+    if isinstance(consola, int):
+        consola = getConsola(consola)
     consola.img = imagen
     consola.save()
-        
+
+#DELETES
+
 def deleteConsola(consola):
     if isinstance(consola, int):
         consola = getConsola(consola)

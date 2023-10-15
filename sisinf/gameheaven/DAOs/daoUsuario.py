@@ -8,7 +8,7 @@ from gameheaven.DAOs import daoTienda as daoTienda
 def newTrajador(trabajador):
     Trabajador.save(trabajador)
 
-
+#GETTERS (with ID)
 
 def getAllTrabajadores():
     return Trabajador.objects.all()
@@ -31,7 +31,7 @@ def getAdministradorTrabajador(idTrabajador):
 def checkPasswordTrabajador(idTrabajador, password):
     return getTrabajador(idTrabajador).password == password
 
-
+#FILTERS (with ID)
 
 def filterTrabajadoresByTienda(idTienda):
     return Trabajador.objects.filter(tienda_id=idTienda)
@@ -39,10 +39,11 @@ def filterTrabajadoresByTienda(idTienda):
 def filterTrabajadoresByAdmin(idAdmin):
     return Trabajador.objects.filter(administrador_id=idAdmin)
 
+#UPDATES
 
-
-def updateTrabajador(idTrabajador, newTrabajador):
-    trabajador = getTrabajador(idTrabajador)
+def updateTrabajador(trabajador, newTrabajador):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
     trabajador.email = newTrabajador.email
     trabajador.password = newTrabajador.password
     trabajador.usuario = newTrabajador.usuario
@@ -50,34 +51,41 @@ def updateTrabajador(idTrabajador, newTrabajador):
     trabajador.administrador = newTrabajador.administrador
     trabajador.save()
 
-def updateEmailTrabajador(idTrabajador, email):
-    trabajador = getTrabajador(idTrabajador)
+def updateEmailTrabajador(trabajador, email):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
     trabajador.email = email
     trabajador.save()
 
-def updatePasswordTrabajador(idTrabajador, password):
-    trabajador = getTrabajador(idTrabajador)
+def updatePasswordTrabajador(trabajador, password):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
     trabajador.password = password
     trabajador.save()
 
-def updateUsuarioTrabajador(idTrabajador, usuario):
-    trabajador = getTrabajador(idTrabajador)
+def updateUsuarioTrabajador(trabajador, usuario):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
     trabajador.usuario = usuario
     trabajador.save()
 
-def updateTiendaTrabajador(idTrabajador, idTienda):
-    trabajador = getTrabajador(idTrabajador)
-    tienda = daoTienda.getTienda(idTienda)
+def updateTiendaTrabajador(trabajador, tienda):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
+    if isinstance(tienda, int):
+        tienda = daoTienda.getTienda(tienda)
     trabajador.tienda = tienda
     trabajador.save()
 
-def updateAdministradorTrabajador(idTrabajador, idAdmin):
-    trabajador = getTrabajador(idTrabajador)
-    administrador = getAdministrador(idAdmin)
+def updateAdministradorTrabajador(trabajador, administrador):
+    if isinstance(trabajador, int):
+        trabajador = getTrabajador(trabajador)
+    if isinstance(administrador, int):
+        administrador = getAdministrador(administrador)
     trabajador.administrador = administrador
     trabajador.save()
 
-
+#DELETES
 
 def deleteTrabajador(trabajador):
     if isinstance(trabajador, int):
@@ -91,7 +99,7 @@ def deleteTrabajador(trabajador):
 def newAdministrador(administrador):
     Administrador.save(administrador)
 
-
+#GETTERS (with ID)
 
 def getAllAdministradores():
     return Administrador.objects.all()
@@ -108,31 +116,35 @@ def getUsuarioAdministrador(idAdministrador):
 def checkPasswordAdministrador(idAdministrador, password):
     return getAdministrador(idAdministrador).password == password
 
+#UPDATES
 
-
-def updateAdministrador(idAdministrador, newAdministrador):
-    administrador = getAdministrador(idAdministrador)
+def updateAdministrador(administrador, newAdministrador):
+    if isinstance(administrador, int):
+        administrador = getAdministrador(administrador)
     administrador.email = newAdministrador.email
     administrador.password = newAdministrador.password
     administrador.usuario = newAdministrador.usuario
     administrador.save()
 
-def updateEmailAdministrador(idAdministrador, email):
-    administrador = getAdministrador(idAdministrador)
+def updateEmailAdministrador(administrador, email):
+    if isinstance(administrador, int):
+        administrador = getAdministrador(administrador)
     administrador.email = email
     administrador.save()
 
-def updatePasswordAdministrador(idAdministrador, password):
-    administrador = getAdministrador(idAdministrador)
+def updatePasswordAdministrador(administrador, password):
+    if isinstance(administrador, int):
+        administrador = getAdministrador(administrador)
     administrador.password = password
     administrador.save()
 
-def updateUsuarioAdministrador(idAdministrador, usuario):
-    administrador = getAdministrador(idAdministrador)
+def updateUsuarioAdministrador(administrador, usuario):
+    if isinstance(administrador, int):
+        administrador = getAdministrador(administrador)
     administrador.usuario = usuario
     administrador.save()
 
-
+#DELETES
 
 def deleteAdministrador(administrador):
     if isinstance(administrador, int):
@@ -145,7 +157,7 @@ def deleteAdministrador(administrador):
 def newCliente(cliente):
     Cliente.save(cliente)
 
-
+#GETTERS (with ID)
 
 def getAllClientes():
     return Cliente.objects.all()
@@ -165,38 +177,44 @@ def getTiendaCliente(idCliente):
 def checkPasswordCliente(idCliente, password):
     return getCliente(idCliente).password == password
 
+#UPDATES
 
-
-def updateCliente(idCliente, newCliente):
-    cliente = getCliente(idCliente)
+def updateCliente(cliente, newCliente):
+    if isinstance(cliente, int):
+        cliente = getCliente(cliente)
     cliente.email = newCliente.email
     cliente.password = newCliente.password
     cliente.usuario = newCliente.usuario
     cliente.tienda = newCliente.tienda
     cliente.save()
 
-def updateEmailCliente(idCliente, email):
-    cliente = getCliente(idCliente)
+def updateEmailCliente(cliente, email):
+    if isinstance(cliente, int):
+        cliente = getCliente(cliente)
     cliente.email = email
     cliente.save()
 
-def updatePasswordCliente(idCliente, password):
-    cliente = getCliente(idCliente)
+def updatePasswordCliente(cliente, password):
+    if isinstance(cliente, int):
+        cliente = getCliente(cliente)
     cliente.password = password
     cliente.save()
 
-def updateUsuarioCliente(idCliente, usuario):
-    cliente = getCliente(idCliente)
+def updateUsuarioCliente(cliente, usuario):
+    if isinstance(cliente, int):
+        cliente = getCliente(cliente)
     cliente.usuario = usuario
     cliente.save()
 
-def updateTiendaCliente(idCliente, idTienda):
-    cliente = getCliente(idCliente)
-    tienda = daoTienda.getTienda(idTienda)
+def updateTiendaCliente(cliente, tienda):
+    if isinstance(cliente, int):
+        cliente = getCliente(cliente)
+    if isinstance(tienda, int):
+        tienda = daoTienda.getTienda(tienda)
     cliente.tienda = tienda
     cliente.save()
 
-
+#DELETES
 
 def deleteCliente(cliente):
     if isinstance(cliente, int):
