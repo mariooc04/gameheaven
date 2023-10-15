@@ -1,14 +1,14 @@
 from gameheaven.models import Videojuego as Videojuego
 from gameheaven.models import Consola as Consola
 
-### Daos videojuego
+### Daos Videojuego
 
 def newVideojuego(videojuego):
     videojuego.save()
 
 
 
-def getVideojuegos():
+def getAllVideojuegos():
     return Videojuego.objects.all()
 
 def getVideojuego(idVideojuego):
@@ -74,7 +74,7 @@ def newConsola(consola):
     
 
 
-def getConsolas():
+def getAllConsolas():
     return Consola.objects.all()
 
 def getConsola(idConsola):

@@ -9,7 +9,7 @@ def newReservaConsola(reservaConsola):
 
 
 
-def getReservasConsola():
+def getAllReservasConsola():
     return ReservaConsola.objects.all()
 
 def getReservaConsola(idReservaConsola):
@@ -97,7 +97,7 @@ def newReservaVideojuego(reservaVideojuego):
 
 
 
-def getReservasVideojuego():
+def getAllReservasVideojuego():
     return ReservaVideojuego.objects.all()
 
 def getReservaVideojuego(idReservaVideojuego):
