@@ -27,16 +27,16 @@ def getStockConsolaReservaConsola(idReserva):
 def getClienteReservaConsola(idReserva):
     return getReservaConsola(idReserva).cliente
 
-#FILTERS (with ID)
+#FILTERS (with ID and Object)
 
-def filterReservasConsolaByCliente(idCliente):
-    return ReservaConsola.objects.filter(cliente__id=idCliente)
+def filterReservasConsolaByCliente(cliente):
+    return ReservaConsola.objects.filter(cliente=cliente)
 
-def filterReservasConsolaByTienda(idTienda):
-    return ReservaConsola.objects.filter(stockConsola__tienda__id=idTienda)
+def filterReservasConsolaByTienda(tienda):
+    return ReservaConsola.objects.filter(stockConsola__tienda=tienda)
 
-def filterReservasConsolaByConsola(idConsola):
-    return ReservaConsola.objects.filter(stockConsola__consola__id=idConsola)
+def filterReservasConsolaByConsola(consola):
+    return ReservaConsola.objects.filter(stockConsola__consola=consola)
 
 def filterReservasConsolaByEstado(estado):
     return ReservaConsola.objects.filter(estado=estado)
@@ -118,13 +118,13 @@ def getFechaReservaVideojuego(idReserva):
 def getEstadoReservaVideojuego(idReserva):
     return getReservaVideojuego(idReserva).estado
 
-#FILTERS (with ID)
+#FILTERS (with ID and Object)
 
-def filterReservasVideojuegoByCliente(idCliente):
-    return ReservaVideojuego.objects.filter(cliente_id=idCliente)
+def filterReservasVideojuegoByCliente(cliente):
+    return ReservaVideojuego.objects.filter(cliente=cliente)
     
-def filterReservasVideojuegoByTienda(idTienda):
-    return ReservaVideojuego.objects.filter(stockVideojuego__tienda__id=idTienda)
+def filterReservasVideojuegoByTienda(tienda):
+    return ReservaVideojuego.objects.filter(stockVideojuego__tienda=tienda)
 
 def filterReservasVideojuegoByEstado(estado):
     return ReservaVideojuego.objects.filter(estado=estado)

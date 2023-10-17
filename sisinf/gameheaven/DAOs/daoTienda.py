@@ -94,67 +94,41 @@ def newStockConsola(stockConsola):
 def getAllStockConsolas():
     return StockConsola.objects.all()
 
-def getStockConsola(idTienda, idConsola):
-    return StockConsola.objects.get(tienda_id=idTienda, consola_id=idConsola)
+def getStockConsola(tienda, consola):
+    return StockConsola.objects.get(tienda=tienda, consola=consola)
     
-def getTiendaStockConsola(idStockConsola):
-    return getStockConsola(idStockConsola).tienda
 
-def getConsolaStockConsola(idStockConsola):
-    return getStockConsola(idStockConsola).consola
+def getPrecioStockConsola(tienda, consola):
+    return getStockConsola(tienda, consola).precio
 
-def getPrecioStockConsola(idStockConsola):
-    return getStockConsola(idStockConsola).precio
-
-def getStockStockConsola(idStockConsola):
-    return getStockConsola(idStockConsola).stock
+def getStockStockConsola(tienda, consola):
+    return getStockConsola(tienda, consola).stock
 
 #UPDATES
 
-def updateStockConsola(stockConsola, newStockConsola):
-    if isinstance(stockConsola, int):
-        stockConsola = getStockConsola(stockConsola)
-    stockConsola.tienda = newStockConsola.tienda
-    stockConsola.consola = newStockConsola.consola
+def updateStockConsola(tienda, consola, newStockConsola):
+    stockConsola = getStockConsola(tienda, consola)
     stockConsola.precio = newStockConsola.precio
     stockConsola.stock = newStockConsola.stock
     stockConsola.save()
 
-def updateTiendaStockConsola(stock, tienda):
-    if isinstance(stock, int):
-        stock = getStockConsola(stock)
-    if isinstance(tienda, int):
-        tienda = getTienda(tienda)
-    stock.tienda = tienda
-    stock.save()
 
-def updateConsolaStockConsola(stock, consola):
-    if isinstance(stock, int):
-        stock = getStockConsola(stock)
-    if isinstance(consola, int):
-        consola = daoProductos.getConsola(consola)
-    stock.idConsola = consola
-    stock.save()
 
-def updatePrecioStockConsola(stock, precio):
-    if isinstance(stock, int):
-        stock = getStockConsola(stock)
-    stock.precio = precio
-    stock.save()
+def updatePrecioStockConsola(tienda, consola, precio):
+    stockConsola = getStockConsola(tienda, consola)
+    stockConsola.precio = precio
+    stockConsola.save()
 
-def updateStockStockConsola(stock, cantidad):
-    if isinstance(stock, int):
-        stock = getStockConsola(stock)
-    stock.stock = cantidad
-    stock.save()
+def updateStockStockConsola(tienda, consola, stock):
+    stockConsola = getStockConsola(tienda, consola)
+    stockConsola.stock = stock
+    stockConsola.save()
 
 #DELETES
 
-def deleteStockConsola(stockConsola):
-    if isinstance(stockConsola, int):
-        stockConsola = getStockConsola(stockConsola)
+def deleteStockConsola(tienda, consola):
+    stockConsola = getStockConsola(tienda, consola)
     stockConsola.delete()
-
 
 ### Daos StockVideojuego
 
@@ -166,65 +140,36 @@ def newStockVideojuego(stockVideojuego):
 def getAllStockVideojuegos():
     return StockVideojuego.objects.all()
 
-def getStockVideojuego(idTienda, idVideojuego):
-    return StockVideojuego.objects.get(tienda_id=idTienda, videojuego_id=idVideojuego)
+def getStockVideojuego(tienda, videojuego):
+    return StockVideojuego.objects.get(tienda=tienda, videojuego=videojuego)
 
-def getIdTiendaStockVideojuego(idStockVideojuego):
-    return getStockVideojuego(idStockVideojuego).tienda
+def getPrecioStockVideojuego(tienda, videojuego):
+    return getStockVideojuego(tienda, videojuego).precio
 
-def getIdVideojuegoStockVideojuego(idStockVideojuego):
-    return getStockVideojuego(idStockVideojuego).videojuego
+def getStockStockVideojuego(tienda, videojuego):
+    return getStockVideojuego(tienda, videojuego).stock
 
-def getPrecioStockVideojuego(idStockVideojuego):
-    return getStockVideojuego(idStockVideojuego).precio
-
-def getStockStockVideojuego(idStockVideojuego):
-    return getStockVideojuego(idStockVideojuego).stock
-
-def getStockVideojuegoTienda(idTienda):
-    return Tienda.objects.filter(idTienda=idTienda).videojuegos
 
 #UPDATES
 
-def updateStockVideojuego(idStockVideojuego, newStockVideojuego):
-    stockVideojuego = getStockVideojuego(idStockVideojuego)
-    stockVideojuego.tienda = newStockVideojuego.tienda
-    stockVideojuego.videojuego = newStockVideojuego.videojuego
+def updateStockVideojuego(tienda, videojuego, newStockVideojuego):
+    stockVideojuego = getStockVideojuego(tienda, videojuego)
     stockVideojuego.precio = newStockVideojuego.precio
     stockVideojuego.stock = newStockVideojuego.stock
     stockVideojuego.save()
 
-def updateTiendaStockVideojuego(stock, tienda):
-    if isinstance(stock, int):
-        stock = getStockVideojuego(stock)
-    if isinstance(tienda, int):
-        tienda = getTienda(tienda)
-    stock.idTienda = tienda
-    stock.save()
+def updatePrecioStockVideojuego(tienda, videojuego, precio):
+    stockVideojuego = getStockVideojuego(tienda, videojuego)
+    stockVideojuego.precio = precio
+    stockVideojuego.save()
 
-def updateVideojuegoStockVideojuego(stock, videojuego):
-    if isinstance(stock, int):
-        stock = getStockVideojuego(stock)
-    if isinstance(videojuego, int):
-        videojuego = daoProductos.getVideojuego(videojuego)
-    stock.videojuego = videojuego
-    stock.save()
-
-def updatePrecioStockVideojuego(stock, precio):
-    if isinstance(stock, int):
-        stock = getStockVideojuego(stock)
-    stock.precio = precio
-    stock.save()
-
-def updateStockStockVideojuego(stock, cantidad):
-    if isinstance(stock, int):
-        stock = getStockVideojuego(stock)
-    stock.stock = stock
-    stock.save()
-
+def updateStockStockVideojuego(tienda, videojuego, stock):
+    stockVideojuego = getStockVideojuego(tienda, videojuego)
+    stockVideojuego.stock = stock
+    stockVideojuego.save()
+ 
 #DELETES
 
-def deleteStockVideojuego(stockVideojuego):
-    if isinstance(stockVideojuego, int):
-        stockVideojuego = getStockVideojuego(stockVideojuego)
+def deleteStockVideojuego(tienda, videojuego):
+    stockVideojuego = getStockVideojuego(tienda, videojuego)
     stockVideojuego.delete()

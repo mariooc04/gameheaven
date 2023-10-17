@@ -39,7 +39,9 @@ class StockVideojuego(models.Model):
     stock = models.IntegerField()
 
     class Meta:
-        unique_together = ('tienda', 'videojuego')
+        constraints = [
+            models.UniqueConstraint(fields=['tienda', 'videojuego'], name='unique_videojuego_tienda')
+        ]
 
 
     def __str__(self):
@@ -52,8 +54,9 @@ class StockConsola(models.Model):
     stock = models.IntegerField()
 
     class Meta:
-        unique_together = ('tienda', 'consola')
-
+        constraints = [
+            models.UniqueConstraint(fields=['tienda', 'consola'], name='unique_consola_tienda')
+        ]
 
     def __str__(self):
         return f'Consola {self.consola} en tienda {self.tienda}, precio {self.precio} €, stock {self.stock}'

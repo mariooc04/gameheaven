@@ -232,7 +232,7 @@ class TestDAOs(TestCase):
         reserva2 = daoReserva.getReservaVideojuego(reserva.id)
         assert reserva2.cliente == cliente
         assert reserva2.stockVideojuego == daoTienda.getStockVideojuego(tienda.id, videojuego.id)
-        assert 1 == daoReserva.filterReservasVideojuegoByTienda(tienda.id).count()
+        assert 1 == daoReserva.filterReservasVideojuegoByTienda(tienda).count()
         daoReserva.updateClienteReservaVideojuego(reserva.id, cliente2)
         reserva55 = daoReserva.filterReservasVideojuegoByCliente(cliente2.id)
         
