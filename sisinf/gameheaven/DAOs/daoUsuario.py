@@ -3,6 +3,11 @@ from gameheaven.models import Administrador as Administrador
 from gameheaven.models import Cliente as Cliente
 from gameheaven.DAOs import daoTienda as daoTienda
 
+
+### Daos Usuario
+def existeUsuario(email):
+    return Trabajador.objects.filter(email=email).exists() or Cliente.objects.filter(email=email).exists() or Administrador.objects.filter(email=email).exists()
+
 ### Daos Trabajador
 
 def newTrajador(trabajador):
@@ -32,6 +37,9 @@ def checkPasswordTrabajador(idTrabajador, password):
     return getTrabajador(idTrabajador).password == password
 
 #FILTERS (with ID)
+
+def filterTrabajadorByEmail(email):
+    return Trabajador.objects.filter(email=email)
 
 def filterTrabajadoresByTienda(idTienda):
     return Trabajador.objects.filter(tienda_id=idTienda)
@@ -116,6 +124,8 @@ def getUsuarioAdministrador(idAdministrador):
 def checkPasswordAdministrador(idAdministrador, password):
     return getAdministrador(idAdministrador).password == password
 
+def filterAdministradorByEmail(email):
+    return Administrador.objects.filter(email=email)
 #UPDATES
 
 def updateAdministrador(administrador, newAdministrador):
@@ -143,6 +153,8 @@ def updateUsuarioAdministrador(administrador, usuario):
         administrador = getAdministrador(administrador)
     administrador.usuario = usuario
     administrador.save()
+
+
 
 #DELETES
 
@@ -174,8 +186,11 @@ def getUsuarioCliente(idCliente):
 def getTiendaCliente(idCliente):
     return getCliente(idCliente).tienda
 
-def checkPasswordCliente(idCliente, password):
-    return getCliente(idCliente).password == password
+def checkPasswordCliente(cliente, password):
+    return getCliente(cliente).password == password
+
+def filterClienteByEmail(email):
+    return Cliente.objects.filter(email=email)
 
 #UPDATES
 

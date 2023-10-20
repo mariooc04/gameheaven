@@ -4,8 +4,8 @@ from django.db import models
 class Tienda(models.Model):
     ciudad = models.CharField(max_length=50)
     codigoPostal = models.IntegerField()
-    videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego')
-    consolas = models.ManyToManyField('Consola', through='StockConsola')
+    videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego', null=True)
+    consolas = models.ManyToManyField('Consola', through='StockConsola', null=True)
 
     def __str__(self):
         return f'Tienda en {self.ciudad}, {self.codigoPostal}'
@@ -68,7 +68,34 @@ class Administrador(models.Model):
 
     def __str__(self):
         return f'Administrador {self.usuario}'
+class Administrador(models.Model):
+    email = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=50)
+    usuario = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f'Administrador {self.usuario}'
+
+class Cliente(models.Model):
+    email = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=50)
+    usuario = models.CharField(max_length=50)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Cliente {self.usuario}'
+    
+
+
+class Trabajador(models.Model):
+    email = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=50)
+    usuario = models.CharField(max_length=50)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    administrador = models.ForeignKey(Administrador, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Trabajador {self.usuario}'
 class Cliente(models.Model):
     email = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)

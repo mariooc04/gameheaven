@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from gameheaven import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.default, name='default'),
+    path('createCliente/', views.createCliente, name='crearCliente'),
 ]
