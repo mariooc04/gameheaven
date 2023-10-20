@@ -68,24 +68,6 @@ class Administrador(models.Model):
 
     def __str__(self):
         return f'Administrador {self.usuario}'
-class Administrador(models.Model):
-    email = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f'Administrador {self.usuario}'
-
-class Cliente(models.Model):
-    email = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=50)
-    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Cliente {self.usuario}'
-    
-
 
 class Trabajador(models.Model):
     email = models.CharField(max_length=50, unique=True)
@@ -96,6 +78,7 @@ class Trabajador(models.Model):
 
     def __str__(self):
         return f'Trabajador {self.usuario}'
+
 class Cliente(models.Model):
     email = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
@@ -104,18 +87,6 @@ class Cliente(models.Model):
 
     def __str__(self):
         return f'Cliente {self.usuario}'
-    
-
-
-class Trabajador(models.Model):
-    email = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=50)
-    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    administrador = models.ForeignKey(Administrador, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Trabajador {self.usuario}'
 
 class ReservaVideojuego(models.Model):
     estadoNoCompletada = 'No completada'
