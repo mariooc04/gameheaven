@@ -36,9 +36,9 @@ def updateTiendaTrabajador(usuario, tienda):
     trabajador.tienda = tienda
     trabajador.save()
 
-### Daos Usuario
-def newUsuario(email, password, username):
-    return CustomUser.objects.create(email=email, password=password, username=username, role=CustomUser.Roles.CLIENTE)
+### Daos Cliente
+def newCliente(email, password, username):
+    return CustomUser.objects.create_user(email=email, password=password, username=username, role=CustomUser.Roles.CLIENTE)
 
 def getClienteByUsuario(usuario):
     return Cliente.objects.get(usuario=usuario)
