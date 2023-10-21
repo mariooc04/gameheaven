@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{%block title %}Iniciar Sesión{% endblock %}
+{% block barraNavegacion %}{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{form|crispy}}
+    <p>¿No tienes cuenta? <button type="submit" class="btn btn-outline-success btn-sm">Regístrate</button></p>
+    <button type="submit" class="btn btn-outline-light">Iniciar Sesión</button>
+    
+</form>
+{% endblock %}

@@ -1,7 +1,16 @@
-{% {% extends "main/base.html" %}%}
+{% extends "main/base.html" %}
 {% load static %}
 
 {%block title %}Registrarse{% endblock %}
+{% block barraNavegacion %}{% endblock %}
+
+{% load crispy_forms_tags %}
 {% block content %}
-<h1>Registrarse</h1>
+<form method="post">
+    {% csrf_token %}
+    {{form|crispy}}
+    <p>¿Ya tienes una cuenta? <button type="submit" class="btn btn-outline-success btn-sm">Iniciar sesión</button></p>
+    <button type="submit" class="btn btn-outline-light">Registrarse</button>
+    
+</form>
 {% endblock %}
