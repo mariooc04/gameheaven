@@ -90,10 +90,10 @@ class CustomUserManager(BaseUserManager):
             email,
             password=password,
             username=username,
+            role=CustomUser.Roles.ADMIN
         )
         user.is_staff = True
         user.is_superuser = True
-        user.role = CustomUser.Roles.ADMIN
         user.save(using=self._db)
         return user
     
