@@ -1,21 +1,17 @@
 from django.test import TestCase
 from gameheaven.models import Tienda
 from gameheaven.DAOs import daoTienda,  daoUsuario
+from django.db import transaction
 
 # Create your tests here.
 
 # Tests for DAOs
 class TestDAOs(TestCase):
     def test_crear_trabajador(TestCase):
-        tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
-        daoTienda.newTienda(tienda)
-        daoUsuario.newTrabajador("alv@alv", "alv", "1234", tienda)
-        try:
-            trabajador = daoUsuario.getTrabajador("alv@alv")
-            assert True
-        except:
-            assert False
-
+        alvaro = daoUsuario.newTrabajador("alv@alv", "alv", "1234")
+        daoTienda.newTienda(Tienda(ciudad="Madrid", codigoPostal=28001))
+        while True:       
+            print("a")
     """ def test_dao_tienda(TestCase):
         # Create
         tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
