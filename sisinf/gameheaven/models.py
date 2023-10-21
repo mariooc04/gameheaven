@@ -5,15 +5,14 @@ from django.dispatch import receiver
 
 # Create your models here.
 
-
 class Tienda(models.Model):
     ciudad = models.CharField(max_length=50)
-    codigoPostal = models.IntegerField()
+    codigoPostal = models.IntegerField(unique=True)
     videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego')
     consolas = models.ManyToManyField('Consola', through='StockConsola')
 
     def __str__(self):
-        return f'Tienda en {self.ciudad}, {self.codigoPostal}'
+        return f'{self.ciudad}, {self.codigoPostal}'
     
 #Productos
 

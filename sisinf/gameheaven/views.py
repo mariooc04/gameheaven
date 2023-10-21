@@ -5,6 +5,10 @@ from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda
 from django.contrib.auth import authenticate, login, logout
+from gameheaven.forms import RegisterForm
+
+
+from .forms import *
 
 
 from gameheaven.templates import *
@@ -16,22 +20,48 @@ def default(request):
 
 
 def loginUser(request):
+
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+    else:
+        form = LoginForm()
+
+    return render(request, 'registration/login.html', {"form": form})
+
+    # ÁLVARO TU CÓDIGO ES EL DE ABAJO, EL DE ARRIBA ES PARA EL FORMULARIO NO BORRAR
+
+    """
     if request.method != 'POST':
         return
     try:
         email = request.POST[Constantes.EMAIL]
         password = request.POST[Constantes.PASSWORD]
     except:
-        pass
+        
     if(daoUsuario.existeUsuario(email) != True):
         return HttpResponse("El usuario no existe")
     if(daoUsuario.checkPassword(email, password) != True):
         return HttpResponse("Contraseña incorrecta")
 
-    return render(request, 'inicio.html')
+    return render(request, 'inicio.html') """
 
 
 def createCliente(request):
+
+
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        
+    else:
+        form = RegisterForm()
+
+    return render(request, 'registration/register.html', {"form": form})
+
+
+    # ÁLVARO TU CÓDIGO ES EL DE ABAJO, EL DE ARRIBA ES PARA EL FORMULARIO NO BORRAR
+
+
+    pass
     
     if request.method != 'POST':
         return
