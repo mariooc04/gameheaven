@@ -1,15 +1,19 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 # Create your models here.
+
+
 class Tienda(models.Model):
     ciudad = models.CharField(max_length=50)
     codigoPostal = models.IntegerField()
-    videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego', null=True)
-    consolas = models.ManyToManyField('Consola', through='StockConsola', null=True)
+    videojuegos = models.ManyToManyField('Videojuego', through='StockVideojuego')
+    consolas = models.ManyToManyField('Consola', through='StockConsola')
 
     def __str__(self):
         return f'Tienda en {self.ciudad}, {self.codigoPostal}'
     
+#Productos
 
 class Videojuego(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -31,6 +35,7 @@ class Consola(models.Model):
     def __str__(self):
         return f'Consola {self.nombre}'
     
+#Stock
 
 class StockVideojuego(models.Model):
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
@@ -61,32 +66,71 @@ class StockConsola(models.Model):
     def __str__(self):
         return f'Consola {self.consola} en tienda {self.tienda}, precio {self.precio} €, stock {self.stock}'
 
-class Administrador(models.Model):
-    email = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=50)
+
+#Usuarios
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        if extra_fields.get('is_staff') is not True or extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_staff=True and is_superuser=True.')
+        return self.create_user(email, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        TRABAJADOR = "TRABAJADOR", "Trabajador"
+        CLIENTE = "CLIENTE", "Cliente"
+
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=30, blank=True)
+    role = models.CharField(max_length=50, choices=Role.choices, default=Role.ADMIN)
+    
+    objects = CustomUserManager()
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.role = self.Role.ADMIN
+        return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'Administrador {self.usuario}'
+        return self.email
 
-class Trabajador(models.Model):
-    email = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=50)
+CustomUser._meta.get_field('groups').related_name = 'customuser_set'
+
+class Trabajador(CustomUser):
+    def save(self, *args, **kwargs):
+        self.role = CustomUser.Role.TRABAJADOR
+        super().save(*args, **kwargs)
+
+class Cliente(CustomUser):
+    def save(self, *args, **kwargs):
+        self.role = CustomUser.Role.CLIENTE
+        super().save(*args, **kwargs)
+
+class TrabajadorProfile(models.Model):
+    user = models.OneToOneField(Trabajador, on_delete=models.CASCADE)
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-    administrador = models.ForeignKey(Administrador, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'Trabajador {self.usuario}'
-
-class Cliente(models.Model):
-    email = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=50)
-    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'Cliente {self.usuario}'
+class ClienteProfile(models.Model):
+    user = models.OneToOneField(Cliente, on_delete=models.CASCADE)
+    tienda = models.ForeignKey(Tienda, null=True, on_delete=models.SET_NULL)
+ 
+    
+#Reservas
 
 class ReservaVideojuego(models.Model):
     estadoNoCompletada = 'No completada'

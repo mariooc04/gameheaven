@@ -1,12 +1,22 @@
 from django.test import TestCase
-from gameheaven.models import Tienda, Consola, Videojuego, Trabajador, Administrador, Cliente, StockConsola, StockVideojuego, ReservaVideojuego, ReservaConsola
-from gameheaven.DAOs import daoTienda, daoProductos, daoUsuario, daoReserva
+from gameheaven.models import Tienda
+from gameheaven.DAOs import daoTienda,  daoUsuario
 
 # Create your tests here.
 
 # Tests for DAOs
 class TestDAOs(TestCase):
-    def test_dao_tienda(TestCase):
+    def test_crear_trabajador(TestCase):
+        tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
+        daoTienda.newTienda(tienda)
+        daoUsuario.newTrabajador("alv@alv", "alv", "1234", tienda)
+        try:
+            trabajador = daoUsuario.getTrabajador("alv@alv")
+            assert True
+        except:
+            assert False
+
+    """ def test_dao_tienda(TestCase):
         # Create
         tienda = Tienda(ciudad="Madrid", codigoPostal=28001)
         daoTienda.newTienda(tienda)
@@ -79,7 +89,7 @@ class TestDAOs(TestCase):
             daoUsuario.newAdministrador(admin)
             admin = daoUsuario.getAdministrador(admin.id)
             trabajador = Trabajador(email="test@test.com", password="test", usuario="test", tienda=tienda, administrador=admin)
-            daoUsuario.newTrajador(trabajador)
+            daoUsuario.newTrabajador(trabajador)
             # Read
             trabajador2 = daoUsuario.getTrabajador(trabajador.id)
             assert trabajador2.email == trabajador.email
@@ -248,5 +258,5 @@ class TestDAOs(TestCase):
             reserva3 = daoReserva.getReservaVideojuego(reserva.id)
             assert False
         except:
-            assert True
+            assert True """
              

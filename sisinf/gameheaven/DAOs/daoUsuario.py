@@ -1,18 +1,22 @@
 from gameheaven.models import Trabajador as Trabajador
-from gameheaven.models import Administrador as Administrador
+from gameheaven.models import TrabajadorProfile as TrabajadorProfile
 from gameheaven.models import Cliente as Cliente
+from gameheaven.models import CustomUser as CustomUser
 from gameheaven.DAOs import daoTienda as daoTienda
 
 
 ### Daos Usuario
 def existeUsuario(email):
-    return Trabajador.objects.filter(email=email).exists() or Cliente.objects.filter(email=email).exists() or Administrador.objects.filter(email=email).exists()
-
+    return Trabajador.objects.filter(email=email).exists() or Cliente.objects.filter(email=email).exists()
 ### Daos Trabajador
 
-def newTrajador(trabajador):
-    Trabajador.save(trabajador)
+def newTrabajador(email, name, password, tienda):
+    trabajador = Trabajador(email=email, name=name, password=password)
+    trabajador.save()
+    TrabajadorProfile.objects.create(user=trabajador, tienda=tienda)
+    
 
+    
 #GETTERS (with ID)
 
 def getAllTrabajadores():
@@ -85,83 +89,12 @@ def updateTiendaTrabajador(trabajador, tienda):
     trabajador.tienda = tienda
     trabajador.save()
 
-def updateAdministradorTrabajador(trabajador, administrador):
-    if isinstance(trabajador, int):
-        trabajador = getTrabajador(trabajador)
-    if isinstance(administrador, int):
-        administrador = getAdministrador(administrador)
-    trabajador.administrador = administrador
-    trabajador.save()
-
 #DELETES
 
 def deleteTrabajador(trabajador):
     if isinstance(trabajador, int):
         trabajador = getTrabajador(trabajador)
     trabajador.delete()
-
-
-
-###Administradores
-
-def newAdministrador(administrador):
-    Administrador.save(administrador)
-
-#GETTERS (with ID)
-
-def getAllAdministradores():
-    return Administrador.objects.all()
-
-def getAdministrador(idAdministrador):
-    return Administrador.objects.get(pk=idAdministrador)
-
-def getEmailAdministrador(idAdministrador):
-    return getAdministrador(idAdministrador).email
-
-def getUsuarioAdministrador(idAdministrador):
-    return getAdministrador(idAdministrador).usuario
-
-def checkPasswordAdministrador(idAdministrador, password):
-    return getAdministrador(idAdministrador).password == password
-
-def filterAdministradorByEmail(email):
-    return Administrador.objects.filter(email=email)
-#UPDATES
-
-def updateAdministrador(administrador, newAdministrador):
-    if isinstance(administrador, int):
-        administrador = getAdministrador(administrador)
-    administrador.email = newAdministrador.email
-    administrador.password = newAdministrador.password
-    administrador.usuario = newAdministrador.usuario
-    administrador.save()
-
-def updateEmailAdministrador(administrador, email):
-    if isinstance(administrador, int):
-        administrador = getAdministrador(administrador)
-    administrador.email = email
-    administrador.save()
-
-def updatePasswordAdministrador(administrador, password):
-    if isinstance(administrador, int):
-        administrador = getAdministrador(administrador)
-    administrador.password = password
-    administrador.save()
-
-def updateUsuarioAdministrador(administrador, usuario):
-    if isinstance(administrador, int):
-        administrador = getAdministrador(administrador)
-    administrador.usuario = usuario
-    administrador.save()
-
-
-
-#DELETES
-
-def deleteAdministrador(administrador):
-    if isinstance(administrador, int):
-        administrador = getAdministrador(administrador)
-    administrador.delete()
 
 
 ### Daos Cliente

@@ -12,7 +12,7 @@ from gameheaven.templates import *
 # Create your views here.
 
 def default(request):
-    return render(request, 'register.html')
+    return render(request, 'main/base.html')
 
 
 def loginUser(request):
