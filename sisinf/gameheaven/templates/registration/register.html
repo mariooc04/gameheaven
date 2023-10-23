@@ -2,15 +2,29 @@
 {% load static %}
 
 {%block title %}Registrarse{% endblock %}
-{% block barraNavegacion %}{% endblock %}
-
+{% block barraNavegacion %}
+            <div>
+            <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist" style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+                <li class="nav-item" role="presentation">
+                  <button  onclick="location.href='/home'" class="nav-link rounded-5" id="home" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Home</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button onclick="location.href='/login'" class="nav-link rounded-5" id="rogin" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Login</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button onclick="location.href='/register'" class="nav-link active rounded-5" id="register" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Register</button>
+                </li>
+              </ul>
+            </div>
+            {% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
 <form method="post">
     {% csrf_token %}
     {{form|crispy}}
+    
+    <p>¿Ya tienes una cuenta? <a href="/login"><button type="button" class="btn btn-outline-success btn-sm" >Iniciar sesión</button></a></p>
     <button type="submit" class="btn btn-outline-light">Registrarse</button>
+    
 </form>
-<p>¿Ya tienes una cuenta? <a href="/login" class="btn btn-outline-success btn-sm">Iniciar sesión</a></p>
-
 {% endblock %}

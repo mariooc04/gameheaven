@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from gameheaven.models import *
+from gameheaven.models import Cliente, Tienda
 from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda
@@ -16,12 +16,10 @@ from gameheaven.templates import *
 # Create your views here.
 
 def default(request):
-    #tienda1 = Tienda(ciudad="Huesca", codigoPostal = "22005")
-    #tienda2 = Tienda(ciudad="Zaragoza", codigoPostal = "50005")
-    #daoTienda.newTienda(tienda1)
-    #daoTienda.newTienda(tienda2)
     return render(request, 'main/base.html')
 
+def home(request):
+    return render(request, 'main/home.html')
 
 def loginUser(request):
 
@@ -55,9 +53,6 @@ def createCliente(request):
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
-        if form.is_valid():
-            newUser = Cliente(email=form.cleaned_data['email'], usuario=form.cleaned_data['username'], password=form.cleaned_data['password1'], tienda=daoTienda.getTienda(form.cleaned_data['tienda']))
-            return redirect('login')
         
     else:
         form = RegisterForm()
