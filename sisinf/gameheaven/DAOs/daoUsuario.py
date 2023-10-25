@@ -1,13 +1,16 @@
-from gameheaven.models import CustomUser, Trabajador, Cliente
+from gameheaven.models import Usuario, Trabajador, Cliente
 from gameheaven.DAOs import daoTienda
 
 
 ### Daos Usuario
-def existeUsuario(email):
-    return CustomUser.objects.filter(email=email).exists()
+def existeUsuarioEmail(email):
+    return Usuario.objects.filter(email=email).exists()
+
+def existeUsuarioUsername(username):
+    return Usuario.objects.filter(username=username).exists()
 
 def getUsuario(idUsuario):
-    return CustomUser.objects.get(pk=idUsuario)
+    return Usuario.objects.get(pk=idUsuario)
 
 def getEmailUsuario(idUsuario):
     return getUsuario(idUsuario).email
@@ -22,7 +25,7 @@ def deleteUser(usuario):
 
 ### Daos Trabajador
 def newTrabajador(email, password, username):
-    return CustomUser.objects.create_user(email=email, password=password, username=username, role=CustomUser.Roles.TRABAJADOR)
+    return Usuario.objects.create_user(email=email, password=password, username=username, role=Usuario.Roles.TRABAJADOR)
 
 def getTrabajadorByUsuario(usuario):
     return Trabajador.objects.get(usuario=usuario)
@@ -37,15 +40,14 @@ def updateTiendaTrabajador(usuario, tienda):
     trabajador.save()
 
 ### Daos Cliente
-def newCliente(email, password, username):
-    return CustomUser.objects.create_user(email=email, password=password, username=username, role=CustomUser.Roles.CLIENTE)
+def newCliente(usuario):
+    return Usuario.objects.create_user(email=usuario.email, password=usuario.password, 
+                                       username=usuario.username, role=Usuario.Roles.CLIENTE)
 
 def getClienteByUsuario(usuario):
     return Cliente.objects.get(usuario=usuario)
 
 def updateTiendaCliente(usuario, tienda):
-    if isinstance(usuario, int):
-        usuario = getUsuario(usuario)
     if isinstance(tienda, int):
         tienda = daoTienda.getTienda(tienda)
     cliente = getClienteByUsuario(usuario)

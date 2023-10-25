@@ -90,7 +90,7 @@ class CustomUserManager(BaseUserManager):
             email,
             password=password,
             username=username,
-            role=CustomUser.Roles.ADMIN
+            role=Usuario.Roles.ADMIN
         )
         user.is_staff = True
         user.is_superuser = True
@@ -107,7 +107,7 @@ class CustomUserManager(BaseUserManager):
             return user
         return None
     
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class Usuario(AbstractBaseUser, PermissionsMixin):
     class Roles(models.TextChoices):
         ADMIN = 'ADMIN', 'Admin'
         CLIENTE = 'CLIENTE', 'Cliente'
@@ -126,23 +126,23 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
-@receiver(post_save, sender=CustomUser)
+@receiver(post_save, sender=Usuario)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if instance.role == CustomUser.Roles.TRABAJADOR:
-            Trabajador.objects.create(user=instance)
-        elif instance.role == CustomUser.Roles.CLIENTE:
-            Cliente.objects.create(user=instance)
+        if instance.role == Usuario.Roles.TRABAJADOR:
+            Trabajador.objects.create(usuario=instance)
+        elif instance.role == Usuario.Roles.CLIENTE:
+            Cliente.objects.create(usuario=instance)
         
 class Trabajador(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.user} trabajador en {self.tienda}'
         
 class Cliente(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

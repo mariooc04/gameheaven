@@ -16,6 +16,9 @@ def getAllTiendas():
 def getTienda(idTienda):
     return Tienda.objects.get(pk=idTienda)
 
+def getTiendaByCiudadCodigoPostal(ciudad, codigoPostal):
+    return Tienda.objects.get(ciudad=ciudad, codigoPostal=codigoPostal)
+
 def getCiudadTienda(idTienda):
     return getTienda(idTienda).ciudad
 
