@@ -42,24 +42,6 @@ def loginUser(request):
 
     return render(request, 'registration/login.html', {"form": form})
 
-    # ÁLVARO TU CÓDIGO ES EL DE ABAJO, EL DE ARRIBA ES PARA EL FORMULARIO NO BORRAR
-
-    """
-    if request.method != 'POST':
-        return
-    try:
-        email = request.POST[Constantes.EMAIL]
-        password = request.POST[Constantes.PASSWORD]
-    except:
-        
-    if(daoUsuario.existeUsuario(email) != True):
-        return HttpResponse("El usuario no existe")
-    if(daoUsuario.checkPassword(email, password) != True):
-        return HttpResponse("Contraseña incorrecta")
-
-    return render(request, 'inicio.html') """
-
-
 def registerUser(request):
 
 
@@ -86,29 +68,4 @@ def registerUser(request):
         form = RegisterForm()
 
     return render(request, 'registration/register.html', {"form": form})
-
-
-    # ÁLVARO TU CÓDIGO ES EL DE ABAJO, EL DE ARRIBA ES PARA EL FORMULARIO NO BORRAR
-
-
-    pass
-    
-    if request.method != 'POST':
-        return
-    try:
-        email = request.POST[Constantes.EMAIL]
-        usuario = request.POST[Constantes.USUARIO]
-        password = request.POST[Constantes.PASSWORD]
-        tienda = Tienda(ciudad="Madrid", codigoPostal = "22005")
-        daoTienda.newTienda(tienda)
-    except:
-        return HttpResponse("Error al crear el cliente")
-    
-    if(daoUsuario.existeUsuario(email)):
-        return HttpResponse("El email ya existe")
-    
-    cliente = Cliente(email=email, usuario=usuario, password=password, tienda=tienda)
-    daoUsuario.newCliente(cliente)
-    return render(request, 'inicio.html')
-
     
