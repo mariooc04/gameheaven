@@ -8,34 +8,38 @@
     <title>{% block title %}DefaultTitle{% endblock %}</title>
 </head>
 <body>
+        
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <div class="navbar-brand" >
-                <img src="{% static '/img/logo.png' %}" alt="Logo" width="8%" height="8%">
+                <a href="/home"><img src="{% static '/img/logo.png' %}" alt="Logo" width="8%" height="8%"></a>
             </div>
             {% block barraNavegacion %}
             <div>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home">Home</a>
-                    </li>
-                    <!-- TODO: MIRAR COMO HACER CON LAS SESIONES QUE CAMBIEN LOS BOTONES -->
-                    <!-- PARA QUE NO SE MUESTREN LOS BOTONES DE REGISTRARSE E INICIAR SESIÓN SI YA SE HA LOGGEADO -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Registrarse</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Iniciar Sesion</a>
-                    </li>
-                </ul>
+            <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist" style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+                <li class="nav-item" role="presentation">
+                  <button  class="nav-link active rounded-5" id="home" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Home</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button onclick="location.href='/login'" class="nav-link rounded-5" id="rogin" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Login</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button onclick="location.href='/register'" class="nav-link rounded-5" id="register" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Register</button>
+                </li>
+              </ul>
             </div>
             {% endblock %}
+            </div>
         </div>
     </nav>
     <div class = "container">
         {% block content %}
+        
         {% endblock %}
+        
     </div>
 
 </body>
+<script src="{% static 'bootstrap.min.js' %}"></script>
+
 </html>

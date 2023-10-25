@@ -20,8 +20,9 @@ from gameheaven import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.default, name='default'),
+    path('', views.home, name='home'),
     path('register/', views.createCliente, name='crearCliente'),
     path('login/', views.loginUser, name='loginUser'),
+    path('home/', views.home,name = 'home'),
     path('', include('django.contrib.auth.urls')),
 ]

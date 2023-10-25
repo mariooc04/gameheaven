@@ -18,6 +18,8 @@ from gameheaven.templates import *
 def default(request):
     return render(request, 'main/base.html')
 
+def home(request):
+    return render(request, 'main/home.html')
 
 def loginUser(request):
 
