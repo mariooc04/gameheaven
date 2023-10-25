@@ -51,6 +51,15 @@ def createCliente(request):
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get('usuario')
+            password = form.cleaned_data.get('password')
+            tienda = form.cleaned_data.get('tienda')
+            usuario = daoUsuario.newCliente(email=email, username=username, password=password)
+            cliente = daoUsuario.getClienteByUsuario(usuario)
+            daoUsuario.updateTiendaCliente(cliente, tienda)
+            return redirect('loginUser')
         
     else:
         form = RegisterForm()
