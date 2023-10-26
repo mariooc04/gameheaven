@@ -7,6 +7,7 @@ from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda
 from django.contrib.auth import authenticate, login, logout
 from gameheaven.forms import RegisterForm, LoginForm
+from django.contrib.auth import logout
 
 
 from .forms import *
@@ -74,6 +75,6 @@ def registerUser(request):
 
     return render(request, 'registration/register.html', {"form": form})
     
-def logout(request):
+def logout_view(request):
     logout(request)
     return redirect('home')
