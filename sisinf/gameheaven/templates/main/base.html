@@ -20,12 +20,18 @@
                 <li class="nav-item" role="presentation">
                   <button  class="nav-link active rounded-5" id="home" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Home</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                  <button onclick="location.href='/login'" class="nav-link rounded-5" id="rogin" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Login</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button onclick="location.href='/register'" class="nav-link rounded-5" id="register" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Register</button>
-                </li>
+                {% if loggeado %}
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/logout'" class="nav-link rounded-5" id="logout" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Logout</button>
+                  </li>
+                {% else %}
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/login'" class="nav-link rounded-5" id="login" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Login</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/register'" class="nav-link rounded-5" id="register" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Register</button>
+                  </li>
+                {% endif %}
               </ul>
             </div>
             {% endblock %}

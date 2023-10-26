@@ -17,11 +17,16 @@ from gameheaven.templates import *
 # Create your views here.
 
 def default(request):
-    return render(request, 'main/base.html')
+    loggeado = False
+    if request.user.is_authenticated:
+        loggeado = True
+    return render(request, 'main/base.html', {'loggeado': loggeado})
 
-@login_required
 def home(request):
-    return render(request, 'main/home.html')
+    loggeado = False
+    if request.user.is_authenticated:
+        loggeado = True
+    return render(request, 'main/home.html', {'loggeado': loggeado})
 
 def loginUser(request):
 
@@ -69,3 +74,6 @@ def registerUser(request):
 
     return render(request, 'registration/register.html', {"form": form})
     
+def logout(request):
+    logout(request)
+    return redirect('home')
