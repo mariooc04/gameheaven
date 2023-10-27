@@ -49,8 +49,6 @@ def loginUser(request):
     return render(request, 'registration/login.html', {"form": form})
 
 def registerUser(request):
-
-
     if request.method == 'POST':
         form = RegisterForm(request.POST)
 
@@ -74,7 +72,7 @@ def registerUser(request):
         form = RegisterForm()
 
     return render(request, 'registration/register.html', {"form": form})
-    
+
 def logout_view(request):
     logout(request)
     return redirect('home')

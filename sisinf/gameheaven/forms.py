@@ -4,14 +4,25 @@ from gameheaven.models import Usuario, Tienda
 from gameheaven.DAOs import daoTienda,daoUsuario
 from django.forms import ModelChoiceField
 from django.core.exceptions import ValidationError
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, password_validation
 
 
-class RegisterForm(forms.Form):
+
+class RegisterForm(forms.ModelForm):
     email = forms.EmailField(required=True)
     username = forms.CharField(required=True, label="Username")
-    password = forms.CharField(widget=forms.PasswordInput, label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    password = forms.CharField(
+        label=("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    password2 = forms.CharField(
+        label=("Password confirmation"),
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        strip=False,
+        help_text=("Enter the same password as before, for verification."),
+    )
     # Define a ModelChoiceField for the 'tienda' field
     tienda = ModelChoiceField(
         queryset=Tienda.objects.all(),  # Provide a queryset of Tienda instances
@@ -24,10 +35,17 @@ class RegisterForm(forms.Form):
         password = cleaned_data.get("password")
         password2 = cleaned_data.get("password2")
 
-        if password and password2 and password != password2:
-            self.add_error("password", "Las contraseñas no coinciden")
-            self.add_error("password2", "Las contraseñas no coinciden")
+        try:
+            password_validation.validate_password(password, self.instance)
+        except ValidationError as error:
+            self.add_error("password", error)
 
+        if cleaned_data.get("username") in password:
+            self.add_error("password", "La contraseña no puede ser similar al nombre de usuario")
+        if password != password2:
+            self.add_error("password2", "Las contraseñas no coinciden")
+        
+        
     def clean_username(self):
         username = self.cleaned_data["username"]
         if daoUsuario.existeUsuarioUsername(username):
