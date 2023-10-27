@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 from gameheaven import views
 
@@ -26,4 +27,7 @@ urlpatterns = [
     path('home/', views.home, name = 'home'),
     path('', include('django.contrib.auth.urls')),
     path('logout_view/', views.logout_view, name='logout_view'),
+    path('settings/', views.settings, name='settings'),
+     path('password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
 ]

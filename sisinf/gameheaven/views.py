@@ -8,6 +8,8 @@ from gameheaven.DAOs import daoTienda
 from django.contrib.auth import authenticate, login, logout
 from gameheaven.forms import RegisterForm, LoginForm
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import permission_required
+
 
 
 from .forms import *
@@ -70,9 +72,15 @@ def registerUser(request):
         
     else:
         form = RegisterForm()
-
     return render(request, 'registration/register.html', {"form": form})
 
+@login_required(login_url='loginUser')
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+@login_required(login_url='loginUser')
+def settings(request):
+    if request.user.is_authenticated:
+        loggeado = True
+    return render(request, 'settings.html', {'loggeado': loggeado})

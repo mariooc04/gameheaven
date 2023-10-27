@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -80,9 +80,13 @@ class CustomUserManager(BaseUserManager):
             email=self.normalize_email(email),
             username=username,
         )
+        
+        
         user.role = role
         user.set_password(password)
         user.save(using=self._db)
+
+        
         return user
     
     def create_superuser(self, email, username, password=None):
@@ -95,6 +99,7 @@ class CustomUserManager(BaseUserManager):
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
+        
         return user
     
     def authenticate(self, request, email=None, password=None):
@@ -130,8 +135,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         if instance.role == Usuario.Roles.TRABAJADOR:
+            trabajador_group = Group.objects.get(name='Trabajador')
+            instance.groups.add(trabajador_group)
             Trabajador.objects.create(usuario=instance)
         elif instance.role == Usuario.Roles.CLIENTE:
+            cliente_group = Group.objects.get(name='Cliente')
+            instance.groups.add(cliente_group)
             Cliente.objects.create(usuario=instance)
         
 class Trabajador(models.Model):

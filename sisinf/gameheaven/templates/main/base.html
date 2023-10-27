@@ -24,6 +24,11 @@
                   <li class="nav-item" role="presentation">
                     <button onclick="location.href='/logout_view'" class="nav-link rounded-5" id="logout" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Logout</button>
                   </li>
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/settings'" class="nav-link active rounded-5" id="configuracion" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">
+                      <img src="{% static 'img/settingsicon.png' %}" width="20px" height="20px" alt="Icono de configuración" />
+                  </button>
+                </li>
                 {% else %}
                   <li class="nav-item" role="presentation">
                     <button onclick="location.href='/login'" class="nav-link rounded-5" id="login" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Login</button>
