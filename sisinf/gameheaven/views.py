@@ -81,6 +81,4 @@ def logout_view(request):
 
 @login_required(login_url='loginUser')
 def settings(request):
-    if request.user.is_authenticated:
-        loggeado = True
-    return render(request, 'settings.html', {'loggeado': loggeado})
+    return render(request, 'settings.html', {'userRole': request.user.role})
