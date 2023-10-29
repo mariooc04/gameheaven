@@ -81,3 +81,22 @@ class LoginForm(forms.Form):
     class Meta:
         model = Usuario
         fields = ["email", "password"]
+
+class SendEmailForm(forms.Form):
+    email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        subject = cleaned_data.get("subject")
+        message = cleaned_data.get("message")
+
+        if email == "" or email == None or subject == "" or subject == None or message == "" or message == None:
+            self.add_error("email", "Ningún campo puede estar vacío.")
+        
+    
+    class Meta:
+        model = Usuario
+        fields = ["email", "subject", "message"]

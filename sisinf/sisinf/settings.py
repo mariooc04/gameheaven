@@ -139,6 +139,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP de Gmail
+EMAIL_PORT = 587  # Puerto SMTP para TLS (587 es común)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'gameheaven.adm@gmail.com'  # Tu dirección de Gmail
+EMAIL_HOST_PASSWORD = 'gameheaven.administrator1234'  # Tu contraseña de Gmail
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
