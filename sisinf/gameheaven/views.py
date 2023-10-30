@@ -91,7 +91,24 @@ def logout_view(request):
 
 @login_required(login_url='loginUser')
 def settings(request):
-    return render(request, 'settings.html', {'userRole': request.user.role})
+    usuario = request.user
+    if request.method == 'POST':
+        form = changeTienda(request.POST)
+        tienda = request.POST[Constantes.TIENDA]
+
+        daoUsuario.updateTiendaCliente(usuario, int(tienda))
+        return redirect('settings')
+    else:
+        form = changeTienda(initial={'tienda': daoUsuario.getClienteByUsuario(usuario).tienda})
+        
+    return render(request, 'settings.html', {'userRole': request.user.role, 'form': form})
+
+@login_required(login_url='loginUser')
+def delete_account(request):
+    user = request.user
+    daoUsuario.deleteUser(user)
+    logout(request)
+    return redirect('home')
 
 def about(request):
     return render(request, 'main/about.html')

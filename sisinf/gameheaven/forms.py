@@ -35,6 +35,8 @@ class RegisterForm(forms.ModelForm):
         password = cleaned_data.get("password")
         password2 = cleaned_data.get("password2")
 
+        print(cleaned_data.get("username"))
+
         try:
             password_validation.validate_password(password, self.instance)
         except ValidationError as error:
@@ -108,5 +110,8 @@ class AddProductForm(forms.Form):
     plataformas = forms.CharField(required=False)
     img = forms.ImageField(required=False)
 
+
+class changeTienda(forms.Form):
+    tienda = forms.ModelChoiceField(queryset=Tienda.objects.all(), empty_label=None, label="Tienda")
 
     
