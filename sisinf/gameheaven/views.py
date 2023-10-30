@@ -11,6 +11,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import permission_required
 from django.core.mail import send_mail
 import smtplib
+import gameheaven.Constantes.ConstantesVOs as Constantes
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
@@ -34,6 +35,8 @@ def default(request):
 
 def home(request):
     loggeado = False
+    """tienda = Tienda(ciudad ="Tienda 1",codigoPostal ="3")
+    daoTienda.newTienda(tienda)"""
     if request.user.is_authenticated:
         loggeado = True
     productos = daoProductos.getAllVideojuegos()
