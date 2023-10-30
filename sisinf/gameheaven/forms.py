@@ -100,3 +100,13 @@ class SendEmailForm(forms.Form):
     class Meta:
         model = Usuario
         fields = ["email", "subject", "message"]
+
+class AddProductForm(forms.Form):
+    nombre = forms.CharField(required=True)
+    descripcion = forms.CharField(required=True)
+    valoracion = forms.FloatField(required=True)
+    plataformas = forms.CharField(required=False)
+    img = forms.ImageField(required=False)
+
+
+    

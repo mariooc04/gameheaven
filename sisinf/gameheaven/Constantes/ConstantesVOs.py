@@ -7,6 +7,21 @@ CLIENTE_PASSWORD2 = 'password2'
 CLIENTE_USUARIO = 'username'
 TIENDA = 'tienda'
 
+# Constantes de Consola
+CONSOLA_ID = 'id'
+CONSOLA_NOMBRE = 'nombre'
+CONSOLA_DESCRIPCION = 'descripcion'
+CONSOLA_VALORACION = 'valoracion'
+CONSOLA_IMG = 'img'
+
+# Constantes de Videojuego
+VIDEOJUEGO_ID = 'id'
+VIDEOJUEGO_NOMBRE = 'nombre'
+VIDEOJUEGO_DESCRIPCION = 'descripcion'
+VIDEOJUEGO_VALORACION = 'valoracion'
+VIDEOJUEGO_PLATAFORMAS = 'plataformas'
+VIDEOJUEGO_IMG = 'img'
+
 # Constantes grupos
 GRUPO_TRABAJADORES = 'Trabajador'
 GRUPO_CLIENTES = 'Cliente'

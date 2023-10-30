@@ -22,7 +22,7 @@ class Videojuego(models.Model):
     descripcion = models.TextField(max_length=500, null=True)
     valoracion = models.FloatField(null=True)
     plataformas = models.CharField(max_length=50, null=True)
-    img = models.ImageField(upload_to='img/', null=True)
+    img = models.BinaryField(null=True)
 
     def __str__(self):
         return f'Videojuego {self.nombre}'
@@ -32,7 +32,7 @@ class Consola(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.TextField(max_length=500, null=True)
     valoracion = models.FloatField(null=True)
-    img = models.ImageField(upload_to='img/', null=True)
+    img = models.BinaryField(null=True)
 
     def __str__(self):
         return f'Consola {self.nombre}'

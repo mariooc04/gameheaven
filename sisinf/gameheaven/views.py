@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from gameheaven.models import Cliente, Tienda, Usuario, Consola
+from gameheaven.models import Cliente, Tienda, Usuario, Consola, Videojuego
 from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda ,daoProductos
@@ -14,6 +14,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
+import base64
+
 
 
 from .forms import *
@@ -34,7 +36,9 @@ def home(request):
     loggeado = False
     if request.user.is_authenticated:
         loggeado = True
-    productos = daoProductos.getAllConsolas()
+    productos = daoProductos.getAllVideojuegos()
+    for producto in productos:
+        producto.img = base64.b64encode(producto.img).decode('utf-8')
     return render(request, 'main/home.html', {'loggeado': loggeado, 'productos': productos})
 
 def loginUser(request):
@@ -124,6 +128,23 @@ def contact(request):
 
     return render(request, 'main/contact.html', {"form": form})
 
-def productList(request):
-    productos = daoProductos.getAllProductos()
-    return render(request, 'main/home.html', {'productos': productos})
+def addproduct(request):
+    if request.method == 'POST':
+        form = AddProductForm(request.POST, request.FILES)
+
+        if(form.is_valid()):
+            nombre = request.POST['nombre']
+            descripcion = request.POST['descripcion']
+            valoracion = request.POST['valoracion']
+            plataformas = request.POST['plataformas']
+            imagen = request.FILES['img'].file.read()
+            if plataformas == None:
+                producto = Consola(nombre=nombre, descripcion=descripcion, valoracion=valoracion, img=imagen)
+                daoProductos.newConsola(producto)
+            else:
+                producto = Videojuego(nombre=nombre, descripcion=descripcion, plataformas = plataformas, valoracion=valoracion, img=imagen)
+                daoProductos.newVideojuego(producto)
+            return redirect('home')
+    else:
+        form = AddProductForm()
+    return render(request, 'trabajador/addproduct.html', {"form": form})

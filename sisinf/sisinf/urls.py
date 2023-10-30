@@ -32,4 +32,5 @@ urlpatterns = [
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
+    path('addproduct/', views.addproduct, name='addproduct'),
 ]
