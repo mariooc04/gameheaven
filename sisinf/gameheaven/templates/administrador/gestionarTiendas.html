@@ -1,0 +1,14 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Gestionar Tiendas{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for shop in tiendas %}
+            <li>{{ shop }} <a href="{% url 'delete_shop' shop.id %}" class="btn btn-primary">Eliminar</a></li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'add_shop' %}" class="btn btn-primary">Añadir Tienda</a>
+{% endblock %}

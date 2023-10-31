@@ -141,8 +141,6 @@ class AddWorkerAccount(forms.Form):
         password = cleaned_data.get("password")
         password2 = cleaned_data.get("password2")
 
-        print(cleaned_data.get("username"))
-
         try:
             password_validation.validate_password(password, self.instance)
         except ValidationError as error:
@@ -170,3 +168,15 @@ class AddWorkerAccount(forms.Form):
     class Meta:
         model = Usuario
         fields = ["email", "username", "tienda", "password", "password2"]
+
+class AddShopForm(forms.Form):
+    ciudad = forms.CharField(required=True, label="Ciudad")
+    codigoPostal = forms.CharField(required=True, label="Código Postal")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        ciudad = cleaned_data.get("ciudad")
+        codigoPostal = cleaned_data.get("codigoPostal")
+
+        if daoTienda.existeTienda(ciudad, codigoPostal):
+            self.add_error("ciudad", "Ya existe una tienda en esa ciudad con ese código postal.")

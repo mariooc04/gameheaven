@@ -31,6 +31,9 @@ def getVideojuegosTienda(idTienda):
 def getConsolasTienda(idTienda):
     return getTienda(idTienda).consolas
 
+def existeTienda(ciudad, codigoPostal):
+    return Tienda.objects.filter(ciudad=ciudad, codigoPostal=codigoPostal).exists()
+
 #UPDATES
 
 def updateTienda(tienda, newTienda):

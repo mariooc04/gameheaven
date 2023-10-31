@@ -212,3 +212,31 @@ def reservas(request):
 def gestionarTrabajadores(request):
     trabajadores = daoUsuario.getAllTrabajadores()
     return render(request, 'trabajador/gestionarTrabajadores.html', {'trabajadores' : trabajadores})
+
+@login_required(login_url='loginUser')
+@permission_required('gameheaven.add_usuario', raise_exception=True)
+def gestionarTiendas(request):
+    tiendas = daoTienda.getAllTiendas()
+    return render(request, 'trabajador/gestionarTiendas.html', {'tiendas' : tiendas})
+
+@login_required(login_url='loginUser')
+@permission_required('gameheaven.add_usuario', raise_exception=True)
+def delete_shop(request, idTienda):
+    daoTienda.deleteTienda(idTienda)
+    return redirect('gestionarTiendas')
+
+@login_required(login_url='loginUser')
+@permission_required('gameheaven.add_usuario', raise_exception=True)
+def add_shop(request):
+    if request.method == 'POST':
+        form = AddShopForm(request.POST)
+
+        if(form.is_valid()):
+            ciudad = request.POST['ciudad']
+            codigoPostal = request.POST['codigoPostal']
+            tienda = Tienda(ciudad=ciudad, codigoPostal=codigoPostal)
+            daoTienda.newTienda(tienda)
+            return redirect('gestionarTiendas')
+    else:
+        form = AddShopForm()
+    return render(request, 'trabajador/add_shop.html', {"form": form})
