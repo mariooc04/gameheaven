@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Reservas{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for reserva in reservasConsola %}
+            <li>{{ reserva }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+        {% for reserva in reservasVideojuego %}
+            <li>{{ reserva }}</li>
+        {% endfor %}
+{% endblock %}

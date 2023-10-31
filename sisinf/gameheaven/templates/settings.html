@@ -6,6 +6,26 @@
 {% block content %}
 <div class="container d-flex justify-content-center align-items-center">
     <div>
+        {% if userRole == "CLIENTE" %}
+            <a href="{% url 'reservas' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Mis Reservas</button>
+            </a>
+        {% endif %}
+        {% if userRole == "ADMINISTRADOR" %}
+            <a href="{% url 'gestionarTrabajadores' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">GestionarTrabajadores</button>
+            </a>
+            <a href="{% url 'gestionarTiendas' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">GestionarTiendas</button>
+        {% endif %}
+        {% if userRole == "TRABAJADOR" %}
+            <a href="{% url 'reservas' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Reservas Tienda</button>
+            </a>
+            <a href="{% url 'trabajador/addproduct.html' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Añadir productos</button>
+            </a>
+        {% endif %}
         <a href="{% url 'password_change' %}">
             <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Contraseña</button>
         </a>
@@ -17,7 +37,7 @@
         <form method="post">
             {% csrf_token %}
             {{form|crispy}}
-            <button type="submit" class="btn btn-outline-success mt-4">Cambiar tienda</button>
+            <button type="submit" class="btn btn-outline-success mt-0.15">Cambiar tienda</button>
         </form>
     </div>
 <div>

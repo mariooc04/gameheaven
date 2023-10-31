@@ -114,4 +114,59 @@ class AddProductForm(forms.Form):
 class changeTienda(forms.Form):
     tienda = forms.ModelChoiceField(queryset=Tienda.objects.all(), empty_label=None, label="Tienda")
 
+class AddWorkerAccount(forms.Form):
+    email = forms.EmailField(required=True)
+    username = forms.CharField(required=True, label="Username")
+    password = forms.CharField(
+        label=("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    password2 = forms.CharField(
+        label=("Password confirmation"),
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        strip=False,
+        help_text=("Enter the same password as before, for verification."),
+    )
+    # Define a ModelChoiceField for the 'tienda' field
+    tienda = ModelChoiceField(
+        queryset=Tienda.objects.all(),  # Provide a queryset of Tienda instances
+        empty_label=None,  # Optionally, you can set an empty_label to None if needed
+        label="Tienda"
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+
+        print(cleaned_data.get("username"))
+
+        try:
+            password_validation.validate_password(password, self.instance)
+        except ValidationError as error:
+            self.add_error("password", error)
+
+        if cleaned_data.get("username") in password:
+            self.add_error("password", "La contraseña no puede ser similar al nombre de usuario")
+        if password != password2:
+            self.add_error("password2", "Las contraseñas no coinciden")
+        
+        
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        if daoUsuario.existeUsuarioUsername(username):
+            raise ValidationError("El nombre de usuario ya existe.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if daoUsuario.existeUsuarioEmail(email):
+            raise ValidationError("El correo electrónico ya está registrado.")
+        return email
     
+    
+    class Meta:
+        model = Usuario
+        fields = ["email", "username", "tienda", "password", "password2"]

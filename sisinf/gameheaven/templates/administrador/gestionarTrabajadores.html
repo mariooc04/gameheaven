@@ -1,0 +1,14 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Gestionar Trabajadores{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for worker in trabajadores %}
+            <li>{{ worker }} <a href="{% url 'delete_account' worker.id %}" class="btn btn-primary">Eliminar</a></li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'add_account' %}" class="btn btn-primary">Añadir Trabajador</a>
+{% endblock %}

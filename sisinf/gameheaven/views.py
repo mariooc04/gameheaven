@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from gameheaven.models import Cliente, Tienda, Usuario, Consola, Videojuego
 from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
-from gameheaven.DAOs import daoTienda ,daoProductos
+from gameheaven.DAOs import daoTienda ,daoProductos, daoReserva
 from django.contrib.auth import authenticate, login, logout
 from gameheaven.forms import RegisterForm, LoginForm
 from django.contrib.auth import logout
@@ -80,9 +80,6 @@ def registerUser(request):
             return redirect('loginUser')
         
         return render(request, 'registration/register.html', {"form": form})
-
-        
-        
     else:
         form = RegisterForm()
     return render(request, 'registration/register.html', {"form": form})
@@ -95,6 +92,7 @@ def logout_view(request):
 @login_required(login_url='loginUser')
 def settings(request):
     usuario = request.user
+    loggeado = request.user.is_authenticated
     if request.method == 'POST':
         form = changeTienda(request.POST)
         tienda = request.POST[Constantes.TIENDA]
@@ -104,7 +102,7 @@ def settings(request):
     else:
         form = changeTienda(initial={'tienda': daoUsuario.getClienteByUsuario(usuario).tienda})
         
-    return render(request, 'settings.html', {'userRole': request.user.role, 'form': form})
+    return render(request, 'settings.html', {'userRole': request.user.role, 'form': form, 'loggeado': loggeado})
 
 @login_required(login_url='loginUser')
 def delete_account(request):
@@ -112,6 +110,28 @@ def delete_account(request):
     daoUsuario.deleteUser(user)
     logout(request)
     return redirect('home')
+
+@login_required(login_url='loginUser')
+def add_account(request):
+    if request.method == 'POST':
+        form = AddWorkerAccount(request.POST)
+
+        if(form.is_valid()):
+            
+            email = request.POST[Constantes.CLIENTE_EMAIL]
+            username = request.POST[Constantes.CLIENTE_USUARIO]
+            password = request.POST[Constantes.CLIENTE_PASSWORD]
+            tienda = request.POST[Constantes.TIENDA]
+
+            usuario = Usuario(email=email, username=username, password=password)
+            usuario = daoUsuario.newTrabajador(usuario)
+            daoUsuario.updateTiendaTrabajador(usuario, int(tienda))
+            return redirect('loginUser')
+        
+        return render(request, 'registration/register.html', {"form": form})
+    else:
+        form = RegisterForm()
+    return render(request, 'registration/register.html', {"form": form})
 
 def about(request):
     return render(request, 'main/about.html')
@@ -168,3 +188,27 @@ def addproduct(request):
     else:
         form = AddProductForm()
     return render(request, 'trabajador/addproduct.html', {"form": form})
+
+@login_required(login_url='loginUser')
+def reservas(request):
+    usuario = request.user
+    loggeado = request.user.is_authenticated
+    
+    if request.user.role == 'CLIENTE':
+        reservasConsola = daoReserva.filterReservasConsolaByCliente(usuario.id)
+        reservasVideojuego = daoReserva.filterReservasVideojuegoByCliente(usuario.id)
+        return render(request, 'reservas.html', {'userRole' : request.user.role, 'reservasConsola': reservasConsola, 'reservasVideojuego' : reservasVideojuego, 'loggeado' : loggeado})
+    elif request.user.role == 'TRABAJADOR':
+        reservasConsola = daoReserva.filterReservasConsolaByTienda(usuario.tienda)
+        reservasVideojuego = daoReserva.filterReservasVideojuegoByTienda(usuario.tienda)
+        return render(request, 'reservas.html', {'userRole' : request.user.role, 'reservasConsola': reservasConsola, 'reservasVideojuego' : reservasVideojuego, 'loggeado' : loggeado})
+
+
+    return render(request, 'reservas.html', {'userRole' : request.user.role, 'loggeado' : loggeado})
+
+
+@login_required(login_url='loginUser')
+@permission_required('gameheaven.add_usuario', raise_exception=True)
+def gestionarTrabajadores(request):
+    trabajadores = daoUsuario.getAllTrabajadores()
+    return render(request, 'trabajador/gestionarTrabajadores.html', {'trabajadores' : trabajadores})

@@ -34,4 +34,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('addproduct/', views.addproduct, name='addproduct'),
     path('delete_account/', views.delete_account, name='delete_account'),
+    path('reservas/', views.reservas, name='reservas'),
+    path('gestionarTrabajadores', views.gestionarTrabajadores, name='gestionarTrabajadores'),
+    path('add_account/', views.add_account, name='add_account'),
 ]
