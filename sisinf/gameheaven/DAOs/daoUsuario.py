@@ -12,8 +12,12 @@ def existeUsuarioUsername(username):
 def getUsuario(idUsuario):
     return Usuario.objects.get(pk=idUsuario)
 
+def getUsuarioByEmail(email):
+    return Usuario.objects.get(email=email)
+
 def getEmailUsuario(idUsuario):
     return getUsuario(idUsuario).email
+
 
 def getUsernameUsuario(idUsuario):
     return getUsuario(idUsuario).username
@@ -22,6 +26,9 @@ def deleteUser(usuario):
     if isinstance(usuario, int):
         usuario = getUsuario(usuario)
     usuario.delete()
+def deleteTrabajador(email):
+    trabajador = getUsuarioByEmail(email)
+    trabajador.delete()
 
 ### Daos Trabajador
 def newTrabajador(email, password, username):
@@ -29,6 +36,9 @@ def newTrabajador(email, password, username):
 
 def getTrabajadorByUsuario(usuario):
     return Trabajador.objects.get(usuario=usuario)
+
+def getAllTrabajadores():
+    return Trabajador.objects.all()
 
 def updateTiendaTrabajador(usuario, tienda):
     if isinstance(usuario, int):
@@ -46,6 +56,7 @@ def newCliente(usuario):
 
 def getClienteByUsuario(usuario):
     return Cliente.objects.get(usuario=usuario)
+
 
 def updateTiendaCliente(usuario, tienda):
     if isinstance(tienda, int):

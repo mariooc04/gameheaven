@@ -11,7 +11,7 @@
                 <button type="button" class="btn btn-outline-info mb-4 mt-4">Mis Reservas</button>
             </a>
         {% endif %}
-        {% if userRole == "ADMINISTRADOR" %}
+        {% if userRole == "ADMIN" %}
             <a href="{% url 'gestionarTrabajadores' %}">
                 <button type="button" class="btn btn-outline-info mb-4 mt-4">GestionarTrabajadores</button>
             </a>
@@ -22,17 +22,14 @@
             <a href="{% url 'reservas' %}">
                 <button type="button" class="btn btn-outline-info mb-4 mt-4">Reservas Tienda</button>
             </a>
-            <a href="{% url 'trabajador/addproduct.html' %}">
+            <a href="{% url 'addproduct' %}">
                 <button type="button" class="btn btn-outline-info mb-4 mt-4">Añadir productos</button>
             </a>
         {% endif %}
         <a href="{% url 'password_change' %}">
             <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Contraseña</button>
         </a>
-        <form action="{% url 'delete_account' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger mb-4">Eliminar Cuenta</button>
-        </form>
+        
         {% load crispy_forms_tags %}
         <form method="post">
             {% csrf_token %}

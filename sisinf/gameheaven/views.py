@@ -94,27 +94,25 @@ def settings(request):
     usuario = request.user
     loggeado = request.user.is_authenticated
     if request.method == 'POST':
-        form = changeTienda(request.POST)
-        tienda = request.POST[Constantes.TIENDA]
-
-        daoUsuario.updateTiendaCliente(usuario, int(tienda))
+        if(usuario.role == Usuario.Roles.TRABAJADOR):
+            pass
+        else:
+            form = changeTienda(request.POST)
+            tienda = request.POST[Constantes.TIENDA]
+            daoUsuario.updateTiendaCliente(usuario, int(tienda))
         return redirect('settings')
     else:
-        form = changeTienda(initial={'tienda': daoUsuario.getClienteByUsuario(usuario).tienda})
+        form = changeTienda(request.POST)
+        #form = changeTienda(initial={'tienda': daoUsuario.getClienteByUsuario(usuario.id).tienda})
         
     return render(request, 'settings.html', {'userRole': request.user.role, 'form': form, 'loggeado': loggeado})
 
-@login_required(login_url='loginUser')
-def delete_account(request):
-    user = request.user
-    daoUsuario.deleteUser(user)
-    logout(request)
-    return redirect('home')
+
 
 @login_required(login_url='loginUser')
 def add_account(request):
     if request.method == 'POST':
-        form = AddWorkerAccount(request.POST)
+        form = RegisterForm(request.POST)
 
         if(form.is_valid()):
             
@@ -123,8 +121,7 @@ def add_account(request):
             password = request.POST[Constantes.CLIENTE_PASSWORD]
             tienda = request.POST[Constantes.TIENDA]
 
-            usuario = Usuario(email=email, username=username, password=password)
-            usuario = daoUsuario.newTrabajador(usuario)
+            usuario = daoUsuario.newTrabajador(email, password, username)
             daoUsuario.updateTiendaTrabajador(usuario, int(tienda))
             return redirect('loginUser')
         
@@ -211,13 +208,26 @@ def reservas(request):
 @permission_required('gameheaven.add_usuario', raise_exception=True)
 def gestionarTrabajadores(request):
     trabajadores = daoUsuario.getAllTrabajadores()
-    return render(request, 'trabajador/gestionarTrabajadores.html', {'trabajadores' : trabajadores})
+    return render(request, 'administrador/gestionarTrabajadores.html', {'trabajadores' : trabajadores})
+
+@login_required(login_url='loginUser')
+def delete_account(request,id):
+    user = daoUsuario.getUsuario(id)
+    daoUsuario.deleteUser(user)
+    logout(request)
+    return redirect('home')
+
+@login_required(login_url='loginUser')
+def delete_trabajador(request,usuario):
+    daoUsuario.deleteTrabajador(usuario)
+    logout(request)
+    return redirect('home')
 
 @login_required(login_url='loginUser')
 @permission_required('gameheaven.add_usuario', raise_exception=True)
 def gestionarTiendas(request):
     tiendas = daoTienda.getAllTiendas()
-    return render(request, 'trabajador/gestionarTiendas.html', {'tiendas' : tiendas})
+    return render(request, 'administrador/gestionarTiendas.html', {'tiendas' : tiendas})
 
 @login_required(login_url='loginUser')
 @permission_required('gameheaven.add_usuario', raise_exception=True)

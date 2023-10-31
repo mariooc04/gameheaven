@@ -149,14 +149,14 @@ class Trabajador(models.Model):
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.user} trabajador en {self.tienda}'
+        return f'{self.usuario} trabajador en {self.tienda}'
         
 class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
     tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.user} cliente en {self.tienda}'
+        return f'{self.usuario} cliente en {self.tienda}'
 
     
 #Reservas

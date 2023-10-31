@@ -114,7 +114,7 @@ class AddProductForm(forms.Form):
 class changeTienda(forms.Form):
     tienda = forms.ModelChoiceField(queryset=Tienda.objects.all(), empty_label=None, label="Tienda")
 
-class AddWorkerAccount(forms.Form):
+class AddWorkerAccount(forms.ModelForm):
     email = forms.EmailField(required=True)
     username = forms.CharField(required=True, label="Username")
     password = forms.CharField(
