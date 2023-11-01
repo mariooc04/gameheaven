@@ -1,14 +1,34 @@
 {% extends "main/base.html" %}
 {% load static %}
 
-{% block title %}Gestionar Tiendas{% endblock %}
+{% block title %}
+    Gestionar Tiendas
+{% endblock %}
 
 {% block content %}
-    <ul>
-        {% for shop in tiendas %}
-            <li>{{ shop }} <a href="{% url 'delete_shop' shop.id %}" class="btn btn-primary">Eliminar</a></li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-4">
+        <h2>Gestionar Tiendas</h2>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Ciudad</th>
+                    <th scope="col">Código Postal</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shop in tiendas %}
+                        <tr class="table-info">
+                            <th scope="row">{{ shop.ciudad }}</th>
+                            <td>{{ shop.codigoPostal }}</td>
+                            <td>
+                                <a href="{% url 'delete_shop' shop.id %}" class="btn btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{% url 'add_shop' %}" class="btn btn-primary">Añadir Tienda</a>
+        <a href="{% url 'add_shop' %}" class="btn btn-primary mt-3">Añadir Tienda</a>
+    </div>
 {% endblock %}

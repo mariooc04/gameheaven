@@ -111,7 +111,7 @@ class AddProductForm(forms.Form):
     img = forms.ImageField(required=False)
 
 
-class changeTienda(forms.Form):
+class ChangeShopForm(forms.Form):
     tienda = forms.ModelChoiceField(queryset=Tienda.objects.all(), empty_label=None, label="Tienda")
 
 class AddWorkerAccount(forms.ModelForm):
@@ -180,3 +180,7 @@ class AddShopForm(forms.Form):
 
         if daoTienda.existeTienda(ciudad, codigoPostal):
             self.add_error("ciudad", "Ya existe una tienda en esa ciudad con ese código postal.")
+
+    class Meta:
+        model = Tienda
+        fields = ["ciudad", "codigoPostal"]

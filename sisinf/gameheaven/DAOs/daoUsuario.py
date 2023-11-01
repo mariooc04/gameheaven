@@ -26,9 +26,8 @@ def deleteUser(usuario):
     if isinstance(usuario, int):
         usuario = getUsuario(usuario)
     usuario.delete()
-def deleteTrabajador(email):
-    trabajador = getUsuarioByEmail(email)
-    trabajador.delete()
+
+
 
 ### Daos Trabajador
 def newTrabajador(email, password, username):

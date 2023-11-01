@@ -10,6 +10,9 @@
             <a href="{% url 'reservas' %}">
                 <button type="button" class="btn btn-outline-info mb-4 mt-4">Mis Reservas</button>
             </a>
+            <a href="{% url 'changeTienda' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Tienda</button>
+            </a>
         {% endif %}
         {% if userRole == "ADMIN" %}
             <a href="{% url 'gestionarTrabajadores' %}">
@@ -25,17 +28,15 @@
             <a href="{% url 'addproduct' %}">
                 <button type="button" class="btn btn-outline-info mb-4 mt-4">Añadir productos</button>
             </a>
+            <a href="{% url 'changeTienda' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Tienda</button>
+            </a>
         {% endif %}
         <a href="{% url 'password_change' %}">
             <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Contraseña</button>
         </a>
         
-        {% load crispy_forms_tags %}
-        <form method="post">
-            {% csrf_token %}
-            {{form|crispy}}
-            <button type="submit" class="btn btn-outline-success mt-0.15">Cambiar tienda</button>
-        </form>
+        
     </div>
 <div>
 {% endblock %}
