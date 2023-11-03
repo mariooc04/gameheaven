@@ -35,8 +35,6 @@ class RegisterForm(forms.ModelForm):
         password = cleaned_data.get("password")
         password2 = cleaned_data.get("password2")
 
-        print(cleaned_data.get("username"))
-
         try:
             password_validation.validate_password(password, self.instance)
         except ValidationError as error:

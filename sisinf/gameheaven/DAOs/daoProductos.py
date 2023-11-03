@@ -13,6 +13,8 @@ def getAllVideojuegos():
 
 def getVideojuego(idVideojuego):
     return Videojuego.objects.get(pk=idVideojuego)
+def getVideojuegoByNombre(nombre):
+    return Videojuego.objects.get(nombre=nombre)
 
 def getNombreVideojuego(idVideojuego):
     return getVideojuego(idVideojuego).nombre
@@ -89,6 +91,8 @@ def getAllConsolas():
 
 def getConsola(idConsola):
     return Consola.objects.get(pk=idConsola)
+def getConsolaByNombre(nombre):
+    return Consola.objects.get(nombre=nombre)
 
 def getNombreConsola(idConsola):
     return getConsola(idConsola).nombre

@@ -147,6 +147,10 @@ def getAllStockVideojuegos():
     return StockVideojuego.objects.all()
 
 def getStockVideojuego(tienda, videojuego):
+    if isinstance(tienda, int):
+        tienda = getTienda(tienda)
+    if isinstance(videojuego, int):
+        videojuego = daoProductos.getVideojuego(videojuego)
     return StockVideojuego.objects.get(tienda=tienda, videojuego=videojuego)
 
 def getPrecioStockVideojuego(tienda, videojuego):

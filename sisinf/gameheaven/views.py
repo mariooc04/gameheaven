@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from gameheaven.models import Cliente, Tienda, Usuario, Consola, Videojuego
+from gameheaven.models import Cliente, Tienda, Usuario, Consola, Videojuego, ReservaConsola, ReservaVideojuego
 from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda ,daoProductos, daoReserva
@@ -15,6 +15,7 @@ import gameheaven.Constantes.ConstantesVOs as Constantes
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
+from django.utils import timezone
 import base64
 
 
@@ -205,7 +206,7 @@ def contact(request):
     }
     return render(request, 'main/contact.html', context)
 
-def addproduct(request):
+def addProduct(request):
     if request.method == 'POST':
         form = AddProductForm(request.POST, request.FILES)
 
@@ -235,7 +236,44 @@ def addproduct(request):
     return render(request, 'trabajador/addproduct.html', context)
 
 @login_required(login_url='loginUser')
-def reservas(request):
+def addStockProduct():
+    pass
+
+@login_required(login_url='loginUser')
+def addReserva(request, nombre):
+    usuario = request.user
+    cliente = daoUsuario.getClienteByUsuario(usuario.id)
+    tienda = cliente.tienda
+    fecha = timezone.now().date()
+    
+    if request.user.role == Usuario.Roles.CLIENTE:
+
+        try:
+            product = daoProductos.getConsolaByNombre(nombre)
+        except:
+            product = daoProductos.getVideojuegoByNombre(nombre)
+
+
+        if isinstance (product, Consola):
+            print("Es una consola")
+            stockConsola = daoTienda.getStockConsola(tienda.id, product.id)
+            reservaConsola = ReservaConsola(cliente=cliente, stockConsola = stockConsola ,fecha=fecha)
+            daoReserva.newReservaConsola(reservaConsola)
+            return redirect('home')
+        elif isinstance (product, Videojuego):
+            print ("Es un videojuego")
+            stockVideojuego = daoTienda.getStockVideojuego(tienda.id, product.id)
+            reservaVideojuego = ReservaVideojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
+            daoReserva.newReservaVideojuego(reservaVideojuego)
+    return redirect('home')
+
+
+
+        
+        
+
+@login_required(login_url='loginUser')
+def verReservas(request):
     usuario = request.user
     
     if request.user.role == Usuario.Roles.CLIENTE:
@@ -251,8 +289,8 @@ def reservas(request):
         }
         return render(request, 'reservas.html', context)
     elif request.user.role == 'TRABAJADOR':
-        reservasConsola = daoReserva.filterReservasConsolaByTienda(usuario.tienda)
-        reservasVideojuego = daoReserva.filterReservasVideojuegoByTienda(usuario.tienda)
+        reservasConsola = daoReserva.getAllReservasConsola
+        reservasVideojuego = daoReserva.getAllReservasVideojuego
         context = {
             'userRole' : request.user.role,
             'reservasConsola': reservasConsola,
@@ -268,7 +306,6 @@ def reservas(request):
         'currentView' : 'home'
     }
     return render(request, 'reservas.html', context)
-
 
 @login_required(login_url='loginUser')
 @permission_required('gameheaven.add_usuario', raise_exception=True)
@@ -315,10 +352,18 @@ def delete_shop(request, idTienda):
     return redirect('gestionarTiendas')
 
 @login_required(login_url='loginUser')
-@permission_required('gameheaven.delete_tienda', raise_exception=True)
-def producto(request):
+def producto(request, product):
+    try: 
+        producto = daoProductos.getConsolaByNombre(product)
+    except:
+        producto = daoProductos.getVideojuegoByNombre(product)
+    if(isinstance(producto, Consola)):
+        pass
+    elif(isinstance(producto, Videojuego)):
+        pass
     context = {
         'loggeado' : request.user.is_authenticated,
+        'producto' : producto,
         }
     return render(request,'producto/producto.html', context)
 

@@ -1,8 +1,24 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load customfilters %}
+
 
 {% block title %}Reservas{% endblock %}
 
 {% block content %}
-    
+    <h1>{{ producto.nombre }}</h1>
+
+    <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+    <p><strong>Valoración:</strong> {{ producto.valoracion }}</p>
+    {% if producto|is_videojuego %}
+    <p><strong>Valoración:</strong> {{ producto.plataformas }}</p>
+    {%endif%}
+
+    {% if producto.img %}
+    <img style="width: 200px; height: 200px; object-fit:scale-down;" class="img-fluid w-100" src="data:image/png;base64,{{ producto.img }}" alt="Image" >
+    {% endif %}
+
+
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back to List</a>
+
 {% endblock %}

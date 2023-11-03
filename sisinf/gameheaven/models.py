@@ -162,31 +162,28 @@ class Cliente(models.Model):
 #Reservas
 
 class ReservaVideojuego(models.Model):
-    estadoNoCompletada = 'No completada'
-    estadoCompletada = 'Completada'
-    ESTADOS = {
-    (estadoCompletada, 'No completada'),
-    (estadoNoCompletada, 'Completada')}
+    class Estados(models.TextChoices):
+        NO_COMPLETADA = 'No completada', 'No completada'
+        COMPLETADA = 'Completada', 'Completada'
+
 
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     stockVideojuego = models.ForeignKey(StockVideojuego, on_delete=models.CASCADE)
     fecha = models.DateField()
-    estado = models.CharField(max_length=50, choices=ESTADOS)
+    estado = models.CharField(max_length=50, choices=Estados.choices, default=Estados.NO_COMPLETADA)
 
     def __str__(self):
         return f'Reserva de {self.stockVideojuego} por {self.cliente}'
 
 class ReservaConsola(models.Model):
-    estadoNoCompletada = 'No completada'
-    estadoCompletada = 'Completada'
-    ESTADOS = {
-    (estadoCompletada, 'No completada'),
-    (estadoNoCompletada, 'Completada')}
+    class Estados(models.TextChoices):
+        NO_COMPLETADA = 'No completada', 'No completada'
+        COMPLETADA = 'Completada', 'Completada'
     
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     stockConsola = models.ForeignKey(StockConsola, on_delete=models.CASCADE)
     fecha = models.DateField()
-    estado = models.CharField(max_length=50, choices=ESTADOS)
+    estado = models.CharField(max_length=50, choices=Estados.choices, default=Estados.NO_COMPLETADA)
 
     def __str__(self):
         return f'Reserva de {self.stockConsola} por {self.cliente}'
