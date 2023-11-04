@@ -351,16 +351,17 @@ def delete_shop(request, idTienda):
     daoTienda.deleteTienda(idTienda)
     return redirect('gestionarTiendas')
 
+
+#--------PRODUCTO----------
 @login_required(login_url='loginUser')
 def producto(request, product):
     try: 
         producto = daoProductos.getConsolaByNombre(product)
     except:
         producto = daoProductos.getVideojuegoByNombre(product)
-    if(isinstance(producto, Consola)):
-        pass
-    elif(isinstance(producto, Videojuego)):
-        pass
+
+    producto.img = base64.b64encode(producto.img).decode('utf-8')
+
     context = {
         'loggeado' : request.user.is_authenticated,
         'producto' : producto,
