@@ -107,6 +107,10 @@ class AddProductForm(forms.Form):
     valoracion = forms.FloatField(required=True)
     plataformas = forms.CharField(required=False)
     img = forms.ImageField(required=False)
+    precio = forms.FloatField(required=True)
+
+class AddStockForm(forms.Form):
+    stock = forms.IntegerField(required=True)
 
 
 class ChangeShopForm(forms.Form):

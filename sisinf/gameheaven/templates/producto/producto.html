@@ -1,22 +1,42 @@
 {% extends "main/base.html" %}
 {% load static %}
 {% load customfilters %}
+{% load crispy_forms_tags %}
 
 
-{% block title %}{{producto.nombre}}{% endblock %}
+{% block title %}{% if videojuego %} {{ stockProducto.videojuego.nombre }} 
+{% else %}{{ stockProducto.consola.nombre }} {% endif %}{% endblock %}
 
 {% block content %}
-    <h1>{{ producto.nombre }}</h1>
+    <h1>{% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.nombre }} 
+        {% else %}{{ stockProducto.consola.nombre }} {% endif %}</h1>
 
-    <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
-    <p><strong>Valoración:</strong> {{ producto.valoracion }}</p>
-    {% if producto.nombre|is_videojuego %}
-    <p><strong>Plataforma:</strong> {{ producto.plataformas }}</p>
+    <p><strong>Descripción:</strong>{% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.descripcion }} 
+        {% else %}{{ stockProducto.consola.descripcion }} {% endif %}</p>
+    <p><strong>Valoración:</strong> {% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojugo.valoracion }} 
+        {% else %} {{ stockProducto.consola.valoracion}} {% endif %}</p>
+    <p><strong>Precio:</strong> {{ stockProducto.precio }}€</p>
+    <p><strong>Stock:</strong> {{ stockProducto.stock }}</p>
+    {% if stockProducto.videojuego.nombre|is_videojuego %}
+    <p><strong>Plataforma:</strong> {{ stockProducto.videojuego.plataformas }}</p>
     {%endif%}
+    
+    <img style="width: 200px; height: 200px; object-fit: scale-down;" class="img-fluid w-100" src="data:image/png;base64,{{ img }}"alt="Image">
+   
 
-    <img style="width: 200px; height: 200px; object-fit:scale-down;" class="img-fluid w-100" src="data:image/png;base64,{{ producto.img }}" alt="Image" >
+    {% if user.is_authenticated and user.role == "TRABAJADOR" %}
+    <form id="addStockForm" method="post" action="{% url 'addStockProduct' %}">
+        {% csrf_token %}
+        {{form|crispy}}
+        {% if stockProducto.videojuego.nombre|is_videojuego %}
+            <input type="hidden" name="nombreProducto" value="{{ stockProducto.videojuego.nombre }}">
+        {% else %}
+            <input type="hidden" name="nombreProducto" value="{{ stockProducto.consola.nombre }}">
+        {% endif %}
+        <button type="submit" class="btn btn-outline-info mb-4">Add Stock</button>
+    </form>
+{% endif %}
 
-
-    <a href="{% url 'home' %}" class="btn btn-secondary">Back to List</a>
+<a href="{% url 'home' %}" class="btn btn-secondary mt-3">Back to List</a>
 
 {% endblock %}

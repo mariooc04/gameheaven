@@ -4,13 +4,47 @@
 {% block title %}Reservas{% endblock %}
 
 {% block content %}
-    <ul>
+    <h2>Reservas de Consolas:</h2>
+    <table border="1">
+        <tr>
+            <th>Cliente</th>
+            <th>Consola</th>
+            <th>Acción</th>
+        </tr>
         {% for reserva in reservasConsola %}
-            <li>{{ reserva }}</li>
+            <tr>
+                <td>{{ reserva.cliente.usuario.username }}</td>
+                <td>{{ reserva.stockConsola.consola.nombre }}</td>
+                <td>
+                    <form method="post" action="{% url 'completeReserva' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
+                        <button type="submit">Completar Reserva</button>
+                    </form>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
-    <ul>
+    </table>
+
+    <h2>Reservas de Videojuegos:</h2>
+    <table border="1">
+        <tr>
+            <th>Cliente</th>
+            <th>Videojuego</th>
+            <th>Acción</th>
+        </tr>
         {% for reserva in reservasVideojuego %}
-            <li>{{ reserva }}</li>
+            <tr>
+                <td>{{ reserva.cliente.usuario.username }}</td>
+                <td>{{ reserva.stockVideojuego.videojuego.nombre }}</td>
+                <td>
+                    <form method="post" action="{% url 'completeReserva' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
+                        <button type="submit">Completar Reserva</button>
+                    </form>
+                </td>
+            </tr>
         {% endfor %}
+    </table>
 {% endblock %}

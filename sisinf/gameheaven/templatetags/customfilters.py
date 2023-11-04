@@ -1,5 +1,5 @@
 from django import template
-from gameheaven.DAOs import daoProductos
+from gameheaven.DAOs import daoProductos,daoTienda
 import gameheaven.models as models
 
 register = template.Library()
@@ -8,3 +8,13 @@ register = template.Library()
 def is_videojuego(nombre):
     obj = daoProductos.getVideojuegoByNombre(nombre)
     return isinstance(obj, models.Videojuego)
+
+@register.filter(name='getPrecio')
+def getPrecio(producto,Tienda):
+    if(isinstance(producto, models.Videojuego)):
+        precio = daoTienda.getPrecioStockVideojuego(Tienda, producto)
+        return precio
+    elif(isinstance(producto, models.Consola)):
+        precio = daoTienda.getPrecioStockConsola(Tienda, producto)
+        return precio
+    

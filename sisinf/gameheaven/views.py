@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from gameheaven.models import Cliente, Tienda, Usuario, Consola, Videojuego, ReservaConsola, ReservaVideojuego
+from gameheaven.models import Cliente, Tienda, Usuario, Consola, Videojuego, ReservaConsola, ReservaVideojuego, StockConsola, StockVideojuego
 from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda ,daoProductos, daoReserva
@@ -35,18 +35,24 @@ def default(request):
     }
     return render(request, 'main/base.html', context)
 
-def home(request):
-    loggeado = False
-    """tienda = Tienda(ciudad ="Tienda 1",codigoPostal ="3")
-    daoTienda.newTienda(tienda)"""
-    productos = daoProductos.getAllVideojuegos()
+@login_required(login_url='loginUser')
+def home(request):   
+    usuario = request.user
+    if usuario.role == Usuario.Roles.CLIENTE:
+        tienda = daoUsuario.getClienteByUsuario(usuario).tienda
+    elif usuario.role == Usuario.Roles.TRABAJADOR:
+        tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
+    
+    videojuegos = list(daoProductos.getAllVideojuegos())
+    consolas = list(daoProductos.getAllConsolas())
+    productos = videojuegos + consolas
     for producto in productos:
         producto.img = base64.b64encode(producto.img).decode('utf-8')
-
     context = {
         'loggeado' : request.user.is_authenticated,
         'currentView' : 'home',
-        'productos' : productos
+        'productos' : productos,
+        'tienda' : tienda,
     }
     return render(request, 'main/home.html', context)
 
@@ -78,7 +84,6 @@ def registerUser(request):
         form = RegisterForm(request.POST)
 
         if(form.is_valid()):
-            
             email = request.POST[Constantes.CLIENTE_EMAIL]
             username = request.POST[Constantes.CLIENTE_USUARIO]
             password = request.POST[Constantes.CLIENTE_PASSWORD]
@@ -216,14 +221,28 @@ def addProduct(request):
             valoracion = request.POST['valoracion']
             plataformas = request.POST['plataformas']
             imagen = request.FILES['img'].file.read()
-            if plataformas == None:
+            precio = request.POST['precio']
+            if len(plataformas) == 0:
                 producto = Consola(nombre=nombre, 
                                    descripcion=descripcion, valoracion=valoracion, img=imagen)
                 daoProductos.newConsola(producto)
+                producto = daoProductos.getConsolaByNombre(nombre)
+
+                tiendas = daoTienda.getAllTiendas()
+                for tienda in tiendas:
+                    stock = StockConsola(tienda = tienda, consola = producto, precio = precio, stock = 0)
+                    daoTienda.newStockConsola(stock)
+                    
             else:
                 producto = Videojuego(nombre=nombre, 
                 descripcion=descripcion, plataformas = plataformas, valoracion=valoracion, img=imagen)
                 daoProductos.newVideojuego(producto)
+
+                product = daoProductos.getVideojuegoByNombre(nombre)
+                tiendas = daoTienda.getAllTiendas()
+                for tienda in tiendas:
+                    stock = StockVideojuego(tienda = tienda, videojuego = product, precio = precio, stock = 0)
+                    daoTienda.newStockVideojuego(stock)
             return redirect('home')
     else:
         form = AddProductForm()
@@ -236,17 +255,41 @@ def addProduct(request):
     return render(request, 'trabajador/addproduct.html', context)
 
 @login_required(login_url='loginUser')
-def addStockProduct():
-    pass
+def addStockProduct(request):
+    if request.method == 'POST':
+        form = AddStockForm(request.POST)
+
+        if(form.is_valid()):
+            
+            nombreProducto = request.POST['nombreProducto']
+            stock = int(request.POST['stock'])
+            trabajador = daoUsuario.getTrabajadorByUsuario(request.user.id)
+            tienda = trabajador.tienda
+            try: 
+                videojuego = daoProductos.getVideojuegoByNombre(nombreProducto)
+                stockVideojuego = daoTienda.getStockVideojuego(tienda, videojuego)
+                stockVideojuego.stock += stock
+                stockVideojuego.save()
+            except:
+                consola = daoProductos.getConsolaByNombre(nombreProducto)
+                stockConsola = daoTienda.getStockConsola(tienda, consola)
+                stockConsola.stock += stock
+                stockConsola.save()
+
+            return redirect('producto/' + nombreProducto)
+        
+    return redirect('home')
+
+    
 
 @login_required(login_url='loginUser')
 def addReserva(request, nombre):
-    usuario = request.user
-    cliente = daoUsuario.getClienteByUsuario(usuario.id)
-    tienda = cliente.tienda
-    fecha = timezone.now().date()
-    
     if request.user.role == Usuario.Roles.CLIENTE:
+        usuario = request.user
+        cliente = daoUsuario.getClienteByUsuario(usuario.id)
+        tienda = cliente.tienda
+        fecha = timezone.now().date()
+    
 
         try:
             product = daoProductos.getConsolaByNombre(nombre)
@@ -255,13 +298,11 @@ def addReserva(request, nombre):
 
 
         if isinstance (product, Consola):
-            print("Es una consola")
             stockConsola = daoTienda.getStockConsola(tienda.id, product.id)
             reservaConsola = ReservaConsola(cliente=cliente, stockConsola = stockConsola ,fecha=fecha)
             daoReserva.newReservaConsola(reservaConsola)
             return redirect('home')
         elif isinstance (product, Videojuego):
-            print ("Es un videojuego")
             stockVideojuego = daoTienda.getStockVideojuego(tienda.id, product.id)
             reservaVideojuego = ReservaVideojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
             daoReserva.newReservaVideojuego(reservaVideojuego)
@@ -355,17 +396,30 @@ def delete_shop(request, idTienda):
 #--------PRODUCTO----------
 @login_required(login_url='loginUser')
 def producto(request, product):
+    videojuego = False
+    try: 
+        usuario = daoUsuario.getClienteByUsuario(request.user)
+    except:
+        usuario = daoUsuario.getTrabajadorByUsuario(request.user)
+
     try: 
         producto = daoProductos.getConsolaByNombre(product)
+        stockProducto = daoTienda.getStockConsola(usuario.tienda, producto.id)
     except:
         producto = daoProductos.getVideojuegoByNombre(product)
+        stockProducto = daoTienda.getStockVideojuego(usuario.tienda, producto.id)
+        videojuego = True
+    img= base64.b64encode(producto.img).decode('utf-8')
 
-    producto.img = base64.b64encode(producto.img).decode('utf-8')
-
+    form = AddStockForm()
     context = {
         'loggeado' : request.user.is_authenticated,
-        'producto' : producto,
+        'stockProducto' : stockProducto,
+        'currentView' : 'home',
+        'img' : img,
+        'form' : form,
         }
+    
     return render(request,'producto/producto.html', context)
 
 @login_required(login_url='loginUser')
@@ -389,3 +443,8 @@ def add_shop(request):
         }
     
     return render(request, 'administrador/addShop.html', context)
+
+
+@login_required(login_url='loginUser')
+def completeReserva(request):
+    redirect('home')

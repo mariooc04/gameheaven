@@ -33,6 +33,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('addproduct/', views.addProduct, name='addproduct'),
+    path('addStockProduct', views.addStockProduct, name='addStockProduct'),
     path('delete_account/<int:id>/', views.deleteMyAccount, name='delete_account'),
     path('delete_trabajador/<int:id>/', views.deleteTrabajador, name='delete_trabajador'),
     path('add_reserva/<str:nombre>', views.addReserva, name='add_reserva'),
@@ -44,4 +45,5 @@ urlpatterns = [
     path('add_shop/', views.add_shop, name='add_shop'),
     path('producto/<str:product>', views.producto, name='producto'),
     path('changeTienda/', views.changeTienda, name='changeTienda'),
+    path('completeReserva', views.completeReserva, name='completeReserva'),
 ]

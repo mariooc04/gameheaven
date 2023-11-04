@@ -106,6 +106,7 @@ def getValoracionConsola(idConsola):
 def getImagenConsola(idConsola):
     return getConsola(idConsola).img
 
+
 #UPDATES
 
 def updateConsola(consola, newConsola):
