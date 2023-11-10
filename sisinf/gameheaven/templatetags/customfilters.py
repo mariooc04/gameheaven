@@ -6,7 +6,10 @@ register = template.Library()
 
 @register.filter(name='is_videojuego')
 def is_videojuego(nombre):
-    obj = daoProductos.getVideojuegoByNombre(nombre)
+    try:
+        obj = daoProductos.getVideojuegoByNombre(nombre)
+    except:
+        return False
     return isinstance(obj, models.Videojuego)
 
 @register.filter(name='getPrecio')

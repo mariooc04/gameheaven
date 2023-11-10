@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
 from django.db.models.signals import post_save
@@ -150,6 +151,10 @@ class Trabajador(models.Model):
 
     def __str__(self):
         return f'{self.usuario} trabajador en {self.tienda}'
+    
+    def delete(self, using: Any = ..., keep_parents: bool = ...) -> tuple[int, dict[str, int]]:
+        self.usuario.delete()
+        return super().delete(using, keep_parents)
         
 class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True)
@@ -157,6 +162,10 @@ class Cliente(models.Model):
 
     def __str__(self):
         return f'{self.usuario} cliente en {self.tienda}'
+    
+    def delete(self, using: Any = ..., keep_parents: bool = ...) -> tuple[int, dict[str, int]]:
+        self.usuario.delete()
+        return super().delete(using, keep_parents)
 
     
 #Reservas

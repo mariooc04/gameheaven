@@ -13,6 +13,9 @@ def newTienda(tienda):
 def getAllTiendas():
     return Tienda.objects.all()
 
+def getRandomTienda():
+    return Tienda.objects.order_by('?').first()
+
 def getTienda(idTienda):
     return Tienda.objects.get(pk=idTienda)
 

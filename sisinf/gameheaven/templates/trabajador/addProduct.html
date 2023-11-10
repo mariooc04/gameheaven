@@ -22,7 +22,11 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{form|crispy}}
-    <button type="submit" class="btn btn-outline-light" href="/home">Añadir Producto</button>
+    {% if videojuego %}
+    <button type="submit" class="btn btn-outline-light" href="/home">Añadir Videojuegos</button>
+    {% else %}
+    <button type="submit" class="btn btn-outline-light" href="/home">Añadir Consolas</button>
+    {% endif %}
     
 </form>
 {% endblock %}

@@ -42,6 +42,8 @@ def home(request):
         tienda = daoUsuario.getClienteByUsuario(usuario).tienda
     elif usuario.role == Usuario.Roles.TRABAJADOR:
         tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
+    elif usuario.role == Usuario.Roles.ADMIN:
+        tienda = daoTienda.getRandomTienda()
     
     videojuegos = list(daoProductos.getAllVideojuegos())
     consolas = list(daoProductos.getAllConsolas())
@@ -211,9 +213,9 @@ def contact(request):
     }
     return render(request, 'main/contact.html', context)
 
-def addProduct(request):
+def addVideojuego(request):
     if request.method == 'POST':
-        form = AddProductForm(request.POST, request.FILES)
+        form = AddVideojuegoForm(request.POST, request.FILES)
 
         if(form.is_valid()):
             nombre = request.POST['nombre']
@@ -222,37 +224,58 @@ def addProduct(request):
             plataformas = request.POST['plataformas']
             imagen = request.FILES['img'].file.read()
             precio = request.POST['precio']
-            if len(plataformas) == 0:
-                producto = Consola(nombre=nombre, 
-                                   descripcion=descripcion, valoracion=valoracion, img=imagen)
-                daoProductos.newConsola(producto)
-                producto = daoProductos.getConsolaByNombre(nombre)
+            producto = Videojuego(nombre=nombre, 
+            descripcion=descripcion, plataformas = plataformas, valoracion=valoracion, img=imagen)
+            daoProductos.newVideojuego(producto)
 
-                tiendas = daoTienda.getAllTiendas()
-                for tienda in tiendas:
-                    stock = StockConsola(tienda = tienda, consola = producto, precio = precio, stock = 0)
-                    daoTienda.newStockConsola(stock)
-                    
-            else:
-                producto = Videojuego(nombre=nombre, 
-                descripcion=descripcion, plataformas = plataformas, valoracion=valoracion, img=imagen)
-                daoProductos.newVideojuego(producto)
-
-                product = daoProductos.getVideojuegoByNombre(nombre)
-                tiendas = daoTienda.getAllTiendas()
-                for tienda in tiendas:
-                    stock = StockVideojuego(tienda = tienda, videojuego = product, precio = precio, stock = 0)
-                    daoTienda.newStockVideojuego(stock)
+            product = daoProductos.getVideojuegoByNombre(nombre)
+            tiendas = daoTienda.getAllTiendas()
+            for tienda in tiendas:
+                stock = StockVideojuego(tienda = tienda, videojuego = product, precio = precio, stock = 0)
+                daoTienda.newStockVideojuego(stock)
             return redirect('home')
     else:
-        form = AddProductForm()
+        form = AddVideojuegoForm()
         
     context = {
         'form' : form,
         'loggeado' : request.user.is_authenticated,
-        'currentView' : 'settings'
+        'currentView' : 'settings',
+        'videojuego' : True
     }
-    return render(request, 'trabajador/addproduct.html', context)
+    return render(request, 'trabajador/addProduct.html', context)
+
+def addConsola(request):
+    if request.method == 'POST':
+        form = AddConsolaForm(request.POST, request.FILES)
+
+        if(form.is_valid()):
+            nombre = request.POST['nombre']
+            descripcion = request.POST['descripcion']
+            valoracion = request.POST['valoracion']
+            imagen = request.FILES['img'].file.read()
+            precio = request.POST['precio']
+
+            producto = Consola(nombre=nombre, 
+                               descripcion=descripcion, valoracion=valoracion, img=imagen)
+            daoProductos.newConsola(producto)
+            producto = daoProductos.getConsolaByNombre(nombre)
+
+            tiendas = daoTienda.getAllTiendas()
+            for tienda in tiendas:
+                stock = StockConsola(tienda = tienda, consola = producto, precio = precio, stock = 0)
+                daoTienda.newStockConsola(stock)
+            return redirect('home')
+    else:
+        form = AddConsolaForm()
+        
+    context = {
+        'form' : form,
+        'loggeado' : request.user.is_authenticated,
+        'currentView' : 'settings',
+        'videojuego' : False
+    }
+    return render(request, 'trabajador/addProduct.html', context)
 
 @login_required(login_url='loginUser')
 def addStockProduct(request):
