@@ -1,0 +1,32 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load customfilters %}
+{%block title %}Añadir videojuego desde STEAM{% endblock %}
+
+{% block content %}
+
+<body>
+    <h1>Videojuegos posibles</h1>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in games.apps %}
+                <tr class="table-info">
+                    <td>{{ app.id }}</td>
+                    <td>{{ app.name }}</td>
+                    <td>
+                        <a href="{{  }}" target="_blank" class="btn btn-outline-success">Ver Detalles</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+{% endblock %}

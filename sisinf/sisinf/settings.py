@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'gameheaven',
     'crispy_forms',
     'crispy_bootstrap5',
+    'steam',
 ]
 
 MIDDLEWARE = [

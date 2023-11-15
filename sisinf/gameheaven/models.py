@@ -24,6 +24,7 @@ class Videojuego(models.Model):
     valoracion = models.FloatField(null=True)
     plataformas = models.CharField(max_length=50, null=True)
     img = models.BinaryField(null=True)
+    steamID = models.IntegerField(null=True)
 
     def __str__(self):
         return f'Videojuego {self.nombre}'

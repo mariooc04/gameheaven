@@ -33,6 +33,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('addVideojuego/', views.addVideojuego, name='addVideojuego'),
+    path('steamGames/', views.addVideojuegoSteam, name='steamGames'),
     path('addConsola/', views.addConsola, name='addConsola'),
     path('addStockProduct', views.addStockProduct, name='addStockProduct'),
     path('delete_account/<int:id>/', views.deleteMyAccount, name='delete_account'),

@@ -17,6 +17,15 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from django.utils import timezone
 import base64
+from steam import Steam
+from decouple import config
+
+urlGETListSteamAPI = "http://api.steampowered.com/ISteamApps/GetAppList/v2"
+
+KEY = config("STEAM_API_KEY")
+
+
+steam = Steam(KEY)
 
 
 
@@ -216,22 +225,45 @@ def contact(request):
 def addVideojuego(request):
     if request.method == 'POST':
         form = AddVideojuegoForm(request.POST, request.FILES)
+    
+        games = steam.apps.search_games(request.POST['nombre'])
+       # games.
+        
+        context = {
+            'nombreVideojuego' : request.POST['nombre'],
+            'descripcionVideojuego' : request.POST['descripcion'],
+            'games' : games,
+        }
 
+        return render(request, 'trabajador/steamGames.html', context)
+    else:
+        form = AddVideojuegoForm()
+        
+    context = {
+        'form' : form,
+        'loggeado' : request.user.is_authenticated,
+        'currentView' : 'settings',
+        'videojuego' : True
+    }
+    return render(request, 'trabajador/addProduct.html', context)
+
+def addVideojuegoSteam(request):
+    if request.method == 'POST':
         if(form.is_valid()):
             nombre = request.POST['nombre']
             descripcion = request.POST['descripcion']
-            valoracion = request.POST['valoracion']
-            plataformas = request.POST['plataformas']
-            imagen = request.FILES['img'].file.read()
             precio = request.POST['precio']
-            producto = Videojuego(nombre=nombre, 
-            descripcion=descripcion, plataformas = plataformas, valoracion=valoracion, img=imagen)
-            daoProductos.newVideojuego(producto)
+            valoracion = request.POST['valoracion']
+            steamID = request.POST['steamID']
 
-            product = daoProductos.getVideojuegoByNombre(nombre)
+            producto = Videojuego(nombre=nombre, 
+                               descripcion=descripcion, valoracion=valoracion, img=imagen)
+            daoProductos.newVideojuego(producto)
+            producto = daoProductos.getVideojuegoByNombre(nombre)
+
             tiendas = daoTienda.getAllTiendas()
             for tienda in tiendas:
-                stock = StockVideojuego(tienda = tienda, videojuego = product, precio = precio, stock = 0)
+                stock = StockVideojuego(tienda = tienda, videojuego = producto, precio = precio, stock = 0)
                 daoTienda.newStockVideojuego(stock)
             return redirect('home')
     else:
