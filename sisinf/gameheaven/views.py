@@ -57,12 +57,23 @@ def home(request):
     videojuegos = list(daoProductos.getAllVideojuegos())
     consolas = list(daoProductos.getAllConsolas())
     productos = videojuegos + consolas
+    productosCaro = productos.copy()
     for producto in productos:
         producto.img = base64.b64encode(producto.img).decode('utf-8')
+    for productoCaro in productosCaro:
+        if(isinstance(productoCaro, Videojuego)):
+            productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
+        else:
+            productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
+    
+    productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
+    productosBarato = sorted(productos, key=lambda x: x.precio)
     context = {
         'loggeado' : request.user.is_authenticated,
         'currentView' : 'home',
         'productos' : productos,
+        'productosCaro' : productosCaro,
+        'productosBarato' : productosBarato,
         'tienda' : tienda,
     }
     return render(request, 'main/home.html', context)
@@ -225,45 +236,22 @@ def contact(request):
 def addVideojuego(request):
     if request.method == 'POST':
         form = AddVideojuegoForm(request.POST, request.FILES)
-    
-        games = steam.apps.search_games(request.POST['nombre'])
-       # games.
-        
-        context = {
-            'nombreVideojuego' : request.POST['nombre'],
-            'descripcionVideojuego' : request.POST['descripcion'],
-            'games' : games,
-        }
 
-        return render(request, 'trabajador/steamGames.html', context)
-    else:
-        form = AddVideojuegoForm()
-        
-    context = {
-        'form' : form,
-        'loggeado' : request.user.is_authenticated,
-        'currentView' : 'settings',
-        'videojuego' : True
-    }
-    return render(request, 'trabajador/addProduct.html', context)
-
-def addVideojuegoSteam(request):
-    if request.method == 'POST':
         if(form.is_valid()):
             nombre = request.POST['nombre']
             descripcion = request.POST['descripcion']
+            #valoracion = request.POST['valoracion']
+            plataformas = request.POST['plataformas']
+            imagen = request.FILES['img'].file.read()
             precio = request.POST['precio']
-            valoracion = request.POST['valoracion']
-            steamID = request.POST['steamID']
-
             producto = Videojuego(nombre=nombre, 
-                               descripcion=descripcion, valoracion=valoracion, img=imagen)
+            descripcion=descripcion, plataformas = plataformas, img=imagen)
             daoProductos.newVideojuego(producto)
-            producto = daoProductos.getVideojuegoByNombre(nombre)
 
+            product = daoProductos.getVideojuegoByNombre(nombre)
             tiendas = daoTienda.getAllTiendas()
             for tienda in tiendas:
-                stock = StockVideojuego(tienda = tienda, videojuego = producto, precio = precio, stock = 0)
+                stock = StockVideojuego(tienda = tienda, videojuego = product, precio = precio, stock = 0)
                 daoTienda.newStockVideojuego(stock)
             return redirect('home')
     else:
@@ -276,6 +264,56 @@ def addVideojuegoSteam(request):
         'videojuego' : True
     }
     return render(request, 'trabajador/addProduct.html', context)
+
+def buscarVideojuegoSteam(request):
+    if request.method == 'POST':
+        form = BuscardorSteamForm(request.POST)
+        nombre = request.POST['nombre']
+        games = steam.apps.search_games(nombre)
+        
+        for app in games['apps']:
+            respuesta = steam.apps.get_app_details(app['id'], filters='metacritic')
+            print(respuesta)
+            print(respuesta[app['id']])
+            app['valoracion'] = respuesta[app['id']]['data']['metacritic']['score']
+        
+        print(games)
+        
+        context = {
+            'loggeado' : request.user.is_authenticated,
+            'currentView' : 'settings',
+            'games' : games,
+        }
+        return render(request, 'trabajador/steamGames.html', context)
+        
+    else:
+        form = BuscardorSteamForm()
+        context = {
+            'form' : form,
+            'loggeado' : request.user.is_authenticated,
+            'currentView' : 'settings',
+        }
+        return render(request, 'trabajador/buscadorSteam.html', context)
+
+def addVideojuegoSteam(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        descripcion = request.POST['descripcion']
+        precio = request.POST['precio']
+        valoracion = request.POST['valoracion']
+        imagen = request.POST['imagen']
+        steamID = request.POST['steamID']
+
+        producto = Videojuego(nombre=nombre, 
+                            descripcion=descripcion, valoracion=valoracion, steamID=steamID, linkImagen=imagen)
+        daoProductos.newVideojuego(producto)
+        producto = daoProductos.getVideojuegoByNombre(nombre)
+
+        tiendas = daoTienda.getAllTiendas()
+        for tienda in tiendas:
+            stock = StockVideojuego(tienda = tienda, videojuego = producto, precio = precio, stock = 0)
+            daoTienda.newStockVideojuego(stock)
+        return redirect('home')
 
 def addConsola(request):
     if request.method == 'POST':

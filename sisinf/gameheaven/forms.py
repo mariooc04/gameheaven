@@ -114,8 +114,11 @@ class AddVideojuegoForm(forms.Form):
     descripcion = forms.CharField(required=True)
     #valoracion = forms.FloatField(required=True)
     plataformas = forms.ChoiceField(choices=PLATAFORMA_CHOICES, required=True)
-    #img = forms.ImageField(required=False)
-    #precio = forms.FloatField(required=True)
+    img = forms.ImageField(required=False)
+    precio = forms.FloatField(required=True)
+
+class BuscardorSteamForm(forms.Form):
+    nombre = forms.CharField(required=True)
 
 class AddConsolaForm(forms.Form):
     nombre = forms.CharField(required=True)

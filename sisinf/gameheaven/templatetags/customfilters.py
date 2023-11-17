@@ -20,4 +20,7 @@ def getPrecio(producto,Tienda):
     elif(isinstance(producto, models.Consola)):
         precio = daoTienda.getPrecioStockConsola(Tienda, producto)
         return precio
+
+
+    
     

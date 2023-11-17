@@ -21,7 +21,16 @@
                     <td>{{ app.id }}</td>
                     <td>{{ app.name }}</td>
                     <td>
-                        <a href="{{  }}" target="_blank" class="btn btn-outline-success">Ver Detalles</a>
+                        <form class="seleccionar-form" method="post" action="{% url 'addSteamGame' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="nombre" value="{{ app.name }}">
+                            <input type="hidden" name="descripcion" value="{{ app.description }}">
+                            <input type="hidden" name="precio" value="{{ app.price }}">
+                            <input type="hidden" name="imagen" value="{{ app.img }}">
+                            <input type="hidden" name="steamID" value="{{ app.id }}">
+                            <input type="hidden" name="valoracion" value="{{ app.metacritic.score }}">
+                            <button type="submit" class="btn btn-outline-success">Seleccionar</button>
+                        </form>                    
                     </td>
                 </tr>
             {% endfor %}

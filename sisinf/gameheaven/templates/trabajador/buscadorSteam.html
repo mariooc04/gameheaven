@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+
 {%block title %}Add Product {% endblock %}
 {% block barraNavegacion %}
             <div>
@@ -15,11 +16,7 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{form|crispy}}
-    {% if videojuego %}
-    <button type="submit" class="btn btn-outline-light" href="/home">Añadir Videojuego</button>
-    {% else %}
-    <button type="submit" class="btn btn-outline-light" href="/home">Añadir Consolas</button>
-    {% endif %}
+    <button type="submit" class="btn btn-outline-light" href="/home">Buscar</button>
     
 </form>
 {% endblock %}
