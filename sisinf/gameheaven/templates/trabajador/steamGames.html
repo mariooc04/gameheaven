@@ -24,11 +24,11 @@
                         <form class="seleccionar-form" method="post" action="{% url 'addSteamGame' %}">
                             {% csrf_token %}
                             <input type="hidden" name="nombre" value="{{ app.name }}">
-                            <input type="hidden" name="descripcion" value="{{ app.description }}">
+                            <input type="hidden" name="descripcion" value="{{ app.descripcion }}">
                             <input type="hidden" name="precio" value="{{ app.price }}">
                             <input type="hidden" name="imagen" value="{{ app.img }}">
                             <input type="hidden" name="steamID" value="{{ app.id }}">
-                            <input type="hidden" name="valoracion" value="{{ app.metacritic.score }}">
+                            <input type="hidden" name="valoracion" value="{{ app.valoracion }}">
                             <button type="submit" class="btn btn-outline-success">Seleccionar</button>
                         </form>                    
                     </td>

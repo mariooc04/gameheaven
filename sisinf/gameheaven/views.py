@@ -6,7 +6,7 @@ from gameheaven.Constantes import ConstantesVOs as Constantes
 from gameheaven.DAOs import daoUsuario
 from gameheaven.DAOs import daoTienda ,daoProductos, daoReserva
 from django.contrib.auth import authenticate, login, logout
-from gameheaven.forms import RegisterForm, LoginForm, AddShopForm
+from gameheaven.forms import RegisterForm, LoginForm, AddShopForm, ConsoleFilterForm
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import permission_required
 from django.core.mail import send_mail
@@ -45,37 +45,79 @@ def default(request):
     return render(request, 'main/base.html', context)
 
 @login_required(login_url='loginUser')
-def home(request):   
-    usuario = request.user
-    if usuario.role == Usuario.Roles.CLIENTE:
-        tienda = daoUsuario.getClienteByUsuario(usuario).tienda
-    elif usuario.role == Usuario.Roles.TRABAJADOR:
-        tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
-    elif usuario.role == Usuario.Roles.ADMIN:
-        tienda = daoTienda.getRandomTienda()
-    
-    videojuegos = list(daoProductos.getAllVideojuegos())
-    consolas = list(daoProductos.getAllConsolas())
-    productos = videojuegos + consolas
-    productosCaro = productos.copy()
-    for producto in productos:
-        producto.img = base64.b64encode(producto.img).decode('utf-8')
-    for productoCaro in productosCaro:
-        if(isinstance(productoCaro, Videojuego)):
-            productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
-        else:
-            productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
-    
-    productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
-    productosBarato = sorted(productos, key=lambda x: x.precio)
-    context = {
-        'loggeado' : request.user.is_authenticated,
-        'currentView' : 'home',
-        'productos' : productos,
-        'productosCaro' : productosCaro,
-        'productosBarato' : productosBarato,
-        'tienda' : tienda,
-    }
+def home(request,filtro = None):  
+    form = ConsoleFilterForm(request.GET)
+    if form.is_valid():
+        usuario = request.user
+        if usuario.role == Usuario.Roles.CLIENTE:
+            tienda = daoUsuario.getClienteByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.TRABAJADOR:
+            tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.ADMIN:
+            tienda = daoTienda.getRandomTienda()
+        consolas = []
+        videojuegos = []
+        if filtro == 'PS5':
+            videojuegos = list(daoProductos.getVideojuegoByPlataforma('PS5'))
+        if filtro == 'PS4':
+            videojuegos += list(daoProductos.getVideojuegoByPlataforma('PS4'))
+        if filtro == 'PC':
+            videojuegos += list(daoProductos.getVideojuegoByPlataforma('PC'))
+        if filtro == 'XBOX':
+            videojuegos += list(daoProductos.getVideojuegoByPlataforma('XBOX'))
+        if filtro == 'SWITCH':
+            videojuegos += list(daoProductos.getVideojuegoByPlataforma('SWITCH'))
+        if filtro == None:
+            videojuegos += list(daoProductos.getAllVideojuegos())
+            consolas += list(daoProductos.getAllConsolas())
+        productos = videojuegos + consolas
+        productosCaro = productos.copy()
+        for producto in productos:
+            producto.img = base64.b64encode(producto.img).decode('utf-8')
+        for productoCaro in productosCaro:
+            if(isinstance(productoCaro, Videojuego)):
+                productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
+            else:
+                productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
+        
+        productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
+        productosBarato = sorted(productos, key=lambda x: x.precio)
+        context = {
+            'loggeado' : request.user.is_authenticated,
+            'currentView' : 'home',
+            'productos' : productos,
+            'productosCaro' : productosCaro,
+            'productosBarato' : productosBarato,
+            'tienda' : tienda,
+        }
+    else: #No se si funciona GG
+        usuario = request.user
+        if usuario.role == Usuario.Roles.CLIENTE:
+            tienda = daoUsuario.getClienteByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.TRABAJADOR:
+            tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.ADMIN:
+            tienda = daoTienda.getRandomTienda()
+        videojuegos = list(daoProductos.getAllVideojuegos())
+        consolas = list(daoProductos.getAllConsolas())
+        productos = videojuegos + consolas
+        productosCaro = productos.copy()
+        for producto in productos:
+            producto.img = base64.b64encode(producto.img).decode('utf-8')
+        for productoCaro in productosCaro:
+            if(isinstance(productoCaro, Videojuego)):
+                productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
+            else:
+                productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
+        
+        context = {
+            'loggeado' : request.user.is_authenticated,
+            'currentView' : 'home',
+            'productos' : productos,
+            'productosCaro' : productosCaro,
+            'productosBarato' : productosBarato,
+            'tienda' : tienda,
+        }
     return render(request, 'main/home.html', context)
 
 def loginUser(request):
@@ -273,9 +315,15 @@ def buscarVideojuegoSteam(request):
         
         for app in games['apps']:
             respuesta = steam.apps.get_app_details(app['id'], filters='metacritic')
-            print(respuesta)
-            print(respuesta[app['id']])
-            app['valoracion'] = respuesta[app['id']]['data']['metacritic']['score']
+            respuesta2 = steam.apps.get_app_details(app['id'])
+            app['descripcion'] = respuesta2[str(app['id'])]['data']['short_description']
+            diccionarioRespuesta = respuesta[str(app['id'])]
+            if(diccionarioRespuesta['success'] == False or diccionarioRespuesta['data'] == []):
+                app['valoracion'] = 0
+            else:
+                app['valoracion'] = diccionarioRespuesta['data']['metacritic']['score']
+            
+            app['price'] = app['price'].replace('$', '')
         
         print(games)
         

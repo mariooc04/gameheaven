@@ -16,6 +16,9 @@ def getVideojuego(idVideojuego):
 def getVideojuegoByNombre(nombre):
     return Videojuego.objects.get(nombre=nombre)
 
+def getVideojuegoByPlataforma(plataforma):
+    return Videojuego.objects.filter(plataformas=plataforma)
+
 def getNombreVideojuego(idVideojuego):
     return getVideojuego(idVideojuego).nombre
 

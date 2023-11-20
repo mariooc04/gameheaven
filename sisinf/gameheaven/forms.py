@@ -6,7 +6,11 @@ from django.forms import ModelChoiceField
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, password_validation
 
-
+class ConsoleFilterForm(forms.Form):
+    PS5 = forms.BooleanField(required=False)
+    XBOX_SERIES = forms.BooleanField(required=False)
+    SWITCH = forms.BooleanField(required=False)
+    PC = forms.BooleanField(required=False)
 
 class RegisterForm(forms.ModelForm):
     email = forms.EmailField(required=True)

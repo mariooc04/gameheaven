@@ -24,7 +24,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('register/', views.registerUser, name='registerUser'),
     path('login/', views.loginUser, name='loginUser'),
-    path('home/', views.home, name = 'home'),
+    path('home/<str:filtro>/', views.home, name = 'home'),
     path('', include('django.contrib.auth.urls')),
     path('logout_view/', views.logout_view, name='logout_view'),
     path('settings/', views.settings, name='settings'),

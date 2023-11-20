@@ -2,7 +2,7 @@
 {% load static %}
 {% load customfilters %}
 {%block title %}Home{% endblock %}
-
+{% load crispy_forms_tags %}
 {% block content %}
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
     Desplegable
@@ -13,18 +13,27 @@
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <div class="form-check form-switch" id="PS5" >
-        <input class="form-check-input" type="checkbox" role="switch" id="PS5">
-        <label class="form-check-label" for="PS5">PS5</label></div>
-        <div class="form-check form-switch" id="XBOX_SERIES" >
-        <input class="form-check-input" type="checkbox" role="switch" id="XBOX_SERIES">
-        <label class="form-check-label" for="XBOX_SERIES">XBOX SERIES</label></div>
-        <div class="form-check form-switch" id="SWITCH" >
-        <input class="form-check-input" type="checkbox" role="switch" id="SWITCH">
-        <label class="form-check-label" for="SWITCH">SWITCH</label></div>
-        <div class="form-check form-switch" id="PC" >
-        <input class="form-check-input" type="checkbox" role="switch" id="PC">
-        <label class="form-check-label" for="PC">PC</label></div>
+        {{form|crispy}}
+        <form method="get" action="{% url 'home' %}">
+            {% csrf_token %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="{{ form.PS5.name }}" id="{{ form.PS5.id_for_label }}" {{ form.PS5.checked }}>
+                <label class="form-check-label" for="{{ form.PS5.id_for_label }}">PS5</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="{{ form.XBOX_SERIES.name }}" id="{{ form.XBOX_SERIES.id_for_label }}" {{ form.XBOX_SERIES.checked }}>
+                <label class="form-check-label" for="{{ form.XBOX_SERIES.id_for_label }}">XBOX SERIES</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="{{ form.SWITCH.name }}" id="{{ form.SWITCH.id_for_label }}" {{ form.SWITCH.checked }}>
+                <label class="form-check-label" for="{{ form.SWITCH.id_for_label }}">SWITCH</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="{{ form.PC.name }}" id="{{ form.PC.id_for_label }}" {{ form.PC.checked }}>
+                <label class="form-check-label" for="{{ form.PC.id_for_label }}">PC</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
     </div>
   </div>
     <div class="container-xxl py-5">
@@ -67,7 +76,6 @@
                                 <div class="text-center p-4">
                                     <a class="d-block h5 mb-2" href="{% url 'producto' producto.nombre %}">{{ producto.nombre }}</a>
                                     <span class="text-primary me-1">{{producto|getPrecio:tienda}}€</span>
-                                    <span class="text-body text-decoration-line-through">29.00€</span>
                                 </div>
                                 <div class="d-flex border-top">
                                     <small class="w-50 text-center border-end py-2">
