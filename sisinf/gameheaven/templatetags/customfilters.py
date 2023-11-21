@@ -12,6 +12,13 @@ def is_videojuego(nombre):
         return False
     return isinstance(obj, models.Videojuego)
 
+@register.filter(name='is_consola')
+def is_consola(nombre):
+    try:
+        obj = daoProductos.getConsolaByNombre(nombre)
+    except:
+        return False
+    return isinstance(obj, models.Consola)
 @register.filter(name='getPrecio')
 def getPrecio(producto,Tienda):
     if(isinstance(producto, models.Videojuego)):
@@ -20,6 +27,7 @@ def getPrecio(producto,Tienda):
     elif(isinstance(producto, models.Consola)):
         precio = daoTienda.getPrecioStockConsola(Tienda, producto)
         return precio
+
 
 
     

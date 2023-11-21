@@ -32,7 +32,7 @@
                 <input class="form-check-input" type="checkbox" name="{{ form.PC.name }}" id="{{ form.PC.id_for_label }}" {{ form.PC.checked }}>
                 <label class="form-check-label" for="{{ form.PC.id_for_label }}">PC</label>
             </div>
-            <button type="submit" class="btn btn-primary">Filter</button>
+            <button type="submit" class="btn btn-primary" href="{% url 'homeFilter' %}">Filter</button>
         </form>
     </div>
   </div>
@@ -68,10 +68,13 @@
                                 <div class="position-relative bg-light overflow-hidden" >
                                     <li class="image-container"  style="display: flex; justify-content: center; align-items: center; ">
                                         <a href="{% url 'producto' producto.nombre %}">
-                                        <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" src="data:image/png;base64,{{ producto.img }}" alt="Image" >
+                                        <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" 
+                                        {% if producto|is_consola or producto.steamID == None  %} src="data:image/png;base64,{{ producto.img }}" 
+                                        {% else %} src="{{ producto.linkImagen }}" 
+                                        {% endif %} alt="Image" >
                                         </a>
                                     </li>
-                                    <div class ="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
+                                    {% if producto == productos.0 or producto == productos.1  %} <div class ="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>{% endif %}
                                 </div>
                                 <div class="text-center p-4">
                                     <a class="d-block h5 mb-2" href="{% url 'producto' producto.nombre %}">{{ producto.nombre }}</a>
@@ -100,15 +103,14 @@
                                 <div class="position-relative bg-light overflow-hidden" >
                                     <li class="image-container"  style="display: flex; justify-content: center; align-items: center; ">
                                         <a href="{% url 'producto' producto.nombre %}">
-                                        <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" src="data:image/png;base64,{{ producto.img }}" alt="Image" >
-                                        </a>
+                                        <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" {% if producto|is_consola or producto.steamID == None  %} src="data:image/png;base64,{{ producto.img }}" 
+                                        {% else %} src="{{ producto.linkImagen }}" 
+                                        {% endif %} alt="Image" ></a>
                                     </li>
-                                    <div class ="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
                                 </div>
                                 <div class="text-center p-4">
                                     <a class="d-block h5 mb-2" href="{% url 'producto' producto.nombre %}">{{ producto.nombre }}</a>
                                     <span class="text-primary me-1">{{producto|getPrecio:tienda}}€</span>
-                                    <span class="text-body text-decoration-line-through">29.00€</span>
                                 </div>
                                 <div class="d-flex border-top">
                                     <small class="w-50 text-center border-end py-2">
@@ -133,15 +135,13 @@
                                         <div class="position-relative bg-light overflow-hidden" >
                                             <li class="image-container"  style="display: flex; justify-content: center; align-items: center; ">
                                                 <a href="{% url 'producto' producto.nombre %}">
-                                                <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" src="data:image/png;base64,{{ producto.img }}" alt="Image" >
+                                                <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" {% if producto.steamID == None %} src="data:image/png;base64,{{ producto.img }}" {% else %} src="{{ producto.linkImagen }}" {% endif %} alt="Image" >
                                                 </a>
                                             </li>
-                                            <div class ="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">New</div>
                                         </div>
                                         <div class="text-center p-4">
                                             <a class="d-block h5 mb-2" href="{% url 'producto' producto.nombre %}">{{ producto.nombre }}</a>
                                             <span class="text-primary me-1">{{producto|getPrecio:tienda}}€</span>
-                                            <span class="text-body text-decoration-line-through">29.00€</span>
                                         </div>
                                         <div class="d-flex border-top">
                                             <small class="w-50 text-center border-end py-2">

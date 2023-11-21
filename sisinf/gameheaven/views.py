@@ -45,9 +45,10 @@ def default(request):
     return render(request, 'main/base.html', context)
 
 @login_required(login_url='loginUser')
-def home(request,filtro = None):  
+def homeFilter(request):  
     form = ConsoleFilterForm(request.GET)
     if form.is_valid():
+        PC = request.GET['PC']
         usuario = request.user
         if usuario.role == Usuario.Roles.CLIENTE:
             tienda = daoUsuario.getClienteByUsuario(usuario).tienda
@@ -61,7 +62,7 @@ def home(request,filtro = None):
             videojuegos = list(daoProductos.getVideojuegoByPlataforma('PS5'))
         if filtro == 'PS4':
             videojuegos += list(daoProductos.getVideojuegoByPlataforma('PS4'))
-        if filtro == 'PC':
+        if  PC == True:
             videojuegos += list(daoProductos.getVideojuegoByPlataforma('PC'))
         if filtro == 'XBOX':
             videojuegos += list(daoProductos.getVideojuegoByPlataforma('XBOX'))
@@ -73,7 +74,76 @@ def home(request,filtro = None):
         productos = videojuegos + consolas
         productosCaro = productos.copy()
         for producto in productos:
-            producto.img = base64.b64encode(producto.img).decode('utf-8')
+            if isinstance(producto, Videojuego) and producto.steamID == None :
+                producto.img = base64.b64encode(producto.img).decode('utf-8')
+        for productoCaro in productosCaro:
+            if(isinstance(productoCaro, Videojuego)):
+                productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
+            else:
+                productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
+        
+        productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
+        productosBarato = sorted(productosCaro, reverse=True)
+        context = {
+            'loggeado' : request.user.is_authenticated,
+            'currentView' : 'home',
+            'productos' : productos,
+            'productosCaro' : productosCaro,
+            'productosBarato' : productosBarato,
+            'tienda' : tienda,
+        }
+    else: #No se si funciona GG
+        usuario = request.user
+        if usuario.role == Usuario.Roles.CLIENTE:
+            tienda = daoUsuario.getClienteByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.TRABAJADOR:
+            tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.ADMIN:
+            tienda = daoTienda.getRandomTienda()
+        videojuegos = list(daoProductos.getAllVideojuegos())
+        consolas = list(daoProductos.getAllConsolas())
+        productos = videojuegos + consolas
+        productosCaro = productos.copy()
+        for producto in productos:
+            if isinstance(producto, Videojuego) and producto.steamID == None :
+                producto.img = base64.b64encode(producto.img).decode('utf-8')
+        for productoCaro in productosCaro:
+            if(isinstance(productoCaro, Videojuego)):
+                productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
+            else:
+                productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
+        
+        context = {
+            'loggeado' : request.user.is_authenticated,
+            'currentView' : 'home',
+            'productos' : productos,
+            'productosCaro' : productosCaro,
+            'productosBarato' : productosBarato,
+            'tienda' : tienda,
+        }
+    return render(request, 'main/home.html', context)
+
+@login_required(login_url='loginUser')
+def home(request):
+    form = ConsoleFilterForm(request.GET)
+    if form.is_valid():
+        usuario = request.user
+        if usuario.role == Usuario.Roles.CLIENTE:
+            tienda = daoUsuario.getClienteByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.TRABAJADOR:
+            tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
+        elif usuario.role == Usuario.Roles.ADMIN:
+            tienda = daoTienda.getRandomTienda()
+        
+        videojuegos = list(daoProductos.getAllVideojuegos())
+        consolas = list(daoProductos.getAllConsolas())
+        productos = videojuegos + consolas
+        productosCaro = productos.copy()
+        for producto in productos:
+            if isinstance(producto, Videojuego) and producto.steamID == None:
+                producto.img = base64.b64encode(producto.img).decode('utf-8')
+            elif isinstance(producto, Consola):
+                producto.img = base64.b64encode(producto.img).decode('utf-8')
         for productoCaro in productosCaro:
             if(isinstance(productoCaro, Videojuego)):
                 productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
@@ -103,7 +173,8 @@ def home(request,filtro = None):
         productos = videojuegos + consolas
         productosCaro = productos.copy()
         for producto in productos:
-            producto.img = base64.b64encode(producto.img).decode('utf-8')
+            if isinstance(producto, Videojuego) and producto.steamID == None:
+                producto.img = base64.b64encode(producto.img).decode('utf-8')
         for productoCaro in productosCaro:
             if(isinstance(productoCaro, Videojuego)):
                 productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
@@ -324,7 +395,7 @@ def buscarVideojuegoSteam(request):
                 app['valoracion'] = diccionarioRespuesta['data']['metacritic']['score']
             
             app['price'] = app['price'].replace('$', '')
-        
+
         print(games)
         
         context = {
@@ -352,8 +423,15 @@ def addVideojuegoSteam(request):
         imagen = request.POST['imagen']
         steamID = request.POST['steamID']
 
+        #if precio == 'Free to Play' or precio == 'Free To Play' or precio == None or precio == '' or precio == ' ' or precio == 'Free':
+        if isinstance(precio, str):
+            try:
+                precio = float(precio)
+            except: 
+                precio = 0
+
         producto = Videojuego(nombre=nombre, 
-                            descripcion=descripcion, valoracion=valoracion, steamID=steamID, linkImagen=imagen)
+                            descripcion=descripcion, valoracion=valoracion, steamID=steamID, linkImagen=imagen, plataformas='PC')
         daoProductos.newVideojuego(producto)
         producto = daoProductos.getVideojuegoByNombre(nombre)
 
@@ -410,11 +488,15 @@ def addStockProduct(request):
                 videojuego = daoProductos.getVideojuegoByNombre(nombreProducto)
                 stockVideojuego = daoTienda.getStockVideojuego(tienda, videojuego)
                 stockVideojuego.stock += stock
+                if(stockVideojuego.stock < 0):
+                    stockVideojuego.stock = 0
                 stockVideojuego.save()
             except:
                 consola = daoProductos.getConsolaByNombre(nombreProducto)
                 stockConsola = daoTienda.getStockConsola(tienda, consola)
                 stockConsola.stock += stock
+                if(stockConsola.stock < 0):
+                    stockConsola.stock = 0
                 stockConsola.save()
 
             return redirect('producto/' + nombreProducto)
@@ -440,13 +522,21 @@ def addReserva(request, nombre):
 
         if isinstance (product, Consola):
             stockConsola = daoTienda.getStockConsola(tienda.id, product.id)
+            if stockConsola.stock == 0:
+                return redirect('home')
             reservaConsola = ReservaConsola(cliente=cliente, stockConsola = stockConsola ,fecha=fecha)
             daoReserva.newReservaConsola(reservaConsola)
+            stockConsola.stock -= 1
+            stockConsola.save()
             return redirect('home')
         elif isinstance (product, Videojuego):
             stockVideojuego = daoTienda.getStockVideojuego(tienda.id, product.id)
+            if stockVideojuego.stock == 0:
+                return redirect('home')
             reservaVideojuego = ReservaVideojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
             daoReserva.newReservaVideojuego(reservaVideojuego)
+            stockVideojuego.stock -= 1
+            stockVideojuego.save()
     return redirect('home')
 
 
@@ -550,7 +640,13 @@ def producto(request, product):
         producto = daoProductos.getVideojuegoByNombre(product)
         stockProducto = daoTienda.getStockVideojuego(usuario.tienda, producto.id)
         videojuego = True
-    img= base64.b64encode(producto.img).decode('utf-8')
+
+    if isinstance(producto, Videojuego) and producto.steamID == None:
+        img= base64.b64encode(producto.img).decode('utf-8')
+    elif not videojuego:
+        img= base64.b64encode(producto.img).decode('utf-8')   
+    else:
+        img = producto.linkImagen 
 
     form = AddStockForm()
     context = {
@@ -588,4 +684,13 @@ def add_shop(request):
 
 @login_required(login_url='loginUser')
 def completeReserva(request):
-    redirect('home')
+    if request.method == 'POST':        
+        idReserva = request.POST['reserva_id']
+        isVideojuego = request.POST['isVideojuego']
+        if(isVideojuego == 'true'):
+            reserva = daoReserva.getReservaVideojuego(idReserva)
+        else:
+            reserva = daoReserva.getReservaConsola(idReserva)
+        reserva.estado = ReservaVideojuego.Estados.COMPLETADA
+        reserva.save()
+        return redirect('reservas')
