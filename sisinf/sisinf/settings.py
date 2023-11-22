@@ -28,9 +28,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR2, 'gameheaven/static')]
 SECRET_KEY = 'django-insecure-cln3djlx54em$hdr@r9!!)5ae4%vnwu$%y8wcl3ttc8nyd)*8b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -144,8 +144,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP de Gmail
 EMAIL_PORT = 587  # Puerto SMTP para TLS (587 es común)
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'gameheaven.adm@gmail.com'  # Tu dirección de Gmail
-EMAIL_HOST_PASSWORD = 'gameheaven.administrator1234'  # Tu contraseña de Gmail
+EMAIL_HOST_USER = 'notInUse'  # Tu dirección de Gmail
+EMAIL_HOST_PASSWORD = 'notInUse'  # Tu contraseña de Gmail
 
 
 # Default primary key field type

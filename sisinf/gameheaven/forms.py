@@ -7,10 +7,12 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, password_validation
 
 class ConsoleFilterForm(forms.Form):
-    PS5 = forms.BooleanField(required=False)
-    XBOX_SERIES = forms.BooleanField(required=False)
-    SWITCH = forms.BooleanField(required=False)
-    PC = forms.BooleanField(required=False)
+    PS5 = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'checkbox'}))
+    XBOX = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'checkbox'}))
+    SWITCH = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'checkbox'}))
+    PC = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'checkbox'}))
+    PS4 = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'checkbox'}))
+
 
 class RegisterForm(forms.ModelForm):
     email = forms.EmailField(required=True)

@@ -21,13 +21,8 @@
     <p><strong>Plataforma:</strong> {{ stockProducto.videojuego.plataformas }}</p>
     {%endif%}
     
-    <img style="width: 200px; height: 200px; object-fit: scale-down; object-fit: cover;" class="img-fluid w-100" 
-    {% if stockProducto|is_consola or stockProducto.videojuego.steamID == None  %} src="data:image/png;base64,{{ img }}" 
-    {% else %} src="{{ img }}" 
-    {% endif %} alt="Image">c="data:image/png;base64,{{ img }}" 
-    {% else %} src="{{ img }}" 
-    {% endif %} alt="Image">
-   
+    <img style="width: 200px; height: 200px; object-fit: scale-down; object-fit: contain;" class="img-fluid w-100" 
+    {%if not isLink %}src="data:image/png;base64,{{ img }}" {% else %} src="{{ img }}" {% endif %} alt="">
 
     {% if user.is_authenticated and user.role == "TRABAJADOR" %}
     <form id="addStockForm" method="post" action="{% url 'addStockProduct' %}">

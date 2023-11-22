@@ -5,35 +5,21 @@
 {% load crispy_forms_tags %}
 {% block content %}
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-    Desplegable
+    Filtros
   </button>
   <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Filters</h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        {{form|crispy}}
-        <form method="get" action="{% url 'home' %}">
-            {% csrf_token %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="{{ form.PS5.name }}" id="{{ form.PS5.id_for_label }}" {{ form.PS5.checked }}>
-                <label class="form-check-label" for="{{ form.PS5.id_for_label }}">PS5</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="{{ form.XBOX_SERIES.name }}" id="{{ form.XBOX_SERIES.id_for_label }}" {{ form.XBOX_SERIES.checked }}>
-                <label class="form-check-label" for="{{ form.XBOX_SERIES.id_for_label }}">XBOX SERIES</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="{{ form.SWITCH.name }}" id="{{ form.SWITCH.id_for_label }}" {{ form.SWITCH.checked }}>
-                <label class="form-check-label" for="{{ form.SWITCH.id_for_label }}">SWITCH</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="{{ form.PC.name }}" id="{{ form.PC.id_for_label }}" {{ form.PC.checked }}>
-                <label class="form-check-label" for="{{ form.PC.id_for_label }}">PC</label>
-            </div>
-            <button type="submit" class="btn btn-primary" href="{% url 'homeFilter' %}">Filter</button>
-        </form>
+        <div class="container mt-5">        
+            <form method="post" action="{% url 'homeFilter' %}">
+                {% csrf_token %}
+                {{form|crispy}}
+                <button type="submit" class="btn btn-outline-info mb-4 mt-4">Submit</button>
+            </form>
+        </div>
     </div>
   </div>
     <div class="container-xxl py-5">
@@ -68,7 +54,7 @@
                                 <div class="position-relative bg-light overflow-hidden" >
                                     <li class="image-container"  style="display: flex; justify-content: center; align-items: center; ">
                                         <a href="{% url 'producto' producto.nombre %}">
-                                        <img style="width: 200px; height: 200px; object-fit:scale-down;" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" 
+                                        <img style="width: 200px; height: 200px; object-fit:contain; border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" href="{% url 'producto' producto.nombre %}" class="img-fluid w-100" 
                                         {% if producto|is_consola or producto.steamID == None  %} src="data:image/png;base64,{{ producto.img }}" 
                                         {% else %} src="{{ producto.linkImagen }}" 
                                         {% endif %} alt="Image" >
