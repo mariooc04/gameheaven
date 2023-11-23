@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load customfilters %}
+{%block title %}Añadir videojuego desde STEAM{% endblock %}
+
+{% block content %}
+
+<body>
+    <h1>Videojuegos posibles</h1>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in games.apps %}
+                <tr class="table-info">
+                    <td>{{ app.id }}</td>
+                    <td>{{ app.name }}</td>
+                    <td>
+                        <form class="seleccionar-form" method="post" action="{% url 'addSteamGame' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="nombre" value="{{ app.name }}">
+                            <input type="hidden" name="descripcion" value="{{ app.descripcion }}">
+                            <input type="hidden" name="precio" value="{{ app.price }}">
+                            <input type="hidden" name="imagen" value="{{ app.img }}">
+                            <input type="hidden" name="steamID" value="{{ app.id }}">
+                            <input type="hidden" name="valoracion" value="{{ app.valoracion }}">
+                            <button type="submit" class="btn btn-outline-success">Seleccionar</button>
+                        </form>                    
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+{% endblock %}

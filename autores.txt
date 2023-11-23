@@ -1,0 +1,5 @@
+NIA		Apellidos			Nombre
+------	-------------		------
+815450	Jal Burguete		Daniel
+820800	López Berga			Álvaro
+817586	Ortega Cubero		Mario

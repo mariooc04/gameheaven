@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="icon" href="{% static '/img/logo.png' %}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <style>
+      .social-block {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background-color: #333; /* Color de fondo */
+          color: #fff; /* Color de texto */
+          text-align: center;
+          padding: 10px 0;
+      }
+  </style>
+    <title>{% block title %}DefaultTitle{% endblock %}</title>
+</head>
+<body>
+        
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div class="navbar-brand" >
+                <a href="/home"><img src="{% static '/img/logo.png' %}" alt="Logo" width="8%" height="8%"></a>
+            </div>
+            {% block barraNavegacion %}
+            <div>
+            <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist" style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+                <li class="nav-item" role="presentation">
+                  <button  onclick="location.href='/home'" class="nav-link {% if currentView == 'home' %} active {% endif %} rounded-5" id="home" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Home</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button onclick="location.href='/about'" class="nav-link {%if currentView == 'about'%} active {%endif%} rounded-5" id="about" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Acerca de</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button onclick="location.href='/contact'" class="nav-link {% if currentView == 'contact'%} active {% endif %}  rounded-5" id="contact" data-bs-toggle="tab" type="button" role="tab"  aria-selected="true" >Contacto</button>
+                </li>
+                {% if loggeado %}
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/logout_view'" class="nav-link rounded-5" id="logout" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Cerrar Sesión</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/settings'" class="nav-link {%if currentView == 'settings'%} active {%endif%} rounded-5" id="configuracion" data-bs-toggle="tab" type="button" role="tab"  aria-selected="true">
+                      <img src="{% static 'img/settingsicon.png' %}" width="20px" height="20px" alt="Icono de configuración" />
+                  </button>
+                </li>
+                {% else %}
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/login'" class="nav-link {%if currentView == 'login'%} active {%endif%} rounded-5" id="login" data-bs-toggle="tab" type="button" role="tab"  aria-selected="true" >Login</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button onclick="location.href='/register'" class="nav-link {%if currentView == 'register'%} active {%endif%} rounded-5" id="register" data-bs-toggle="tab" type="button" role="tab"  aria-selected="true" >Register</button>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            {% endblock %}
+            </div>
+        </div>
+    </nav>
+    <div class = "container">
+        {% block content %}
+        
+        {% endblock %}
+        
+    </div>
+
+    <div class="container-fluid bg-dark text-white py-2 text-center fixed-bottom">
+      {% block social %}
+       <a href="https://twitter.com/gameheavenStore?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @gameheavenStore</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      {% endblock %}
+    </div>
+
+</body>
+<script src="{% static 'bootstrap.min.js' %}"></script>
+
+</html>

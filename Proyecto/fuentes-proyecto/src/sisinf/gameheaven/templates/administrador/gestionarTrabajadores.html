@@ -1,0 +1,34 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Gestionar Trabajadores{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>Gestionar Trabajadores</h2>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Correo Electrónico</th>
+                    <th scope="col">Tienda</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for worker in trabajadores %}
+                    {% if worker.usuario %}
+                        <tr class="table-info">
+                            <th scope="row">{{ worker.usuario.email }}</th>
+                            <td>{{ worker.tienda }}</td>
+                            <td>
+                                <a href="{% url 'delete_trabajador' id=worker.usuario.id %}" class="btn btn-danger">Eliminar</a>
+                            </td>   
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'add_trabajador' %}" class="btn btn-primary mt-3">Añadir Trabajador</a>
+    </div>
+{% endblock %}

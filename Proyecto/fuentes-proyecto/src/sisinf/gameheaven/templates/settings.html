@@ -1,0 +1,48 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Configuración{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center">
+    <div>
+        {% if userRole == "CLIENTE" %}
+            <a href="{% url 'reservas' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Mis Reservas</button>
+            </a>
+            <a href="{% url 'changeTienda' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Tienda</button>
+            </a>
+        {% endif %}
+        {% if userRole == "ADMIN" %}
+            <a href="{% url 'gestionarTrabajadores' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">GestionarTrabajadores</button>
+            </a>
+            <a href="{% url 'gestionarTiendas' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">GestionarTiendas</button>
+        {% endif %}
+        {% if userRole == "TRABAJADOR" %}
+            <a href="{% url 'reservas' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Reservas Tienda</button>
+            </a>
+            <a href="{% url 'addVideojuego' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Añadir videojuegos</button>
+            </a>
+            <a href="{% url 'searchSteamGames' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Añadir juego de Steam</button>
+            </a>
+            <a href="{% url 'addConsola' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Añadir consola</button>
+            </a>
+            <a href="{% url 'changeTienda' %}">
+                <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Tienda</button>
+            </a>
+        {% endif %}
+        <a href="{% url 'password_change' %}">
+            <button type="button" class="btn btn-outline-info mb-4 mt-4">Cambiar Contraseña</button>
+        </a>
+        
+        
+    </div>
+<div>
+{% endblock %}
