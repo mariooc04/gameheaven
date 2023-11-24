@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: gameheavendb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sisinf_C6
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -8,7 +14,4 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-<<<<<<< HEAD
-
-=======
->>>>>>> eb196b8818535c8c882336588ab65094dd711170
+  

@@ -28,7 +28,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR2, 'gameheaven/static')]
 SECRET_KEY = 'django-insecure-cln3djlx54em$hdr@r9!!)5ae4%vnwu$%y8wcl3ttc8nyd)*8b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'gameheavendb',
         'USER': 'postgres',
         'PASSWORD': 'sisinf_C6',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
