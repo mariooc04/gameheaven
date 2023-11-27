@@ -267,6 +267,8 @@ def loginUser(request):
 def registerUser(request):
     # creo una tienda de ejemplo
     tienda = Tienda(ciudad='Huesca', codigoPostal='22005')
+    tienda.save()
+    
     if request.method == 'POST':
         form = RegisterForm(request.POST)
 
