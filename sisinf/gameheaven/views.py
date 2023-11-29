@@ -19,6 +19,8 @@ from django.utils import timezone
 import base64
 from steam import Steam
 from decouple import config
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_protect
 
 urlGETListSteamAPI = "http://api.steampowered.com/ISteamApps/GetAppList/v2"
 
@@ -165,6 +167,7 @@ def homeFilter(request):
             'form' : form,
         }
     return render(request, 'main/home.html', context)
+
 
 @login_required(login_url='loginUser')
 def home(request):
@@ -528,7 +531,9 @@ def addConsola(request):
     }
     return render(request, 'trabajador/addProduct.html', context)
 
+@require_POST
 @login_required(login_url='loginUser')
+@csrf_protect
 def addStockProduct(request):
     if request.method == 'POST':
         form = AddStockForm(request.POST)
@@ -681,6 +686,7 @@ def delete_shop(request, idTienda):
 
 #--------PRODUCTO----------
 @login_required(login_url='loginUser')
+@csrf_protect
 def producto(request, product):
     isLink = False
     try: 
