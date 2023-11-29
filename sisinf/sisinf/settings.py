@@ -18,8 +18,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 BASE_DIR2 = Path(__file__).resolve().parent.parent
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR2, 'gameheaven/static')]
+#STATIC_URL = '/static/'
+
+#STATICFILES_DIRS = [os.path.join(BASE_DIR2, 'gameheaven/static')]
+#STATIC_ROOT = '/home/alvaro/Documents/Sistemas_Informacion/gameheaven/sisinf/static/'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -30,7 +33,16 @@ SECRET_KEY = 'django-insecure-cln3djlx54em$hdr@r9!!)5ae4%vnwu$%y8wcl3ttc8nyd)*8b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.2']
+# Use secure cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Allow the proxy to set the Host header
+USE_X_FORWARDED_HOST = True
+
+# Set the header used by the proxy server to determine the actual client's IP address
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -88,7 +100,8 @@ DATABASES = {
         'NAME': 'gameheavendb',
         'USER': 'postgres',
         'PASSWORD': 'sisinf_C6',
-        'HOST': 'db',
+       # 'HOST': 'db',
+       'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -128,11 +141,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'gameheaven/static')
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -154,3 +171,5 @@ EMAIL_HOST_PASSWORD = 'notInUse'  # Tu contraseña de Gmail
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'gameheaven.Usuario'
+
+#CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1']
