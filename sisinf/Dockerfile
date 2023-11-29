@@ -11,3 +11,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
+EXPOSE 25666

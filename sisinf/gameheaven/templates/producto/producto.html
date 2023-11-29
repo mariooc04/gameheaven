@@ -13,7 +13,7 @@
 
     <p><strong>Descripción:</strong>{% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.descripcion }} 
         {% else %}{{ stockProducto.consola.descripcion }} {% endif %}</p>
-    <p><strong>Valoración:</strong> {% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojugo.valoracion }} 
+    <p><strong>Valoración:</strong> {% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.valoracion }} 
         {% else %} {{ stockProducto.consola.valoracion}} {% endif %}</p>
     <p><strong>Precio:</strong> {{ stockProducto.precio }}€</p>
     <p><strong>Stock:</strong> {{ stockProducto.stock }}</p>
