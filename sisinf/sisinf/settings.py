@@ -27,7 +27,7 @@ BASE_DIR2 = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cln3djlx54em$hdr@r9!!)5ae4%vnwu$%y8wcl3ttc8nyd)*8b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -170,4 +170,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'gameheaven.Usuario'
 
-CSRF_TRUSTED_ORIGINS = ['http://*']
+CSRF_TRUSTED_ORIGINS = ['http://*','https://*']
