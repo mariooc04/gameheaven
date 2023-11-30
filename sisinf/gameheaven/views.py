@@ -245,7 +245,6 @@ def home(request):
     return render(request, 'main/home.html', context)
 
 def loginUser(request):
-
     if request.method == 'POST':
         form = LoginForm(request.POST)
 

@@ -8,10 +8,23 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: sisinf_C6
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
+      - static:/static
+    build: 
+      context: .
     ports:
       - "8000:8000"
+    depends_on:
+        - db
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+
+volumes:
+  static: 
   

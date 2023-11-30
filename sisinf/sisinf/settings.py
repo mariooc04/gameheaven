@@ -18,10 +18,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 BASE_DIR2 = Path(__file__).resolve().parent.parent
 
-#STATIC_URL = '/static/'
-
-#STATICFILES_DIRS = [os.path.join(BASE_DIR2, 'gameheaven/static')]
-#STATIC_ROOT = '/home/alvaro/Documents/Sistemas_Informacion/gameheaven/sisinf/static/'
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,18 +27,20 @@ BASE_DIR2 = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cln3djlx54em$hdr@r9!!)5ae4%vnwu$%y8wcl3ttc8nyd)*8b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.2']
+ALLOWED_HOSTS = ['*']
+
+#SESSION_COOKIE_AGES = 60 * 60 * 24 * 7 * 2  # 2 weeks
 # Use secure cookies
-SESSION_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Allow the proxy to set the Host header
-USE_X_FORWARDED_HOST = True
+#USE_X_FORWARDED_HOST = True
 
 # Set the header used by the proxy server to determine the actual client's IP address
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -100,8 +98,8 @@ DATABASES = {
         'NAME': 'gameheavendb',
         'USER': 'postgres',
         'PASSWORD': 'sisinf_C6',
-       # 'HOST': 'db',
-       'HOST': 'localhost',
+       'HOST': 'db',
+       #'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -147,7 +145,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'gameheaven/static')
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = "/static/"
 
 
 
@@ -172,4 +170,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'gameheaven.Usuario'
 
-#CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['http://*']
