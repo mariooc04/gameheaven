@@ -170,4 +170,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'gameheaven.Usuario'
 
-CSRF_TRUSTED_ORIGINS = ['http://*','https://*', 'http://gameheavensisinf.ddns.net']
+#CSRF_TRUSTED_ORIGINS = ['http://*','https://*', 'http://gameheavensisinf.ddns.net']
