@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ['*']
 #SESSION_COOKIE_AGES = 60 * 60 * 24 * 7 * 2  # 2 weeks
 # Use secure cookies
 #SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 # Allow the proxy to set the Host header
 #USE_X_FORWARDED_HOST = True
@@ -170,4 +170,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'gameheaven.Usuario'
 
-#CSRF_TRUSTED_ORIGINS = ['http://*','https://*', 'http://gameheavensisinf.ddns.net']
+CSRF_TRUSTED_ORIGINS = ['http://*','https://*', 'http://gameheavensisinf.ddns.net']
