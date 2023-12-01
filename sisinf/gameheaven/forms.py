@@ -5,6 +5,7 @@ from gameheaven.DAOs import daoTienda,daoUsuario
 from django.forms import ModelChoiceField
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, password_validation
+from PIL import Image
 
 class ConsoleFilterForm(forms.Form):
     PS5 = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'checkbox'}))
@@ -118,7 +119,7 @@ PLATAFORMA_CHOICES = [
 class AddVideojuegoForm(forms.Form):
     nombre = forms.CharField(required=True)
     descripcion = forms.CharField(required=True)
-    #valoracion = forms.FloatField(required=True)
+    valoracion = forms.FloatField(required=True)
     plataformas = forms.ChoiceField(choices=PLATAFORMA_CHOICES, required=True)
     img = forms.ImageField(required=False)
     precio = forms.FloatField(required=True)
