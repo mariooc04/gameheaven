@@ -47,8 +47,11 @@ class RegisterForm(forms.ModelForm):
         except ValidationError as error:
             self.add_error("password", error)
 
-        if cleaned_data.get("username") in password:
-            self.add_error("password", "La contraseña no puede ser similar al nombre de usuario")
+        try:
+            if cleaned_data.get("username") in password:
+                self.add_error("password", "La contraseña no puede ser similar al nombre de usuario")
+        except:
+            pass
         if password != password2:
             self.add_error("password2", "Las contraseñas no coinciden")
         
