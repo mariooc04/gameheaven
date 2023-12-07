@@ -22,6 +22,7 @@ from decouple import config
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
+import html
 
 
 urlGETListSteamAPI = "http://api.steampowered.com/ISteamApps/GetAppList/v2"
@@ -473,6 +474,7 @@ def buscarVideojuegoSteam(request):
 def addVideojuegoSteam(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
+        nombre = html.escape(nombre)
         descripcion = request.POST['descripcion']
         precio = request.POST['precio']
         valoracion = request.POST['valoracion']
