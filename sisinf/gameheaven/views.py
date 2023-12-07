@@ -23,6 +23,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
 import html
+import json
 
 
 urlGETListSteamAPI = "http://api.steampowered.com/ISteamApps/GetAppList/v2"
@@ -474,7 +475,8 @@ def buscarVideojuegoSteam(request):
 def addVideojuegoSteam(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
-        nombre = '\\'.join(nombre.split('\\', 1))
+        #nombre = '&#'.join(nombre.split('\\', 1))
+        #nombre += ';'
         descripcion = request.POST['descripcion']
         precio = request.POST['precio']
         valoracion = request.POST['valoracion']
@@ -706,6 +708,7 @@ def delete_shop(request, idTienda):
 def producto(request, product):
     isLink = False
 
+    titulo = json.loads('"' + producto.nombre + '"')
     if request.user.role == Usuario.Roles.CLIENTE:
         usuario = daoUsuario.getClienteByUsuario(request.user)
         tienda = usuario.tienda
@@ -719,9 +722,11 @@ def producto(request, product):
     try: 
         producto = daoProductos.getConsolaByNombre(product)
         stockProducto = daoTienda.getStockConsola(tienda, producto.id)
+       
     except:
         producto = daoProductos.getVideojuegoByNombre(product)
         stockProducto = daoTienda.getStockVideojuego(tienda, producto.id)
+        
 
     if isinstance(producto, Videojuego) and producto.steamID == None:
         img= base64.b64encode(producto.img).decode('utf-8')
@@ -731,6 +736,7 @@ def producto(request, product):
         img = producto.linkImagen 
         isLink = True
 
+
     form = AddStockForm()
     context = {
         'loggeado' : request.user.is_authenticated,
@@ -739,6 +745,7 @@ def producto(request, product):
         'currentView' : 'home',
         'img' : img,
         'form' : form,
+        'titulo' : titulo,
         }
     
     return render(request,'producto/producto.html', context)
