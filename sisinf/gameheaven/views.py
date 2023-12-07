@@ -21,6 +21,8 @@ from steam import Steam
 from decouple import config
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
+from PIL import Image
+
 
 urlGETListSteamAPI = "http://api.steampowered.com/ISteamApps/GetAppList/v2"
 

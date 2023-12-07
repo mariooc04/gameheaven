@@ -5,3 +5,4 @@ crispy-bootstrap5 == 2023.10
 beautifulsoup4 == 4.12.2
 python-steam-api == 1.2.0
 gunicorn == 21.2.0
+pillow == 10.1.0
