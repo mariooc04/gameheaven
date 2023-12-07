@@ -118,79 +118,6 @@ def homeFilter(request):
         for producto in productos:
             if isinstance(producto, Videojuego) and producto.steamID == None :
                 producto.img = base64.b64encode(producto.img).decode('utf-8')
-        productosCaro = productos.copy()
-        productosBarato = productos.copy()
-        for productoCaro in productosCaro:
-            if(isinstance(productoCaro, Videojuego)):
-                productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
-            else:
-                productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
-        
-        productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
-        productosBarato = sorted(productosBarato, key=lambda x: x.precio)
-        context = {
-            'loggeado' : request.user.is_authenticated,
-            'currentView' : 'home',
-            'productos' : productos,
-            'productosCaro' : productosCaro,
-            'productosBarato' : productosBarato,
-            'tienda' : tienda,
-            'form' : form,
-        }
-    else: #No se si funciona GG
-        usuario = request.user
-        if usuario.role == Usuario.Roles.CLIENTE:
-            tienda = daoUsuario.getClienteByUsuario(usuario).tienda
-        elif usuario.role == Usuario.Roles.TRABAJADOR:
-            tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
-        elif usuario.role == Usuario.Roles.ADMIN:
-            tienda = daoTienda.getRandomTienda()
-        videojuegos = list(daoProductos.getAllVideojuegos())
-        consolas = list(daoProductos.getAllConsolas())
-        productos = videojuegos + consolas
-        for producto in productos:
-            if isinstance(producto, Videojuego) and producto.steamID == None :
-                producto.img = base64.b64encode(producto.img).decode('utf-8')
-        productosCaro = productos.copy()
-        productosBarato = productos.copy()
-        for productoCaro in productosCaro:
-            if(isinstance(productoCaro, Videojuego)):
-                productoCaro.precio = daoTienda.getPrecioStockVideojuego(tienda, productoCaro)
-            else:
-                productoCaro.precio = daoTienda.getPrecioStockConsola(tienda, productoCaro)
-        
-        productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
-        productosBarato = sorted(productosBarato, key=lambda x: x.precio)
-        context = {
-            'loggeado' : request.user.is_authenticated,
-            'currentView' : 'home',
-            'productos' : productos,
-            'productosCaro' : productosCaro,
-            'productosBarato' : productosBarato,
-            'tienda' : tienda,
-            'form' : form,
-        }
-    return render(request, 'main/home.html', context)
-
-
-@login_required(login_url='loginUser')
-def home(request):
-    form = ConsoleFilterForm(request.POST)
-    if form.is_valid():
-        usuario = request.user
-        if usuario.role == Usuario.Roles.CLIENTE:
-            tienda = daoUsuario.getClienteByUsuario(usuario).tienda
-        elif usuario.role == Usuario.Roles.TRABAJADOR:
-            tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
-        elif usuario.role == Usuario.Roles.ADMIN:
-            tienda = daoTienda.getRandomTienda()
-        
-        videojuegos = list(daoProductos.getAllVideojuegos())
-        consolas = list(daoProductos.getAllConsolas())
-        productos = videojuegos + consolas
-        for producto in productos:
-            if isinstance(producto, Videojuego) and producto.steamID == None:
-                producto.img = base64.b64encode(producto.img).decode('utf-8')
             elif isinstance(producto, Consola):
                 producto.img = base64.b64encode(producto.img).decode('utf-8')
         productosCaro = productos.copy()
@@ -213,7 +140,14 @@ def home(request):
             'tienda' : tienda,
             'form' : form,
         }
-    else:
+        
+    return render(request, 'main/home.html', context)
+
+
+@login_required(login_url='loginUser')
+def home(request):
+    form = ConsoleFilterForm(request.POST)
+    if form.is_valid():
         usuario = request.user
         if usuario.role == Usuario.Roles.CLIENTE:
             tienda = daoUsuario.getClienteByUsuario(usuario).tienda
@@ -221,12 +155,14 @@ def home(request):
             tienda = daoUsuario.getTrabajadorByUsuario(usuario).tienda
         elif usuario.role == Usuario.Roles.ADMIN:
             tienda = daoTienda.getRandomTienda()
+        
         videojuegos = list(daoProductos.getAllVideojuegos())
         consolas = list(daoProductos.getAllConsolas())
         productos = videojuegos + consolas
-        productosCaro = productos.copy()
         for producto in productos:
             if isinstance(producto, Videojuego) and producto.steamID == None:
+                producto.img = base64.b64encode(producto.img).decode('utf-8')
+            elif isinstance(producto, Consola):
                 producto.img = base64.b64encode(producto.img).decode('utf-8')
         productosCaro = productos.copy()
         productosBarato = productos.copy()
@@ -475,8 +411,7 @@ def buscarVideojuegoSteam(request):
 def addVideojuegoSteam(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
-        #nombre = '&#'.join(nombre.split('\\', 1))
-        #nombre += ';'
+        nombre = json.loads('"' + nombre + '"')
         descripcion = request.POST['descripcion']
         precio = request.POST['precio']
         valoracion = request.POST['valoracion']
@@ -721,12 +656,10 @@ def producto(request, product):
     try: 
         producto = daoProductos.getConsolaByNombre(product)
         stockProducto = daoTienda.getStockConsola(tienda, producto.id)
-        titulo = json.loads('"' + producto.nombre + '"')
        
     except:
         producto = daoProductos.getVideojuegoByNombre(product)
         stockProducto = daoTienda.getStockVideojuego(tienda, producto.id)
-        titulo = json.loads('"' + producto.nombre + '"')
         
 
     if isinstance(producto, Videojuego) and producto.steamID == None:
@@ -746,7 +679,6 @@ def producto(request, product):
         'currentView' : 'home',
         'img' : img,
         'form' : form,
-        'titulo' : titulo,
         }
     
     return render(request,'producto/producto.html', context)
