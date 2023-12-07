@@ -708,7 +708,6 @@ def delete_shop(request, idTienda):
 def producto(request, product):
     isLink = False
 
-    titulo = json.loads('"' + producto.nombre + '"')
     if request.user.role == Usuario.Roles.CLIENTE:
         usuario = daoUsuario.getClienteByUsuario(request.user)
         tienda = usuario.tienda
@@ -722,10 +721,12 @@ def producto(request, product):
     try: 
         producto = daoProductos.getConsolaByNombre(product)
         stockProducto = daoTienda.getStockConsola(tienda, producto.id)
+        titulo = json.loads('"' + producto.nombre + '"')
        
     except:
         producto = daoProductos.getVideojuegoByNombre(product)
         stockProducto = daoTienda.getStockVideojuego(tienda, producto.id)
+        titulo = json.loads('"' + producto.nombre + '"')
         
 
     if isinstance(producto, Videojuego) and producto.steamID == None:
