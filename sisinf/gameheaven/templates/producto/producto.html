@@ -8,7 +8,7 @@
 {% else %}{{ stockProducto.consola.nombre }} {% endif %}{% endblock %}
 
 {% block content %}
-    <h1>{% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.nombre }} 
+    <h1>{% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.nombre |safe}} 
         {% else %}{{ stockProducto.consola.nombre }} {% endif %}</h1>
 
     <p><strong>Descripción:</strong>{% if stockProducto.videojuego.nombre|is_videojuego %} {{ stockProducto.videojuego.descripcion }} 
