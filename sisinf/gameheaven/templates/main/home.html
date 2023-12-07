@@ -70,11 +70,19 @@
                                     <small class="w-50 text-center border-end py-2">
                                         <a class="text-body" href="{% url 'producto' producto.nombre %}"><i class="fa fa-eye text-primary me-2"></i>Ver detalles</a>
                                     </small>
+                                    {% if userRole == "CLIENTE" %}
                                     <small class="w-50 text-center py-2">
                                         <a href="{% url 'add_reserva' producto.nombre %}">
                                             <button type="button" class="btn btn-outline-info mb-4 mt-4">Reservar</button>
                                         </a>
                                     </small>
+                                    {% elif userRole == "TRABAJADOR" or userRole == "ADMIN" %}
+                                        <small class="w-50 text-center py-2">
+                                        <a href="{% url 'removeProduct' id=producto.id %}">
+                                            <button type="button" class="btn btn-outline-info mb-4 mt-4">Quitar</button>
+                                        </a>
+                                        </small>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

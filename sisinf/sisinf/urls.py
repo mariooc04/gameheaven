@@ -50,4 +50,5 @@ urlpatterns = [
     path('producto/<str:product>', views.producto, name='producto'),
     path('changeTienda/', views.changeTienda, name='changeTienda'),
     path('completeReserva', views.completeReserva, name='completeReserva'),
+    path('removeProduct/<int:id>', views.removeProduct, name='removeProduct'),
 ]

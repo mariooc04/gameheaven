@@ -201,6 +201,7 @@ def home(request):
         productosBarato = sorted(productosBarato, key=lambda x: x.precio)
         context = {
             'loggeado' : request.user.is_authenticated,
+            'userRole' : request.user.role,
             'currentView' : 'home',
             'productos' : productos,
             'productosCaro' : productosCaro,
@@ -235,6 +236,7 @@ def home(request):
         productosBarato = sorted(productosBarato, key=lambda x: x.precio)
         context = {
             'loggeado' : request.user.is_authenticated,
+            'userRole' : request.user.role,
             'currentView' : 'home',
             'productos' : productos,
             'productosCaro' : productosCaro,
@@ -599,6 +601,16 @@ def addReserva(request, nombre):
     return redirect('home')
 
 
+
+@login_required(login_url='loginUser')
+@permission_required('gameheaven.delete_usuario', raise_exception=True)
+def removeProduct(request, id):
+    try:
+        daoProductos.deleteVideojuego(id)
+    except:
+        daoProductos.deleteConsola(id)
+
+    return redirect('home')
 
         
         
