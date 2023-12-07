@@ -474,12 +474,8 @@ def buscarVideojuegoSteam(request):
 def addVideojuegoSteam(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
-        nombre1 = html.escape(nombre)
-        print(nombre1)
+        nombre = nombre.replace('\\', '', 1)
 
-        nombre = '&#x{:04x};'.format(ord(nombre))
-
-        print(nombre)
         descripcion = request.POST['descripcion']
         precio = request.POST['precio']
         valoracion = request.POST['valoracion']
