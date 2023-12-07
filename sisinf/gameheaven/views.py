@@ -605,7 +605,8 @@ def addReserva(request, nombre):
 
 
 @login_required(login_url='loginUser')
-@permission_required('gameheaven.delete_usuario', raise_exception=True)
+@permission_required('gameheaven.delete_videojuego', raise_exception=True)
+@permission_required('gameheaven.delete_consola', raise_exception=True)
 def removeProduct(request, id):
     try:
         daoProductos.deleteVideojuego(id)
