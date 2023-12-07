@@ -703,17 +703,23 @@ def delete_shop(request, idTienda):
 @csrf_protect
 def producto(request, product):
     isLink = False
-    try: 
+
+    if request.user.role == Usuario.Roles.CLIENTE:
         usuario = daoUsuario.getClienteByUsuario(request.user)
-    except:
+        tienda = usuario.tienda
+    elif request.user.role == Usuario.Roles.TRABAJADOR:
         usuario = daoUsuario.getTrabajadorByUsuario(request.user)
+        tienda = usuario.tienda
+    else:
+        tienda = daoTienda.getRandomTienda()
+    
 
     try: 
         producto = daoProductos.getConsolaByNombre(product)
-        stockProducto = daoTienda.getStockConsola(usuario.tienda, producto.id)
+        stockProducto = daoTienda.getStockConsola(tienda, producto.id)
     except:
         producto = daoProductos.getVideojuegoByNombre(product)
-        stockProducto = daoTienda.getStockVideojuego(usuario.tienda, producto.id)
+        stockProducto = daoTienda.getStockVideojuego(tienda, producto.id)
 
     if isinstance(producto, Videojuego) and producto.steamID == None:
         img= base64.b64encode(producto.img).decode('utf-8')
