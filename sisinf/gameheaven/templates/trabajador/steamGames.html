@@ -23,7 +23,7 @@
                     <td>
                         <form class="seleccionar-form" method="post" action="{% url 'addSteamGame' %}">
                             {% csrf_token %}
-                            <input type="hidden" name="nombre" value="{{ app.name }}">
+                            <input type="hidden" name="nombre" value="{{ app.name|safe }}">
                             <input type="hidden" name="descripcion" value="{{ app.descripcion }}">
                             <input type="hidden" name="precio" value="{{ app.price }}">
                             <input type="hidden" name="imagen" value="{{ app.img }}">

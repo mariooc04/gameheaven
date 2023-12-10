@@ -175,6 +175,8 @@ def home(request):
         
         productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
         productosBarato = sorted(productosBarato, key=lambda x: x.precio)
+        productos.reverse()
+
         context = {
             'loggeado' : request.user.is_authenticated,
             'userRole' : request.user.role,
@@ -390,6 +392,7 @@ def buscarVideojuegoSteam(request):
                 app['valoracion'] = diccionarioRespuesta['data']['metacritic']['score']
             
             app['price'] = app['price'].replace('$', '')
+            app['name'] = json.loads('"' + app['name'] + '"')
 
         print(games)
         
@@ -412,7 +415,6 @@ def buscarVideojuegoSteam(request):
 def addVideojuegoSteam(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
-        nombre = json.loads('"' + nombre + '"')
         descripcion = request.POST['descripcion']
         precio = request.POST['precio']
         valoracion = request.POST['valoracion']
