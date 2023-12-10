@@ -203,6 +203,7 @@ def home(request):
         
         productosCaro = sorted(productosCaro, key=lambda x: x.precio , reverse=True)
         productosBarato = sorted(productosBarato, key=lambda x: x.precio)
+        productos.reverse()
         context = {
             'loggeado' : request.user.is_authenticated,
             'userRole' : request.user.role,
