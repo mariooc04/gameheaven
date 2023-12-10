@@ -437,7 +437,6 @@ def addVideojuegoSteam(request):
                             descripcion=descripcion, valoracion=valoracion, steamID=steamID, linkImagen=imagen, plataformas='PC')
         daoProductos.newVideojuego(producto)
         producto = daoProductos.getVideojuegoByNombre(nombre)
-
         tiendas = daoTienda.getAllTiendas()
         for tienda in tiendas:
             stock = StockVideojuego(tienda = tienda, videojuego = producto, precio = precio, stock = 0)
@@ -538,7 +537,7 @@ def addReserva(request, nombre):
             stockVideojuego = daoTienda.getStockVideojuego(tienda.id, product.id)
             if stockVideojuego.stock == 0:
                 return redirect('home')
-            reservaVideojuego = ReservaVideojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
+            reservaVideojuego = Videojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
             daoReserva.newReservaVideojuego(reservaVideojuego)
             stockVideojuego.stock -= 1
             stockVideojuego.save()
