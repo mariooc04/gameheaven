@@ -80,5 +80,13 @@
 
 </body>
 <script src="{% static 'bootstrap.min.js' %}"></script>
+<script>
+  // Create a new Bootstrap toast instance
+  var toast = new bootstrap.Toast(document.querySelector('.toast'));
 
+  // Show the toast when the page loads
+  window.onload = function () {
+      toast.show();
+  };
+</script>
 </html>

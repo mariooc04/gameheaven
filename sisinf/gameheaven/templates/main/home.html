@@ -22,6 +22,15 @@
         </div>
     </div>
   </div>
+  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Bootstrap</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-0 gx-5 align-items-end">
@@ -74,8 +83,8 @@
                                     <small class="w-50 text-center py-2">
                                         <a href="{% url 'add_reserva' producto.nombre %}">
                                             <button type="button" class="btn btn-outline-info mb-4 mt-4">Reservar</button>
+                                        </small>
                                         </a>
-                                    </small>
                                     {% elif userRole == "TRABAJADOR" or userRole == "ADMIN" %}
                                         <small class="w-50 text-center py-2">
                                         <a href="{% url 'removeProduct' id=producto.id %}">

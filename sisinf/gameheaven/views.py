@@ -458,7 +458,6 @@ def addConsola(request):
                                descripcion=descripcion, valoracion=valoracion, img=imagen)
             daoProductos.newConsola(producto)
             producto = daoProductos.getConsolaByNombre(nombre)
-
             tiendas = daoTienda.getAllTiendas()
             for tienda in tiendas:
                 stock = StockConsola(tienda = tienda, consola = producto, precio = precio, stock = 0)
@@ -537,7 +536,7 @@ def addReserva(request, nombre):
             stockVideojuego = daoTienda.getStockVideojuego(tienda.id, product.id)
             if stockVideojuego.stock == 0:
                 return redirect('home')
-            reservaVideojuego = Videojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
+            reservaVideojuego = ReservaVideojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
             daoReserva.newReservaVideojuego(reservaVideojuego)
             stockVideojuego.stock -= 1
             stockVideojuego.save()
