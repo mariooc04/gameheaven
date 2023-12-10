@@ -26,8 +26,3 @@ fi
 # build de la imagen y compruebo que no falle
 
 docker-compose up --build
-if [ $? -eq 0 ]; then
-    echo "Build successful, you can access the web at http://localhost:80 have fun!"
-else
-    docker-compose up --build
-fi
