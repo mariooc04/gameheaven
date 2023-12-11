@@ -25,7 +25,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
                                 <input type="hidden" name="isVideojuego" value='false'>
-                                {% if reserva.estado != "No Completada" %}
+                                {% if reserva.estado == "No completada" %}
                                     <button class="btn btn-success" type="submit">Completar Reserva</button>
                                 {% else %}
                                     <button class="btn btn-danger" disabled>Completada</button>

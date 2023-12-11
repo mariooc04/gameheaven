@@ -24,21 +24,20 @@ from django.views.decorators.csrf import csrf_protect
 from PIL import Image
 import html
 import json
+from django.contrib import messages
+from .forms import *
+from gameheaven.templates import *
+
 
 
 urlGETListSteamAPI = "http://api.steampowered.com/ISteamApps/GetAppList/v2"
 
 KEY = config("STEAM_API_KEY")
 
-
 steam = Steam(KEY)
 
 
 
-from .forms import *
-
-
-from gameheaven.templates import *
 
 # Create your views here.
 
@@ -526,20 +525,24 @@ def addReserva(request, nombre):
         if isinstance (product, Consola):
             stockConsola = daoTienda.getStockConsola(tienda.id, product.id)
             if stockConsola.stock == 0:
+                messages.error(request, 'No hay stock disponible para la consola.')
                 return redirect('home')
             reservaConsola = ReservaConsola(cliente=cliente, stockConsola = stockConsola ,fecha=fecha)
             daoReserva.newReservaConsola(reservaConsola)
             stockConsola.stock -= 1
             stockConsola.save()
+            messages.success(request, 'La reserva de la consola se ha realizado con éxito.')
             return redirect('home')
         elif isinstance (product, Videojuego):
             stockVideojuego = daoTienda.getStockVideojuego(tienda.id, product.id)
             if stockVideojuego.stock == 0:
+                messages.error(request, 'No hay stock disponible para el videojuego.')
                 return redirect('home')
             reservaVideojuego = ReservaVideojuego(cliente=cliente, stockVideojuego=stockVideojuego, fecha=fecha)
             daoReserva.newReservaVideojuego(reservaVideojuego)
             stockVideojuego.stock -= 1
             stockVideojuego.save()
+            messages.success(request, 'La reserva del videojuego se ha realizado con éxito.')
     return redirect('home')
 
 
